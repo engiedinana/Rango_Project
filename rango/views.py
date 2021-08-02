@@ -90,6 +90,7 @@ def show_category(request, category_name_slug):
         # We'll use this in the template to verify that the category exists.
         context_dict['category'] = category
         context_dict['fav_list'] = get_user(request).pages.all()
+        print(context_dict['fav_list'])
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything -
