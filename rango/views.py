@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render
 from django.http import HttpResponse
 from rango.models import Category
@@ -11,6 +12,136 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from datetime import datetime
+from rango.models import User
+from urllib.parse import urlencode
+from django.conf import settings
+from django.contrib import messages
+import requests 
+
+def facebook_login(request):
+    redirect_uri = "%s://%s%s" % (
+        request.scheme, request.get_host(), reverse('rango:facebook_login')
+    )
+    if('code' in request.GET):
+        code = request.GET.get('code')
+        url = 'https://graph.facebook.com/v2.10/oauth/access_token'
+        params = {
+            'client_id': settings.FB_APP_ID,
+            'client_secret': settings.FB_APP_SECRET,
+            'code': code,
+            'redirect_uri': redirect_uri,
+        }
+        response = requests.get(url, params=params)
+        params = response.json()
+        params.update({
+            'fields': 'id,last_name,first_name,picture,birthday,email,gender'
+        })
+        url = 'https://graph.facebook.com/me'
+        user_data = requests.get(url, params=params).json()
+        email = user_data.get('email')
+        if email:
+            user, _ = User.objects.get_or_create(email=email, username=email)
+            gender = user_data.get('gender', '').lower()
+            dob = user_data.get('birthday')
+            if gender == 'male':
+                gender = 'M'
+            elif gender == 'female':
+                gender = 'F'
+            else:
+                gender = 'O'
+            data = {
+                'first_name': user_data.get('first_name'),
+                'last_name': user_data.get('last_name'),
+                'fb_avatar': user_data.get('picture', {}).get('data', {}).get('url'),
+                'gender': gender,
+                'dob': datetime.strptime(dob, "%m/%d/%Y") if dob else None,
+                'is_active': True
+            }
+            user.__dict__.update(data)
+            user.save()
+            user.backend = settings.AUTHENTICATION_BACKENDS[0]
+            login(request, user)
+        else:
+            messages.error(
+                request,
+                'Unable to login with Facebook Please try again'
+            )
+        return redirect('/')
+    else:
+        url = "https://graph.facebook.com/oauth/authorize"
+        params = {
+            'client_id': settings.FB_APP_ID,
+            'redirect_uri': redirect_uri,
+            'scope': 'email,public_profile,user_birthday'
+        }
+        url += '?' + urlencode(params)
+        return redirect(url)
+
+def facebook_register(request):
+    print("SARAAAAAAAAAAAAAAAAAAaa", os.getcwd())
+    redirect_uri = "%s://%s%s" % (
+        request.scheme, request.get_host(), reverse('rango:facebook_register')
+    )
+    if('code' in request.GET):
+        code = request.GET.get('code')
+        url = 'https://graph.facebook.com/v2.10/oauth/access_token'
+        params = {
+            'client_id': settings.FB_APP_ID,
+            'client_secret': settings.FB_APP_SECRET,
+            'code': code,
+            'redirect_uri': redirect_uri,
+        }
+        response = requests.get(url, params=params)
+        params = response.json()
+        params.update({
+            'fields': 'id,last_name,first_name,picture,birthday,email,gender'
+        })
+        url = 'https://graph.facebook.com/me'
+        user_data = requests.get(url, params=params).json()
+        email = user_data.get('email')
+        if email:
+            user, _ = User.objects.get(email=email, username=email)
+            print("HELLLOOOOOOOOOOOOOOOOOOOOOOOO " ,user)
+            if user:
+                messages.error(
+                request,
+                'User Already Exists')
+            user, _ = User.objects.get_or_create(email=email, username=email)
+            gender = user_data.get('gender', '').lower()
+            dob = user_data.get('birthday')
+            if gender == 'male':
+                gender = 'M'
+            elif gender == 'female':
+                gender = 'F'
+            else:
+                gender = 'O'
+            data = {
+                'first_name': user_data.get('first_name'),
+                'last_name': user_data.get('last_name'),
+                'fb_avatar': user_data.get('picture', {}).get('data', {}).get('url'),
+                'gender': gender,
+                'dob': datetime.strptime(dob, "%m/%d/%Y") if dob else None,
+                'is_active': True
+            }
+            user.__dict__.update(data)
+            user.save()
+            user.backend = settings.AUTHENTICATION_BACKENDS[0]
+            login(request, user)
+        else:
+            messages.error(
+                request,
+                'Unable to login with Facebook Please try again'
+            )
+        return redirect('/')
+    else:
+        url = "https://graph.facebook.com/oauth/authorize"
+        params = {
+            'client_id': settings.FB_APP_ID,
+            'redirect_uri': redirect_uri,
+            'scope': 'email,public_profile,user_birthday'
+        }
+        url += '?' + urlencode(params)
+        return redirect(url)
 
 # A helper method
 def get_server_side_cookie(request, cookie, default_val=None):
