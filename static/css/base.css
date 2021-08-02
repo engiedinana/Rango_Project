@@ -1,7 +1,7 @@
-.showSaveFavorite {
+.show {
     display:inline-block
 }
 
-.showUnsaveFavorite {
+.hide {
     display:None
 }

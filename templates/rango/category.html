@@ -19,10 +19,12 @@
             {% if user.is_authenticated %}
                     {% if fav_list %}
                         {% if page in fav_list %}
-                        <button id="unsaveFavorite" class="showUnsaveFavorite" data-pageid="{{page.id}}">Unsave</button>
+                        <button id="unsaveFavorite" class="show" data-pageid="{{page.id}}">Unsave</button>
+                        <button id="saveFavorite" class="hide" data-pageid="{{page.id}}">Save</button>
                         {% endif %}
                     {% else %}
-                    <button id="saveFavorite" class="showSaveFavorite" data-pageid="{{page.id}}">Save</button>
+                    <button id="saveFavorite" class="show" data-pageid="{{page.id}}">Save</button>
+                    <button id="unsaveFavorite" class="hide" data-pageid="{{page.id}}">Unsave</button>
                     {% endif %}
             {% endif %}
         {% endfor %}
