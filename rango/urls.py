@@ -14,4 +14,8 @@ path('logout/', views.user_logout, name='logout'),
 path('facebook_login/', views.facebook_login, name="facebook_login"),
 path('facebook_register/', views.facebook_register, name="facebook_register"),
 
+#route for saving a favorite page and view to fire
+path('save_favorite/',views.SaveFavoriteView.as_view(), name="save_favorite"),
+#route for unsaving a favorite page and corresponding view to fire
+path('unsave_favorite/', views.UnsaveFavoriteView.as_view(), name="unsave_favorite")
 ]

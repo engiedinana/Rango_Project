@@ -10,6 +10,7 @@
                 How to Tango with Django!
             {% endblock %}
         </title>
+        <link rel="stylesheet" href="{% static "css/base.css" %}"/>
     </head>
     <body>
         <div>
@@ -39,5 +40,10 @@
                 <li><a href="{% url 'rango:index' %}">Index</a></li>
                 </ul>
         </div>
+        <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
+        <script src="{% static "js/rango-jquery.js" %}" crossorigin="anonymous"></script>
+        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css"
+        22 rel="stylesheet">
+        <script src="{% static "js/rango-ajax.js" %}" crossorigin="anonymous"></script>
     </body>
 </html>

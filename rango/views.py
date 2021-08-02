@@ -9,13 +9,16 @@ from django.urls import reverse
 from rango.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
+from django.contrib.auth import logout, get_user
 from datetime import datetime
 from rango.models import User
 from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib import messages
 import requests 
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.contrib.auth import get_user_model
 
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
@@ -131,6 +134,8 @@ def facebook_register(request):
         return redirect(url)
 #-----------------------------------------------------
 
+User = get_user_model()
+
 # A helper method
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
@@ -203,6 +208,7 @@ def show_category(request, category_name_slug):
         # the database to the context dictionary.
         # We'll use this in the template to verify that the category exists.
         context_dict['category'] = category
+        context_dict['fav_list'] = get_user(request).pages.all()
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything -
@@ -357,7 +363,10 @@ def user_login(request):
 
 @login_required
 def restricted(request):
-    return render(request, 'rango/restricted.html')
+    context_dict = {}
+    #Render saved list 
+    context_dict['pages'] = get_user(request).pages.all()
+    return render(request, 'rango/restricted.html', context=context_dict)
 
 #Use the login_required() decorator to ensure only those logged in can
 # access the view.
@@ -368,3 +377,45 @@ def user_logout(request):
     # Take the user back to the homepage.
     return redirect(reverse('rango:index'))
 
+#View for saving a favorite page
+class SaveFavoriteView(View):
+    #only authenticated users can add a favorite page
+    @method_decorator(login_required)
+    #handle ajax get request
+    def get(self, request):
+        #Fetch id of page to save
+        page_id = request.GET['page_id']
+        #exception handling for fetching the page from DB
+        try:
+            page = Page.objects.get(id=int(page_id))
+        except Page.DoesNotExist:
+            return HttpResponse(-1)
+        except ValueError:
+            return HttpResponse(-1)
+        #Link user to the saved page and save the association in database
+        page.favorite.add(get_user(request))
+        page.save()
+        #return response 
+        return HttpResponse("success")
+        
+#View for removing a page from favorites
+class UnsaveFavoriteView(View):
+    #only authenticated users can add a favorite page
+    @method_decorator(login_required)
+    #handle ajax get request
+    def get(self, request):
+        #Fetch id of page to save
+        page_id = request.GET['page_id']
+        #exception handling for fetching the page from DB
+        try:
+            page= Page.objects.get(id=int(page_id))
+        except Page.DoesNotExist:
+                return HttpResponse(-1)
+        except ValueError:
+                return HttpResponse(-1)
+        #Delete saved page from the fav list
+        user = get_user(request)
+        user.pages.all().filter(id=page_id).delete()
+        user.save()
+        #return response
+        return HttpResponse("success")    
