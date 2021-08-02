@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from rango.maxVal import maxLength128
+
 class Category(models.Model):
     name = models.CharField(max_length=maxLength128, unique=True)
     views = models.IntegerField(default=0)
@@ -21,6 +22,8 @@ class Page(models.Model):
     title = models.CharField(max_length=maxLength128)
     url = models.URLField()
     views = models.IntegerField(default=0)
+    #Many users can have many favorite pages
+    favorite = models.ManyToManyField(User, related_name='pages')
     def __str__(self):
         return self.title
 

@@ -16,6 +16,15 @@
     <ul>
         {% for page in pages %}
         <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            {% if user.is_authenticated %}
+                {% if fav_list %}
+                    {% if page in fav_list %}
+                        <button id="saveFavorite" class="showSaveFavorite" data-pageid="{{page.id}}">Save</button>
+                    { % else % }
+                        <button id="unsaveFavorite" class="showUnsaveFavorite" data-pageid="{{page.id}}">Unsave</button>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
         {% endfor %}
     </ul>
     {% else %}

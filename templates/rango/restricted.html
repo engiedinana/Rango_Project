@@ -6,6 +6,10 @@
 {% endblock %}
 
 {% block body_block %}
-    Since you're logged in, you can see this text!
+{% if pages %}
+{% for page in pages %}
+<li><a href="{{ page.url }}">{{ page.title }}</a></li>
+{% endfor %}
+{% endif %}
 {% endblock %}
 
