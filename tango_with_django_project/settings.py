@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social_django', # allows integrating external apis for loggin in and registering
     'rango',
 ]
 
@@ -106,15 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Authentication APIs for logging in and registering to Rango
-AUTHENTICATION_BACKENDS = [
-    'social_core.backends.facebook.FacebookOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
-]
-
-FB_APP_ID = 784434325561150        # App ID
-FB_APP_SECRET = '3bfbf735bf16b9085b492cb14e0a54b9'  # App Secret
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -138,5 +128,9 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
+
 LOGIN_URL = 'rango:login'
-LOGIN_REDIRECT_URL = 'index'
+
+#Facebook API Credential for Registration and Login
+SOCIAL_AUTH_FACEBOOK_KEY = 784434325561150        # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '3bfbf735bf16b9085b492cb14e0a54b9'  # App Secret

@@ -17,16 +17,22 @@ from django.conf import settings
 from django.contrib import messages
 import requests 
 
-def facebook_login(request):
+"""
+Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
+Params: request, request type (whether it is a login or a register)
+Return: condition (to indicate the executed path), email/url, user_data (if any)
+"""
+def connect_to_facebook(request, request_type):
+    # uri needed to switch to FB for authorization
     redirect_uri = "%s://%s%s" % (
-        request.scheme, request.get_host(), reverse('rango:facebook_login')
+        request.scheme, request.get_host(), reverse(request_type)
     )
     if('code' in request.GET):
         code = request.GET.get('code')
         url = 'https://graph.facebook.com/v2.10/oauth/access_token'
         params = {
-            'client_id': settings.FB_APP_ID,
-            'client_secret': settings.FB_APP_SECRET,
+            'client_id': settings.SOCIAL_AUTH_FACEBOOK_KEY,
+            'client_secret': settings.SOCIAL_AUTH_FACEBOOK_SECRET,
             'code': code,
             'redirect_uri': redirect_uri,
         }
@@ -36,111 +42,94 @@ def facebook_login(request):
             'fields': 'id,last_name,first_name,picture,birthday,email,gender'
         })
         url = 'https://graph.facebook.com/me'
-        user_data = requests.get(url, params=params).json()
+        
+        user_data = requests.get(url, params=params).json() #containes lastname, firstname, email, birthday, profile picture
         email = user_data.get('email')
-        if email:
-            try:
-                user = User.objects.get(email=email, username=email)
-                gender = user_data.get('gender', '').lower()
-                dob = user_data.get('birthday')
-                if gender == 'male':
-                    gender = 'M'
-                elif gender == 'female':
-                    gender = 'F'
-                else:
-                    gender = 'O'
-                data = {
-                    'first_name': user_data.get('first_name'),
-                    'last_name': user_data.get('last_name'),
-                    'fb_avatar': user_data.get('picture', {}).get('data', {}).get('url'),
-                    'gender': gender,
-                    'dob': datetime.strptime(dob, "%m/%d/%Y") if dob else None,
-                    'is_active': True
-                }
-                user.__dict__.update(data)
-                user.save()
-                user.backend = settings.AUTHENTICATION_BACKENDS[0]
-                login(request, user)
-            except:
-                print("Sign up first") #need UI!
-        else:
-            messages.error(
-                request,
-                'Unable to login with Facebook Please try again'
-            )
-        return redirect('/')
+        return True, email, user_data
     else:
+        # send request to FB to get the resources 
         url = "https://graph.facebook.com/oauth/authorize"
         params = {
-            'client_id': settings.FB_APP_ID,
+            'client_id': settings.SOCIAL_AUTH_FACEBOOK_KEY,
             'redirect_uri': redirect_uri,
             'scope': 'email,public_profile,user_birthday'
         }
         url += '?' + urlencode(params)
-        return redirect(url)
+        return False, url, ""
 
-def facebook_register(request):
-    redirect_uri = "%s://%s%s" % (
-        request.scheme, request.get_host(), reverse('rango:facebook_register')
-    )
-    if('code' in request.GET):
-        code = request.GET.get('code')
-        url = 'https://graph.facebook.com/v2.10/oauth/access_token'
-        params = {
-            'client_id': settings.FB_APP_ID,
-            'client_secret': settings.FB_APP_SECRET,
-            'code': code,
-            'redirect_uri': redirect_uri,
-        }
-        response = requests.get(url, params=params)
-        params = response.json()
-        params.update({
-            'fields': 'id,last_name,first_name,picture,birthday,email,gender'
-        })
-        url = 'https://graph.facebook.com/me'
-        user_data = requests.get(url, params=params).json()
-        email = user_data.get('email')
+"""
+Description: This function creates a new user upon registration if the email does not already exist
+Params: request, email, user_data
+"""
+def create_facebook_user(request, email, user_data):
+    user, _ = User.objects.get_or_create(email=email, username=email)
+    #extract all needed data to create a new user in the DB
+    gender = user_data.get('gender', '').lower()
+    data_of_birth = user_data.get('birthday')
+    gender = 'M' if gender == 'male' else 'F'
+    data = {
+            'first_name': user_data.get('first_name'),
+            'last_name': user_data.get('last_name'),
+            'user_profile_picture': user_data.get('picture', {}).get('data', {}).get('url'),
+            'gender': gender,
+            'data_of_birth': datetime.strptime(data_of_birth, "%m/%d/%Y") if data_of_birth else None,
+            'is_active': True
+            }
+    user.__dict__.update(data)
+    #Save the user to DB
+    user.save()
+    user.backend = settings.AUTHENTICATION_BACKENDS[0]
+    #Login to view the homepage
+    login(request, user)
+
+"""
+Description: This function allows users to login using Facebook
+Params: request
+Return: redirect(...)
+"""
+def facebook_login(request):
+    condition, return_string, _ = connect_to_facebook(request, 'rango:facebook_login')
+    if condition:
+        email = return_string
         if email:
             try:
+                #user exists in the DB, so they can login
+                user = User.objects.get(email=email, username=email)
+                login(request, user)
+            except:
+                #user doesn't existin the DB, they need to register first
+                print("Sign up first") #need UI!
+        else:
+            print('Unable to login with Facebook Please try again') #need UI!
+        return redirect('/')
+    else:
+        url = return_string
+        return redirect(url)
+
+"""
+Description: This function allows users to register using Facebook
+Params: request
+Return: redirect(...)
+"""
+def facebook_register(request):
+    condition, return_string, user_data = connect_to_facebook(request, 'rango:facebook_register')
+    if condition:
+        email = return_string
+        if email:
+            try:
+                #user already exists in the DB, they can't register to the system multiple times
                 user = User.objects.get(email=email, username = email)
                 print('User Already Exists') #needs UI reflection!
             except:
-                user, _ = User.objects.get_or_create(email=email, username=email)
-                gender = user_data.get('gender', '').lower()
-                dob = user_data.get('birthday')
-                if gender == 'male':
-                    gender = 'M'
-                elif gender == 'female':
-                    gender = 'F'
-                else:
-                    gender = 'O'
-                data = {
-                    'first_name': user_data.get('first_name'),
-                    'last_name': user_data.get('last_name'),
-                    'fb_avatar': user_data.get('picture', {}).get('data', {}).get('url'),
-                    'gender': gender,
-                    'dob': datetime.strptime(dob, "%m/%d/%Y") if dob else None,
-                    'is_active': True
-                }
-                user.__dict__.update(data)
-                user.save()
-                user.backend = settings.AUTHENTICATION_BACKENDS[0]
-                login(request, user)
+                #user doesn't exist in the DB, so create a new user with appropriate data
+                create_facebook_user(request, email, user_data)
         else:
-            messages.error(
-                request,
-                'Unable to login with Facebook Please try again'
-            )
+            print('Unable to login with Facebook Please try again')
         return redirect('/')
     else:
-        url = "https://graph.facebook.com/oauth/authorize"
-        params = {
-            'client_id': settings.FB_APP_ID,
-            'redirect_uri': redirect_uri,
-            'scope': 'email,public_profile,user_birthday'
-        }
-        url += '?' + urlencode(params)
+        url = return_string
         return redirect(url)
+#-----------------------------------------------------
 
 # A helper method
 def get_server_side_cookie(request, cookie, default_val=None):
