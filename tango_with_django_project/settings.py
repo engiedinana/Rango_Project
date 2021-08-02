@@ -105,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -129,4 +128,9 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 
+
 LOGIN_URL = 'rango:login'
+
+#Facebook API Credential for Registration and Login
+SOCIAL_AUTH_FACEBOOK_KEY = 784434325561150        # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '3bfbf735bf16b9085b492cb14e0a54b9'  # App Secret
