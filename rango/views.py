@@ -1,4 +1,3 @@
-import os
 from django.shortcuts import render
 from django.http import HttpResponse
 from rango.models import Category
@@ -40,27 +39,30 @@ def facebook_login(request):
         user_data = requests.get(url, params=params).json()
         email = user_data.get('email')
         if email:
-            user, _ = User.objects.get_or_create(email=email, username=email)
-            gender = user_data.get('gender', '').lower()
-            dob = user_data.get('birthday')
-            if gender == 'male':
-                gender = 'M'
-            elif gender == 'female':
-                gender = 'F'
-            else:
-                gender = 'O'
-            data = {
-                'first_name': user_data.get('first_name'),
-                'last_name': user_data.get('last_name'),
-                'fb_avatar': user_data.get('picture', {}).get('data', {}).get('url'),
-                'gender': gender,
-                'dob': datetime.strptime(dob, "%m/%d/%Y") if dob else None,
-                'is_active': True
-            }
-            user.__dict__.update(data)
-            user.save()
-            user.backend = settings.AUTHENTICATION_BACKENDS[0]
-            login(request, user)
+            try:
+                user = User.objects.get(email=email, username=email)
+                gender = user_data.get('gender', '').lower()
+                dob = user_data.get('birthday')
+                if gender == 'male':
+                    gender = 'M'
+                elif gender == 'female':
+                    gender = 'F'
+                else:
+                    gender = 'O'
+                data = {
+                    'first_name': user_data.get('first_name'),
+                    'last_name': user_data.get('last_name'),
+                    'fb_avatar': user_data.get('picture', {}).get('data', {}).get('url'),
+                    'gender': gender,
+                    'dob': datetime.strptime(dob, "%m/%d/%Y") if dob else None,
+                    'is_active': True
+                }
+                user.__dict__.update(data)
+                user.save()
+                user.backend = settings.AUTHENTICATION_BACKENDS[0]
+                login(request, user)
+            except:
+                print("Sign up first") #need UI!
         else:
             messages.error(
                 request,
@@ -78,7 +80,6 @@ def facebook_login(request):
         return redirect(url)
 
 def facebook_register(request):
-    print("SARAAAAAAAAAAAAAAAAAAaa", os.getcwd())
     redirect_uri = "%s://%s%s" % (
         request.scheme, request.get_host(), reverse('rango:facebook_register')
     )
@@ -100,33 +101,31 @@ def facebook_register(request):
         user_data = requests.get(url, params=params).json()
         email = user_data.get('email')
         if email:
-            user, _ = User.objects.get(email=email, username=email)
-            print("HELLLOOOOOOOOOOOOOOOOOOOOOOOO " ,user)
-            if user:
-                messages.error(
-                request,
-                'User Already Exists')
-            user, _ = User.objects.get_or_create(email=email, username=email)
-            gender = user_data.get('gender', '').lower()
-            dob = user_data.get('birthday')
-            if gender == 'male':
-                gender = 'M'
-            elif gender == 'female':
-                gender = 'F'
-            else:
-                gender = 'O'
-            data = {
-                'first_name': user_data.get('first_name'),
-                'last_name': user_data.get('last_name'),
-                'fb_avatar': user_data.get('picture', {}).get('data', {}).get('url'),
-                'gender': gender,
-                'dob': datetime.strptime(dob, "%m/%d/%Y") if dob else None,
-                'is_active': True
-            }
-            user.__dict__.update(data)
-            user.save()
-            user.backend = settings.AUTHENTICATION_BACKENDS[0]
-            login(request, user)
+            try:
+                user = User.objects.get(email=email, username = email)
+                print('User Already Exists') #needs UI reflection!
+            except:
+                user, _ = User.objects.get_or_create(email=email, username=email)
+                gender = user_data.get('gender', '').lower()
+                dob = user_data.get('birthday')
+                if gender == 'male':
+                    gender = 'M'
+                elif gender == 'female':
+                    gender = 'F'
+                else:
+                    gender = 'O'
+                data = {
+                    'first_name': user_data.get('first_name'),
+                    'last_name': user_data.get('last_name'),
+                    'fb_avatar': user_data.get('picture', {}).get('data', {}).get('url'),
+                    'gender': gender,
+                    'dob': datetime.strptime(dob, "%m/%d/%Y") if dob else None,
+                    'is_active': True
+                }
+                user.__dict__.update(data)
+                user.save()
+                user.backend = settings.AUTHENTICATION_BACKENDS[0]
+                login(request, user)
         else:
             messages.error(
                 request,
