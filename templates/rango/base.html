@@ -25,7 +25,7 @@
     </div>
     <!-- Navbar container -->
     <nav id = "menu_bar" class="navbar navbar-light navbar-expand-lg">
-        <div class="container">
+        <div class="container-fluid">
             <!--Add Hamburger icon/button to toggle menu display -->
             <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#content-navbar-collapse" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
@@ -72,23 +72,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="{% static "js/rango-ajax.js" %}" crossorigin="anonymous"></script>
 </body>
-
-
-
-<!-- <body>
-
-
-<div class="container-fluid">
-    <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-    <div class="sidebar-sticky">
-    {% block sidebar_block %}
-        {% get_category_list category %}
-    {% endblock %}
-    </div>
-    </nav>
-    
-    </div>
-</div>
--->
 </html>
