@@ -2,7 +2,6 @@
 @import url(https://fonts.googleapis.com/css?family=Fjalla+One);
 
 * {
-  /* margin: auto; */
   line-height: normal
 }
 
@@ -13,16 +12,14 @@
   border-left:solid #9cb39c;
   border-right:solid #9cb39c;
   border-width: 2px;
-  margin-top: 5px;
-  padding-top: 10px;
   }
 
 a {
    color: #6e7e6e;
-   font-family: Arial, Helvetica, sans-serif;
-   font-size: 18px;
+   font-family: "Times New Roman", Times, serif;
+   font-size: 20px;
    text-decoration: none;
-   }
+}
 
 a:hover {
   color: black;
@@ -30,33 +27,34 @@ a:hover {
 
 ul.navbar-nav > li {
   padding-left: 10px;
+  color : white;
+}
+
+#footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.wrapper {
+  text-align: center;
+}
+
+#title, img {
+  display: inline-block;
 }
 
 #title {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 20px;
-    text-align: center;
-    color: #6e7e6e;
-}
-
-h6{
-    font-family: "Times New Roman", Times, serif;;
-    font-size: 55px;
-}
-
-#footer_links{
-    text-align: right;
+  vertical-align: top;
+  position: relative;
+  font-family: "Times New Roman", Times, serif;
+  color: #6e7e6e;
+  font-size: 50px;
 }
 
 #img_logo {
-    display: block;
-    max-width: 80px;
-    height: 45px;
-}
-
-#title img, h6 {
-    display: inline;
-    float: none;
+  width: 60px;
+  height: 60px;
+  max-width: 60px; 
 }
 
 /*Fav list*/
@@ -68,6 +66,24 @@ h6{
   display: none;
 }
 
+/* Navigation bar */
+
+@media only screen and (max-width: 1200px) {
+  .navbar-collapse {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-130%, -66%);
+    text-align: center;
+    background-color: white;
+  } 
+  .navbar-nav{
+    border: solid #9cb39c;
+    border-width: 1px;
+  }
+}
+
+/* User Profile */
 .terms_elements{
   color: #525151;
   font: "Source Sans Pro";
