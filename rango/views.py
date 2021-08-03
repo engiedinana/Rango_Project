@@ -189,6 +189,10 @@ def about(request):
     return response
     #return render(request, 'rango/about.html', context = {"MEDIA_URL":"/media/"})
 
+def terms_of_use(request):
+    response = render(request, 'rango/terms_of_use.html', {})
+    return response
+
 # Create your views here.
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
