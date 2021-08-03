@@ -25,7 +25,7 @@ a {
    }
 
 a:hover {
-    color: #0c0c0c;
+  color: black;
 }
 
 ul.navbar-nav > li {
@@ -72,9 +72,7 @@ h6{
   color: #525151;
   font: "Source Sans Pro";
   font-size: 16px;
-  padding: 0 0 0.2em 1em;
-  
-  
+  padding: 0 0 0.2em 1em; 
 }
 
 .terms{
@@ -102,4 +100,11 @@ h6{
   text-align: justify;
   text-justify: inter-word;
 }
+
+.dropdown-item:hover{
+  background-image:none !important;
+  color: #8ca08c
+}
+
+
 /*User Profile Page*/
