@@ -21,6 +21,9 @@
                         {% if page in fav_list %}
                         <button id="unsaveFavorite" class="show" data-pageid="{{page.id}}">Unsave</button>
                         <button id="saveFavorite" class="hide" data-pageid="{{page.id}}">Save</button>
+                        {% else %}
+                        <button id="unsaveFavorite" class="hide" data-pageid="{{page.id}}">Unsave</button>
+                        <button id="saveFavorite" class="show" data-pageid="{{page.id}}">Save</button>
                         {% endif %}
                     {% else %}
                     <button id="saveFavorite" class="show" data-pageid="{{page.id}}">Save</button>
