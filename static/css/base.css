@@ -99,6 +99,7 @@ h6{
 
 #terms_div{
   width: 90%;
+  text-align: justify;
   text-justify: inter-word;
 }
 /*User Profile Page*/
