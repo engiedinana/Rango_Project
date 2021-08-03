@@ -33,7 +33,7 @@
             </button>
             <!-- Data to show or menu items to display upon toggle -->
             <div class="collapse navbar-collapse" id="content-navbar-collapse">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav mr-auto">
                     <li><a class="nav-link" href="{% url 'rango:index' %}">Home</a></li>
                     <li><a class= "nav-link" href="/machine_learning">Machine Learning</a></li> <!--URL to be changed-->
                     <li><a class= "nav-link" href="/frameworks">Frameworks</a></li> <!--URL to be changed-->
@@ -42,7 +42,7 @@
                     <li><a class= "nav-link" href="{% url 'rango:about' %}">About Us</a></li>
                 </ul>
                 <!-- Dynamic changing of options for user upon user login -->
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav ml-auto">
                     {% if user.is_authenticated %}
                     <li><a class= "nav-link" href="{% url 'rango:profile' %}">Profile</a></li> <!--URL to be changed-->
                     <li><a class= "nav-link" href="{% url 'rango:logout' %}?next=/rango/">Logout</a></li>
