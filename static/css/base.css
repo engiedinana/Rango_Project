@@ -76,6 +76,26 @@ h6{
   display: none;
 }
 
+li#page{
+  display:inline-block;
+}
+
+ul#parentPage button,ul#favListParent button  {
+  border: transparent;
+  background: transparent;
+  cursor:pointer;
+}
+
+ul#parentPage img, ul#favListParent img {
+  width: 40px;
+  height: 42px;
+  display: inline-block;
+}
+
+#page a, ul#favListParent a{
+  font-size: 27px;
+}
+
 /*User Profile Page*/
 #user_profile {
   padding-left:40px;
