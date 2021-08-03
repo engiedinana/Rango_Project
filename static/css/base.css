@@ -1,3 +1,4 @@
+/*base.html*/
 @import url(https://fonts.googleapis.com/css?family=Fjalla+One);
 
 * {
@@ -58,6 +59,7 @@ h6{
     float: none;
 }
 
+/*Fav list*/
 .show {
   display:inline-block;
 }
@@ -65,3 +67,5 @@ h6{
 .hide {
   display: none;
 }
+
+/*User Profile Page*/
