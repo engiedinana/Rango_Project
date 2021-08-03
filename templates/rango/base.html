@@ -1,49 +1,82 @@
 <!DOCTYPE html>
+
 {% load static %}
 {% load rango_template_tags %}
 
 <html>
-    <head>
-        <title>
-            Rango -
-            {% block title_block %}
-                How to Tango with Django!
-            {% endblock %}
-        </title>
-        <link rel="stylesheet" href="{% static "css/base.css" %}"/>
-    </head>
-    <body>
+<head>
+    <title>
+        Rango - 
+        {% block title_block %}
+            for CS Geeks!
+        {% endblock %}
+    </title>
+    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/base.css' %}">
+</head>
+
+<body>
+    <div id = "title">
         <div>
+            <img id = "img_logo" src="{% static 'images/logo.png' %}" alt="Picture of Rango" /> 
+            <h6>Rango</h6>
+        </div>
+    </div>
+    <ul id = "menu_bar">
+        <li class = "menu_item"><a href="{% url 'rango:index' %}">Home</a></li>
+        <li class = "menu_item"><a href="/machine_learning">Machine Learning</a></li> <!--URL to be changed-->
+        <li class = "menu_item"><a href="/frameworks">Frameworks</a></li> <!--URL to be changed-->
+        <li class = "menu_item"><a href="/algorithms">Algorithms</a></li> <!--URL to be changed-->
+        <li class = "menu_item"><a href="/web_design">Web Design</a></li> <!--URL to be changed-->
+        <li class = "menu_item"><a href="{% url 'rango:about' %}">About Us</a></li>
+        {% if user.is_authenticated %}
+        <li class = "menu_item_right1"><a href="/profile">Profile</a></li> <!--URL to be changed-->
+        <li class = "menu_item_right2"><a href="{% url 'rango:logout' %}?next=/rango/">Logout</a></li>
+        {% else %}
+        <li class = "menu_item_right1"><a href="{% url 'rango:register' %}">Register</a></li>
+        <li class = "menu_item_right2"><a href="{% url 'rango:login' %}">Login</a></li>
+        {% endif %}
+      </ul>
+
+      <main role="main">
         {% block body_block %}
         {% endblock %}
-        </div>
-        <div>
-            {% block sidebar_block %}
-                {% get_category_list category%}
-            {% endblock %}
-        </div>
-        <hr />
-        <div>
-            <ul>
-            {% if user.is_authenticated %}
-                <!-- Show these links when the user is logged in -->
-                <li><a href="{% url 'rango:add_category' %}">Add New Category</a></li>
-                <li><a href="{% url 'rango:restricted' %}">Restricted Page</a></li>
-                <li><a href="{% url 'rango:logout' %}">Logout</a></li>
-            {% else %}
-                <!-- Show these links when the user is NOT logged in -->
-                <li><a href="{% url 'rango:register' %}">Sign Up</a></li>
-                <li><a href="{% url 'rango:login' %}">Login</a></li>
-            {% endif %}
-                <!-- Outside the conditional statements, ALWAYS show -->
-                <li><a href="{% url 'rango:about' %}">About</a></li>
-                <li><a href="{% url 'rango:index' %}">Index</a></li>
-                </ul>
-        </div>
-        <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
-        <script src="{% static "js/rango-jquery.js" %}" crossorigin="anonymous"></script>
-        <link href="https://getbootstrap.com/docs/4.2/dist/css/bootstrap.min.css"
-        22 rel="stylesheet">
-        <script src="{% static "js/rango-ajax.js" %}" crossorigin="anonymous"></script>
-    </body>
+        <footer id = "footer">
+            <p id = 'copyright'>Copyright &copy; Rango &middot; All rights reserved.</p>
+            <p id = 'footer_links'><a href="#">Contact us</a> &middot;
+                <a href="#">Terms of Use</a>
+            </p>
+        </footer>
+        </main>
+    </div>
+</body>
+
+
+
+<!-- <body>
+
+
+<div class="container-fluid">
+    <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+    <div class="sidebar-sticky">
+    {% block sidebar_block %}
+        {% get_category_list category %}
+    {% endblock %}
+    </div>
+    </nav>
+    
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.2/assets/js/vendor/jquery-slim.min.js"><\/script>')
+    </script>
+    <script src="https://getbootstrap.com/docs/4.2/dist/js/bootstrap.bundle.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/99 feather.min.js">
+    </script>
+    <script src="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.js">
+    </script>
+</body> -->
 </html>
