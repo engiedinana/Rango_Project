@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rango.models import Category
-from rango.models import Page
+from rango.models import Page, UserProfile
 from rango.forms import CategoryForm
 from django.shortcuts import redirect
 from rango.forms import PageForm
@@ -19,7 +19,7 @@ import requests
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth import get_user_model
-
+from django.contrib.auth.models import User
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
 Params: request, request type (whether it is a login or a register)
@@ -364,13 +364,6 @@ def user_login(request):
         # blank dictionary object...
         return render(request, 'rango/login.html')
 
-@login_required
-def profile(request):
-    context_dict = {}
-    #Render saved list 
-    context_dict['pages'] = get_user(request).pages.all()
-    return render(request, 'rango/profile.html', context=context_dict)
-
 #Use the login_required() decorator to ensure only those logged in can
 # access the view.
 @login_required
@@ -422,4 +415,45 @@ class UnsaveFavoriteView(View):
         user.pages.remove(to_remove[0])
         user.save()
         #return response
-        return HttpResponse("success")    
+        return HttpResponse("success")
+
+class ProfileView(View):
+    def get_user_details(self, username):
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return None
+        
+        user_profile = UserProfile.objects.get_or_create(user=user)[0]
+        form = UserProfileForm({'website': user_profile.website, 'picture':user_profile.picture})
+        return (user, user_profile, form)
+    @method_decorator(login_required)
+    def get(self, request, username):
+        #Render saved list 
+        fav_list = get_user(request).pages.all()
+        try:
+            (user, user_profile, form) = self.get_user_details(username)
+        except TypeError:
+            return redirect(reverse('rango:index'))
+        
+        context_dict = {'user_profile': user_profile,
+                        'selected_user': user,
+                        'form': form, 
+                        'pages':fav_list}
+        return render(request, 'rango/profile.html', context_dict)
+    
+    @method_decorator(login_required)
+    def post(self, request, username):
+        try:
+            (user, user_profile, form) = self. get_user_details(username)
+        except TypeError:
+            return redirect(reverse('rango:index'))
+        
+        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('rango:profile', user.username)
+        else:
+            print(form.errors)
+        context_dict = {'user_profile': user_profile, 'selected_user': user, 'form':form}
+        return render(request, 'rangp/profile.html', context_dict)

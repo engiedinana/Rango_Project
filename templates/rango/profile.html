@@ -1,15 +1,75 @@
 {% extends 'rango/base.html' %}
-{% load static %} <!-- New line -->
+{% load staticfiles %} <!-- New line -->
 
 {% block title_block %}
     Profile Page
 {% endblock %}
 
 {% block body_block %}
-{% if pages %}
-{% for page in pages %}
-<li><a href="{{ page.url }}">{{ page.title }}</a></li>
-{% endfor %}
-{% endif %}
+<div class="jumbotron p-4">
+<div class="container">
+    <div class="row">
+        {% if user_profile.picture %}
+        <p>{{user_profile.picture}}</p>
+        <img src = "{{MEDIA_URL}}{{user_profile.picture}}"
+             width="300"
+             height="300"
+             alt="{{ selected_user.username}}'s profile image"/>
+        {% else %}
+        <img src = "{% static 'images/placeholder.jpeg' %}"
+             width="300"
+             height="300"
+             alt="fallback profile image"/>
+        {% endif %}
+        <br />
+        <div id="user_profile">
+            <!--
+           
+            <form method="post" action="." enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+            </form>
+           
+        -->
+                {% if selected_user %}
+                    <!--Change to first name last name-->
+                    <h6>{{selected_user.username}}</h6>
+                    <div class="email_container">
+                        {% if user_profile.email %}
+                        <p class="email">email:</p><a href="{{ user_profile.email }}">{{user_profile.email}}</a>
+                        {% else %}
+                        <p class="email">You do not have an email registered with us</p>
+                        {% endif %}
+                    </div>
+                    <!--Add DOB-->
+                {% else %}
+                    <h6>Mike Gibson</h6>
+                    <div class="email_container">
+                        <p class="email">email:</p><a href="#">mike.gibson@hotmail.com</a>
+                    </div>
+                {% endif %}
+        
+        </div>
+    </div>
+</div>
+<hr class="userProfile"/>
+<div class="jumbotron p-0"></div>
+    
+    {% if pages %}
+    <div class="container">
+        <h1 class="jumbotron-heading">Saved Pages</h1>
+    </div>
+    <div class="container favorites">
+        <ul>
+        {% for page in pages %}
+            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <div class="container">
+        <h1 class="jumbotron-heading">You have no saved Pages</h1>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
-

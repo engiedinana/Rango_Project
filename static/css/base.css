@@ -3,7 +3,7 @@
 
 * {
   /* margin: auto; */
-  line-height: normal
+  line-height: normal;
 }
 
 #menu_bar {
@@ -40,7 +40,7 @@ ul.navbar-nav > li {
 }
 
 h6{
-    font-family: "Times New Roman", Times, serif;;
+    font-family: "Times New Roman", Times, serif;
     font-size: 55px;
 }
 
@@ -54,7 +54,7 @@ h6{
     height: 45px;
 }
 
-#title img, h6 {
+#title img, #title h6 {
     display: inline;
     float: none;
 }
@@ -69,3 +69,29 @@ h6{
 }
 
 /*User Profile Page*/
+#user_profile {
+  padding-left:40px;
+}
+
+#user_profile p.email{
+  display: inline-block;
+}
+
+.email_container{
+  padding-top: 20px;
+}
+
+hr.userProfile {
+  margin-top: 4rem;
+  border-top: 5px solid rgba(0,0,0,.1);
+  background-color: black;
+}
+
+.favorites {
+  border: 3px solid 9cb39c;
+}
+
+.jumbotron {
+  background-color: #FFF !important;
+
+}
