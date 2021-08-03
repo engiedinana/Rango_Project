@@ -13,29 +13,41 @@
     {% if category %}
     <h1>{{ category.name }}</h1>
     {% if pages %}
-    <ul>
+    <ul id="parentPage">
         {% for page in pages %}
-        <li><a href="{{ page.url }}">{{ page.title }}</a></li>
             {% if user.is_authenticated %}
                     {% if fav_list %}
                         {% if page in fav_list %}
-                        <button id="unsaveFavorite" class="show" data-pageid="{{page.id}}">
-                            <i class="far fa-bookmark"></i>
+                        <div>
+                        <li id="page"><a href="{{ page.url }}">{{ page.title }}</a></li>
+                        <button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
+                            <img src={% static 'images/unsaveIcon.png' %}/>
                         </button>
-                        <button id="saveFavorite" class="hide" data-pageid="{{page.id}}">
-                            <i class="far fa-bookmark"></i>
+                        <button id="saveFavorite{{forloop.counter0}} class="hide" data-pageid="{{page.id}}">
+                            <img src={% static 'images/saveIcon.png' %}/>
                         </button>
+                        </div>
                         {% else %}
-                        <button id="unsaveFavorite" class="hide" data-pageid="{{page.id}}">
-                            <i class="icon-bookmark-empty"></i>
+                        <div>
+                        <li id="page"><a href="{{ page.url }}">{{ page.title }}</a></li>
+                        <button id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
+                            <img src={% static 'images/unsaveIcon.png' %}/>
                         </button>
-                        <button id="saveFavorite" class="show" data-pageid="{{page.id}}">
-                            <i class="icon-bookmark-empty"></i>
+                        <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
+                            <img src={% static 'images/saveIcon.png' %}/>
                         </button>
+                        </div>
                         {% endif %}
                     {% else %}
-                    <button id="saveFavorite" class="show" data-pageid="{{page.id}}">Save</button>
-                    <button id="unsaveFavorite" class="hide" data-pageid="{{page.id}}">Unsave</button>
+                    <div>
+                    <li id="page"><a href="{{ page.url }}">{{ page.title }}</a></li>
+                    <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
+                        <img src={% static 'images/saveIcon.png' %}/>
+                    </button>
+                    <button id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
+                        <img src={% static 'images/unsaveIcon.png' %}/>
+                    </button>
+                    </div>
                     {% endif %}
             {% endif %}
         {% endfor %}
