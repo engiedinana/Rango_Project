@@ -3,21 +3,70 @@
 
 
 {% block title_block %}
-    About Rango
+    About Us
 {% endblock %}
 
+{% block header_block %}
+    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+{% endblock %}
 
 {% block body_block %}
-    <h1>Rango says...</h1>
-    <div>
-        here is the about page. <br />
-        <strong>This tutorial has been put together by Sara Khalil</strong><br />
+<div class="about-section">
+    <h1>About Us</h1>
+    <p>Rango is a collaborative platform designed to bring together CS geeks -  beginners and experts - to express their passion, share knowledge and learn through browsing/adding different topics and their supporting websites, saving page-links for future references, and engaging with others through comments and ratings.
+    </p>
+</div>
+  
+  <h2 id = "team">Our Team</h2>
+  <div class="row">
+    <div class="column">
+      <div class="card">
+        <img class = "img" src="{% static 'images/Engie.jpeg' %}" alt="Engie">
+        <div class="container">
+          <h2>Engie Dinana</h2>
+          <p class="title">Developer</p>
+          <p>Engie is a Masters student at University of Glasgow</p>
+          <p>edinana@aucegypt.edu</p>
+        </div>
+      </div>
     </div>
-    <p>Visits: {{ visits }}</p>
-    <div>
-        <img src="{% static 'images/rango.jpg' %}" alt="Picture of Rango" /> <!-- New line -->
-        <img src="{{ MEDIA_URL }}cat.jpg" alt="Picture of a Cat" /> <!-- New line -->
+  
+    <div class="column">
+      <div class="card">
+        <img class = "img" src="{% static 'images/Ghazian.jpeg' %}" alt="Ghazian">
+        <div class="container">
+          <h2>Ghazian Azfar</h2>
+          <p class="title">Developer</p>
+          <p>Ghazian is a Masters student at University of Glasgow</p>
+          <p>azfar.ghazian@gmail.com</p>
+        </div>
+      </div>
     </div>
+    
+    <div class="column">
+      <div class="card">
+        <img class = "img" src="{% static 'images/Nikhita.jpeg' %}" alt="Nikhita">
+        <div class="container">
+          <h2>Nikhita Sareen</h2>
+          <p class="title">Developer</p>
+          <p>Nikhita is a Masters student at University of Glasgow</p>
+          <p>nikhitasareen@gmail.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+        <div class="card">
+          <img class = "img" src="{% static 'images/Sara.jpeg' %}" alt="Sara">
+          <div class="container">
+            <h2>Sara Khalil</h2>
+            <p class="title">Developer</p>
+            <p>Sara is a Masters student at University of Glasgow</p>
+            <p>sarahhahmed@aucegypt.edu</p>
+          </div>
+        </div>
+      </div>   
+  </div>
 {% endblock %}
 
 

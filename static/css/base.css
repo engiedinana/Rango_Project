@@ -105,12 +105,13 @@ hr.userProfile {
 }
 /* Navigation bar */
 
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 960px) {
   .navbar-collapse {
     position: fixed;
-    left: 5%;
-    top: 19%;
+    /* left: 50%;
+    top: 50%; */
     /* transform: translate(-130%, -66%); */
+    padding-top: 500px;
     text-align: center;
     background-color: white;
   } 

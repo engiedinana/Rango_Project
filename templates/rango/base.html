@@ -10,10 +10,13 @@
         {% block title_block %}
             for CS Geeks!
         {% endblock %}
-    </title>
-    <!-- Bootstrap stylesheet along with local style style sheet -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/base.css' %}">
+    </title>  
+            <!-- Bootstrap stylesheet along with local style style sheet -->
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+            <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/base.css' %}">
+        {% block header_block %}
+          
+        {% endblock %}
 </head>
 
 <body>
@@ -26,11 +29,13 @@
     <!-- Navbar container -->
     <nav id = "menu_bar" class="navbar navbar-light navbar-expand-lg">
         <div class="container-fluid">
+            <div class = "navbar-header">
             <!--Add Hamburger icon/button to toggle menu display -->
             <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#content-navbar-collapse" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="navbar-toggler-icon"></span>
             </button>
+            </div>
             <!-- Data to show or menu items to display upon toggle -->
             <div class="collapse navbar-collapse" id="content-navbar-collapse">
                 <ul class="nav navbar-nav mr-auto">
