@@ -11,6 +11,8 @@
             for CS Geeks!
         {% endblock %}
     </title>
+    <!-- Bootstrap stylesheet along with local style style sheet -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" media="screen" href="{% static 'css/base.css' %}">
 </head>
 
@@ -21,22 +23,37 @@
             <h6>Rango</h6>
         </div>
     </div>
-    <ul id = "menu_bar">
-        <li class = "menu_item"><a href="{% url 'rango:index' %}">Home</a></li>
-        <li class = "menu_item"><a href="/machine_learning">Machine Learning</a></li> <!--URL to be changed-->
-        <li class = "menu_item"><a href="/frameworks">Frameworks</a></li> <!--URL to be changed-->
-        <li class = "menu_item"><a href="/algorithms">Algorithms</a></li> <!--URL to be changed-->
-        <li class = "menu_item"><a href="/web_design">Web Design</a></li> <!--URL to be changed-->
-        <li class = "menu_item"><a href="{% url 'rango:about' %}">About Us</a></li>
-        {% if user.is_authenticated %}
-        <li class = "menu_item_right1"><a href="/profile">Profile</a></li> <!--URL to be changed-->
-        <li class = "menu_item_right2"><a href="{% url 'rango:logout' %}?next=/rango/">Logout</a></li>
-        {% else %}
-        <li class = "menu_item_right1"><a href="{% url 'rango:register' %}">Register</a></li>
-        <li class = "menu_item_right2"><a href="{% url 'rango:login' %}">Login</a></li>
-        {% endif %}
-      </ul>
-
+    <!-- Navbar container -->
+    <nav id = "menu_bar" class="navbar navbar-light navbar-expand-lg">
+        <div class="container">
+            <!--Add Hamburger icon/button to toggle menu display -->
+            <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#content-navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Data to show or menu items to display upon toggle -->
+            <div class="collapse navbar-collapse" id="content-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a class="nav-link" href="{% url 'rango:index' %}">Home</a></li>
+                    <li><a class= "nav-link" href="/machine_learning">Machine Learning</a></li> <!--URL to be changed-->
+                    <li><a class= "nav-link" href="/frameworks">Frameworks</a></li> <!--URL to be changed-->
+                    <li><a class= "nav-link" href="/algorithms">Algorithms</a></li> <!--URL to be changed-->
+                    <li><a class= "nav-link" href="/web_design">Web Design</a></li> <!--URL to be changed-->
+                    <li><a class= "nav-link" href="{% url 'rango:about' %}">About Us</a></li>
+                </ul>
+                <!-- Dynamic changing of options for user upon user login -->
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                    <li><a class= "nav-link" href="{% url 'rango:profile' %}">Profile</a></li> <!--URL to be changed-->
+                    <li><a class= "nav-link" href="{% url 'rango:logout' %}?next=/rango/">Logout</a></li>
+                    {% else %}
+                    <li><a class= "nav-link" href="{% url 'rango:register' %}">Register</a></li>
+                    <li><a class= "nav-link" href="{% url 'rango:login' %}">Login</a></li>
+                    {% endif %}
+                </ul>          
+            </div>
+        </div>
+    </nav>
       <main role="main">
         {% block body_block %}
         {% endblock %}
@@ -48,6 +65,12 @@
         </footer>
         </main>
     </div>
+    <!-- Scripts for Jquery , Ajax and Bootstrap support -->
+    <script src="{% static "js/jquery-3.3.1.min.js" %}" crossorigin="anonymous"></script>
+    <script src="{% static "js/rango-jquery.js" %}" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="{% static "js/rango-ajax.js" %}" crossorigin="anonymous"></script>
 </body>
 
 
@@ -67,16 +90,6 @@
     
     </div>
 </div>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script>
-        window.jQuery || document.write('<script src="https://getbootstrap.com/docs/4.2/assets/js/vendor/jquery-slim.min.js"><\/script>')
-    </script>
-    <script src="https://getbootstrap.com/docs/4.2/dist/js/bootstrap.bundle.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/99 feather.min.js">
-    </script>
-    <script src="https://getbootstrap.com/docs/4.2/examples/dashboard/dashboard.js">
-    </script>
-</body> -->
+-->
+</body> 
 </html>

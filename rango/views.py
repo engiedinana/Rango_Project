@@ -167,8 +167,8 @@ def index(request):
     # Retrieve the top 5 only -- or all if less than 5.
     # Place the list in our context_dict dictionary (with our boldmessage!)
     # that will be passed to the template engine.
-    category_list = Category.objects.order_by('-likes')[:5]
-    page_list = Page.objects.order_by('-views')[:5]
+    category_list = Category.objects.all()#.order_by('-likes')[:5]
+    page_list = Page.objects.all()#.order_by('-views')[:5]
     context_dict = {}
     context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
     context_dict['categories'] = category_list
@@ -208,7 +208,10 @@ def show_category(request, category_name_slug):
         # the database to the context dictionary.
         # We'll use this in the template to verify that the category exists.
         context_dict['category'] = category
-        context_dict['fav_list'] = get_user(request).pages.all()
+        #Get user instance
+        user = get_user(request)
+        #Get all the favorite pages of the user and send to render on page
+        context_dict['fav_list'] = user.pages.all()
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything -
@@ -362,11 +365,11 @@ def user_login(request):
         return render(request, 'rango/login.html')
 
 @login_required
-def restricted(request):
+def profile(request):
     context_dict = {}
     #Render saved list 
     context_dict['pages'] = get_user(request).pages.all()
-    return render(request, 'rango/restricted.html', context=context_dict)
+    return render(request, 'rango/profile.html', context=context_dict)
 
 #Use the login_required() decorator to ensure only those logged in can
 # access the view.
@@ -415,7 +418,8 @@ class UnsaveFavoriteView(View):
                 return HttpResponse(-1)
         #Delete saved page from the fav list
         user = get_user(request)
-        user.pages.all().filter(id=page_id).delete()
+        to_remove = user.pages.all().filter(id=page_id)
+        user.pages.remove(to_remove[0])
         user.save()
         #return response
         return HttpResponse("success")    

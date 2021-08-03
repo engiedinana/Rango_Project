@@ -6,8 +6,8 @@ from rango.maxVal import maxLength128,maxLength200
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=maxLength128, help_text="Please enter the category name.")
-    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    #views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    #likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     # An inline class to provide additional information on the form.
@@ -37,7 +37,7 @@ class PageForm(forms.ModelForm):
         # Some fields may allow NULL values; we may not want to include them.
         # Here, we are hiding the foreign key.
         # we can either exclude the category field from the form,
-        exclude = ('category',)
+        exclude = ('category','favorite')
         # or specify the fields to include (don't include the category field).
         #fields = ('title', 'url', 'views')
 class UserForm(forms.ModelForm):
