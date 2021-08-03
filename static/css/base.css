@@ -73,7 +73,7 @@ ul.navbar-nav > li {
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-150%, -66%);
+    transform: translate(-130%, -66%);
     text-align: center;
     background-color: white;
   } 
