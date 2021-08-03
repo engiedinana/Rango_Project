@@ -80,19 +80,19 @@ li#page{
   display:inline-block;
 }
 
-ul#parentPage button {
+ul#parentPage button,ul#favListParent button  {
   border: transparent;
   background: transparent;
   cursor:pointer;
 }
 
-ul#parentPage img {
-  width: 50px;
-  height: 50px;
+ul#parentPage img, ul#favListParent img {
+  width: 40px;
+  height: 42px;
   display: inline-block;
 }
 
-#page a{
+#page a, ul#favListParent a{
   font-size: 27px;
 }
 

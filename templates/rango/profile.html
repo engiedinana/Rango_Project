@@ -1,5 +1,5 @@
 {% extends 'rango/base.html' %}
-{% load staticfiles %} <!-- New line -->
+{% load static %} <!-- New line -->
 
 {% block title_block %}
     Profile Page
@@ -60,9 +60,17 @@
         <h1 class="jumbotron-heading">Saved Pages</h1>
     </div>
     <div class="container favorites">
-        <ul>
+        <ul id="favListParent">
         {% for page in pages %}
-            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            <li><a href="{{ page.url }}">{{ page.title }}</a>
+                <button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
+                    <img src={% static 'images/unsaveIcon.png' %}/>
+                </button>
+                <button id="saveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
+                    <img src={% static 'images/saveIcon.png' %}/>
+                </button>
+            </li>
+
         {% endfor %}
         </ul>
     </div>
