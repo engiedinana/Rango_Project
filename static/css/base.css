@@ -27,6 +27,7 @@ a:hover {
 
 ul.navbar-nav > li {
   padding-left: 10px;
+  color : white;
 }
 
 #footer {
@@ -65,81 +66,21 @@ ul.navbar-nav > li {
   display: none;
 }
 
-/*User Profile Page*/
+/* Navigation bar */
 
-.navbar-nav>li:last-child {
-  border: none;
-}
-
-.navbar-default .navbar-toggle {
-  border-color: rgba(0, 0, 0, 0);
-}
-
-.navbar-default .navbar-toggle .icon-bar {
-  background-color: rgb(10, 10, 10);
-}
-
-.navbar-toggle {
-  margin-top: 19px;
-  margin-right: 43px;
-}
-
-.navbar-default .navbar-nav>li>a {
-  color: black;
-  font-size: 15px;
-  line-height: 1px;
-}
-
-.navbar-default .navbar-nav>li>a:hover,
-.navbar-default .navbar-nav>li>a:focus {
-  color: rgb(2, 2, 2);
-  background-color: rgba(255, 198, 0, 0);
-  -webkit-transition: background-color 200ms linear;
-  -moz-transition: background-color 200ms linear;
-  -o-transition: background-color 200ms linear;
-  -ms-transition: background-color 200ms linear;
-  transition: background-color 200ms linear;
-}
-
-.navbar-default .navbar-nav>li>a {
-  display: inline-block;
-  position: relative;
-  padding-bottom: 3px;
-}
-
-.navbar-default .navbar-nav>li>a:after {
-  content: '';
-  display: block;
-  margin: auto;
-  height: 1px;
-  width: 0px;
-  background: black;
-  transition: width .4s ease, background-color .4s ease;
-  margin-top: 12px;
-}
-
-.navbar-default .navbar-nav>li>a:hover:after {
-  width: 100%;
-  background: #FFC600;
-}
-
-.navbar-default .navbar-nav>.active>a,
-.navbar-default .navbar-nav>.active>a:focus,
-.navbar-default .navbar-nav>.active>a:hover {
-  color: rgb(14, 13, 13);
-  background-color: rgba(255, 198, 0, 0);
-  border-bottom: solid #FFC600;
-  border-bottom-width: 1px;
-  height: 29px;
-}
-
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1200px) {
   .navbar-collapse {
     position: fixed;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-150%, -66%);
     text-align: center;
-  
+    background-color: white;
+  } 
+  .navbar-nav{
+    border: solid #9cb39c;
+    border-width: 1px;
   }
-  
+}
+
+/* User Profile */
