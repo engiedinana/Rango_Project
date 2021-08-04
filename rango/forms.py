@@ -42,7 +42,7 @@ class PageForm(forms.ModelForm):
         # Some fields may allow NULL values; we may not want to include them.
         # Here, we are hiding the foreign key.
         # we can either exclude the category field from the form,
-        exclude = ('category','favorite')
+        exclude = ('category','favorite', 'UserProfile')
         # or specify the fields to include (don't include the category field).
         #fields = ('title', 'url', 'views')
 class UserForm(forms.ModelForm):
