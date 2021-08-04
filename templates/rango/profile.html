@@ -5,65 +5,58 @@
     Profile Page
 {% endblock %}
 
+{% block header_block %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
 {% block body_block %}
-<div class="jumbotron p-4">
-<div class="container">
-    <div class="row">
-        {% if user_profile.picture %}
-        <img src = "{{MEDIA_URL}}{{user_profile.picture}}"
+<div class="card">
+    {% if user_profile.picture %}
+        <img class = "center" src = "{{MEDIA_URL}}{{user_profile.picture}}"
              width="300"
              height="300"
              alt="{{ selected_user.username}}'s profile image"/>
         {% else %}
-        <img src="{% static "images/default_profile_pic.png" %}"
+        <img class = "center" src="{% static "images/default_profile_pic.png" %}"
             width="300"
              height="300"
             alt="Picture of Rango"/>
         {% endif %}
-        <br />
-        <div id="user_profile" class="col-sm-12 col-md-6 col-lg-6">
-                {% if selected_user %}
-                    <h6>{{selected_user.first_name}} {{selected_user.last_name}} </h6>
-                    <div class="email_container">
-                        {% if user.username %}
-                        <p class="username">Username: {{ user.username }}</p>
+    <h1><strong>{{selected_user.first_name}} {{selected_user.last_name}} </strong></h1>
+    {% if user.username %}
+                        <p class="username"><strong>Username:</strong> {{ user.username }}</p>
                         {% endif %}
                         {% if user.email %}
-                        <p class="email">Email:</p><a href="{{ user.email }}">{{ user.email }}</a>
+                        <p class="email"><strong>Email:</strong> <a href="{{ user.email }}">{{ user.email }}</a></p>
                         {% endif %}
                         {% if user_profile.dob %}
-                        <p class="dob">Date of Birth: {{ user_profile.dob }}</p>
+                        <p class="dob"><strong>Date of Birth:</strong> {{ user_profile.dob }}</p>
                         {% endif %}
                         {% if user_profile.gender %}
-                        <p class="gender">Gender: {{ user_profile.gender }}</p>
+                        <p class="gender"><strong>Gender:</strong> {{ user_profile.gender }}</p>
                         {% endif %}
                         {% if user_profile.website %}
-                        <p class="website">Website:</p><a href="{{ user_profile.website }}">{{ user_profile.website }}</a>
-                        {% endif %}
-                    </div>
-                {% endif %} 
-        </div>
-    </div>
+                        <p class="website"><strong>Website:</strong> <a href="{{ user_profile.website }}">{{ user_profile.website }}</a></p>
+    {% endif %}
 </div>
+
+<div class="jumbotron p-4">
 <hr class="userProfile"/>
 <div class="jumbotron p-0"></div>
-    
     {% if pages %}
     <div class="container">
-        <h1 class="jumbotron-heading">Saved Pages</h1>
+        <h1 class="jumbotron-heading"><strong>Saved Pages</strong></h1>
     </div>
     <div class="container favorites">
         <ul id="favListParent">
         {% for page in pages %}
-            <li><a href="{{ page.url }}">{{ page.title }}</a>
-                <button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
-                    <img src={% static 'images/unsaveIcon.png' %}/>
-                </button>
-                <button id="saveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
-                    <img src={% static 'images/saveIcon.png' %}/>
-                </button>
+            <li class = favlist><button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
+                <img class = "icon" src={% static 'images/unsaveIcon.png' %}/>
+            </button>
+            <button id="saveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
+                <img class = "icon" src={% static 'images/saveIcon.png' %}/>
+            </button><a href="{{ page.url }}">{{ page.title }}</a>
             </li>
-
         {% endfor %}
         </ul>
     </div>
