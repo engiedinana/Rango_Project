@@ -15,6 +15,19 @@
         {% endif %} <br/>
         <strong>{{ boldmessage }}</strong>
     </div>
+
+    {% if user.is_authenticated %}
+    <div class="col-md-4" id="add_category">
+        <div class="row">
+            <a href="{% url 'rango:add_category' %}">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </div>
+        <!-- Add rating option -->
+    </div>
+    </div>
+    {% endif %}
+
     <h2>Most Liked Categories</h2>
     <div>
         {% if categories %}
