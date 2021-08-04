@@ -5,8 +5,8 @@ window.addEventListener('load',  function() {
    xhr.onreadystatechange = function() {
       if (xhr.readyState == XMLHttpRequest.DONE) {
          k = xhr.responseText
-          alert(k);
-          console.log(k)
+          //alert(k);
+          //console.log(k)
       }
   }
    xhr.open("GET", "get_cat", true);
