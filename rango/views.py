@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rango.models import Category, SuperCategories
-from rango.models import Page, UserProfile
-from rango.forms import CategoryForm, ContactUsForm
+from rango.models import Category, SuperCategories, Page, UserProfile, Comments, User
+from rango.forms import CategoryForm, ContactUsForm, CommentForm
 from django.shortcuts import redirect
 from rango.forms import PageForm
 from django.urls import reverse
@@ -11,7 +10,6 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, get_user
 from datetime import datetime
-from rango.models import User
 from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib import messages
@@ -22,6 +20,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from datetime import date
+
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
 Params: request, request type (whether it is a login or a register)
@@ -174,6 +174,7 @@ def index(request):
     # that will be passed to the template engine.
     category_list = Category.objects.all()#.order_by('-likes')[:5]
     page_list = Page.objects.all()#.order_by('-views')[:5]
+    
     context_dict = {}
     context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
     context_dict['categories'] = category_list
@@ -225,6 +226,19 @@ def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
     context_dict = {}
+    current_user = get_user(request)
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
+    if category == None:
+        return redirect(reverse('rango:index'))
+    
+    try:
+        profile = UserProfile.objects.get(user=current_user)
+    except UserProfile.DoesNotExist:
+        profile = None
+    
     try:
         # Can we find a category name slug with the given name?
         # If we can't, the .get() method raises a DoesNotExist exception.
@@ -234,26 +248,45 @@ def show_category(request, category_name_slug):
         # The filter() will return a list of page objects or an empty list.
         pages = Page.objects.filter(category=category)
         # Adds our results list to the template context under name pages.
+        #Fetch all the comments
+        comment_list = Comments.objects.filter(category=category)
         context_dict['pages'] = pages
         # We also add the category object from
         # the database to the context dictionary.
         # We'll use this in the template to verify that the category exists.
         context_dict['category'] = category
-        #Get user instance
-        user = get_user(request)
+        context_dict['comments'] = comment_list
+         #Get user instance
+        user = current_user
         if (not user.is_anonymous) and (user is not None):
             #Get all the favorite pages of the user and send to render on page
             context_dict['fav_list'] = user.pages.all()
         else:
             context_dict['fav_list'] = None
             
+        if request.method == 'POST':
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                if category and profile:
+                    comment = form.save(commit=False)
+                    comment.category = category
+                    comment.date = date.today()
+                    comment.profileInfo = profile
+                    comment.save()
+                return redirect(reverse('rango:show_category', kwargs={'category_name_slug':category_name_slug}))
+            else:
+                print(form.errors)          
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything -
         # the template will display the "no category" message for us.
         context_dict['category'] = None
         context_dict['pages'] = None
-        # Go render the response and return it to the client.
+        context_dict['comments'] = None
+        context_dict['forms'] = None 
+    form = CommentForm()
+    context_dict['form'] = form 
+        #It is not a post request, it is a get request and render the comment form to the user
     return render(request, 'rango/category.html', context=context_dict)
 
 @login_required
@@ -520,24 +553,25 @@ class ProfileView(View):
             print(form.errors)
         context_dict = {'user_profile': user_profile, 'selected_user': user, 'form':form}
         return render(request, 'rango/profile.html', context_dict)
-    
+
+#View for the cantact us form
 class ContactUsView(View):
+    #get request to show user the empty form
     def get(self,request):
         form = ContactUsForm()
         return render(request, 'rango/contact_us.html', {'form': form}) 
     
+    #post request to take input from user in a form and store it in the database
     def post(self, request):
         form = ContactUsForm(request.POST)
-        # Have we been provided with a valid form?
+        #verify form is valid
         if form.is_valid():
-            # Save the details to the database.
+            #save the valid form in the database
             form.save(commit=True)
-            # Now that the enquiry is made just redirect the user back to the index view.
+            #redirect user upon successful posting of the comment
             return redirect(reverse('rango:index'))
         else:
-            # The supplied form contained errors -
-            # just print them to the terminal.
             print(form.errors)
-            # Will handle the bad form, new form, or no form supplied cases.
-            # Render the form with error messages (if any).
+        #If the user reaches here there was some error in the form so re render the form
         return render(request, 'rango/contact_us.html', {'form': form})
+ 
