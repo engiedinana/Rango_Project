@@ -187,7 +187,7 @@ div#user_profile.col-sm-12 {
 }
 
 /*Contact us*/
-#id_comments {
+#id_description {
   width: 300px;
   height: 250px;
   border: 2px solid #9cb39c;
@@ -221,7 +221,7 @@ div#user_profile.col-sm-12 {
   border-left:solid #9cb39c;
   border-right:solid #9cb39c;
   border-width: 2px;
-  height: 40px;
+  height: 50px;
   width: 300px;
   border-radius: 8px;
 }
