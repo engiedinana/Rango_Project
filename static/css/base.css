@@ -232,3 +232,24 @@ div#user_profile.col-sm-12 {
   border-top: 5px solid rgba(0,0,0,.1);
   background-color: black;
 }
+
+/*Show category*/
+#about_category img{
+    width: 250px;
+    height: 250px;
+}
+
+#about_category h1
+{
+    align-items: flex-end;
+    display: flex;
+}
+
+#add_page i {
+  font-size:-webkit-xxx-large ;
+  color:black;
+}
+
+#category_pages {
+  border: 2px solid #9cb39c;
+}

@@ -54,16 +54,20 @@ class Page(models.Model):
     def __str__(self):
         return self.title
 
+#Table for storing user requests, suggestions, complaints and handling via admin
 class Enquiries(models.Model):
+    #Basic user details
     first_name = models.CharField(max_length=maxLength128)
     last_name = models.CharField(max_length=maxLength128)
-    description = models.CharField(max_length=maxLength150)
     email = models.EmailField(max_length=maxLength128)
-    
-"""
+    #Field to store comments of user for the issue, suggestion etc.
+    description = models.CharField(max_length=maxLength150)
+   
+#Table for storing user comments on a category
 class Comments(models.Model):
-    UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
+    #Link comment to the category it is meant for
     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    description = models.TextField(blank=True)
+    #Comment description
+    description = models.TextField()
+    #date the comment was made
     date = models.DateField()
-"""

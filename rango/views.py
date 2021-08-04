@@ -214,8 +214,12 @@ def show_category(request, category_name_slug):
         context_dict['category'] = category
         #Get user instance
         user = get_user(request)
-        #Get all the favorite pages of the user and send to render on page
-        context_dict['fav_list'] = user.pages.all()
+        if (not user.is_anonymous) and (user is not None):
+            #Get all the favorite pages of the user and send to render on page
+            context_dict['fav_list'] = user.pages.all()
+        else:
+            context_dict['fav_list'] = None
+            
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything -
