@@ -11,7 +11,7 @@
 
 {% block body_block %}
     {% if category %}
-    <div class="container-fluid">
+    <div class="container">
         <div class="row" id="about_category">
             <img src={% static 'images/placeholder.jpeg' %}/>
             <h1>{{ category.name }}</h1>
@@ -75,8 +75,43 @@
         </div>
         <!-- Add rating option -->
     </div>
-</div>
-
+    </div>
+    {% if comments or pages %}
+    <div class="conainer">
+        <div class="row">
+            <h1>Comments</h1>
+        </div>
+    </div>
+    {% endif %}
+    {% if comments %}
+    {% for comment in comments %}
+    <div id="comment_container" class="container">
+        <div class="container">
+            <p>{{comment.profileInfo}}" "{{comment.profileInfo}}</p>
+            <p>{{comment.date}}</p>
+        </div>
+        <div class="container">
+            <p id="comment">{{comment.description}}</p>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% if pages %}
+    <form id="comment_form" method="post" action="/rango/category/{{ category.slug }}/">
+        <div class="form-group">
+        {% csrf_token %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {% for field in form.visible_fields %}
+            {{ field.errors }}
+            {{ field.help_text }}
+            {{ field }}
+        {% endfor %}
+        <input type="submit" name="submit" value="Post" />
+        </div>
+    </form>
+    {% endif %}
     {% endif %}
     </div>
     {% else %}

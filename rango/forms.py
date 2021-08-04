@@ -1,8 +1,9 @@
+from datetime import datetime
 from django import forms
-from rango.models import Page, Category, Enquiries
+from rango.models import Comments, Page, Category, Enquiries
 from django.contrib.auth.models import User
 from rango.models import UserProfile
-from rango.maxVal import maxLength128,maxLength200, maxLength150
+from rango.maxVal import maxLength128,maxLength200,maxLength150,maxLength256
 import datetime
 
 class CategoryForm(forms.ModelForm):
@@ -70,3 +71,10 @@ class ContactUsForm(forms.ModelForm):
         # Provide an association between the ModelForm and a model
         model = Enquiries
         fields = ('first_name','last_name', 'email', 'description',)
+        
+class CommentForm(forms.ModelForm):
+    #description in comment
+    description = forms.CharField(max_length=maxLength256, widget=forms.TextInput(attrs={'placeholder': 'Write your comment in 256 words'}))
+    class Meta:
+        model = Comments
+        fields=('description',)

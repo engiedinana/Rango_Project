@@ -205,7 +205,7 @@ li.dropdown:last-child .dropdown-content{
 }
 
 /*Contact us*/
-#id_description {
+#contactus #id_description {
   width: 300px;
   height: 250px;
   border: 2px solid #9cb39c;
@@ -224,7 +224,7 @@ li.dropdown:last-child .dropdown-content{
   font-size: -webkit-xxx-large;
 }
 
-#contactus input[type="submit"]
+#contactus input[type="submit"], #comment_container input[type="submit"]
 {
   width: 300px;
   background-color: #8ca08c;
@@ -270,4 +270,19 @@ li.dropdown:last-child .dropdown-content{
 
 #category_pages {
   border: 2px solid #9cb39c;
+}
+
+#comment_container p {
+  display: inline-block;
+}
+
+#comment_form #id_description {
+  width: 200px;
+  height: 100px;
+  border: 2px solid #9cb39c;
+  border-radius: 8px;
+  text-align: center;
+}
+#comment_form input{
+  display:block;
 }

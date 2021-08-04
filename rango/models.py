@@ -1,7 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import default, slugify
 from django.contrib.auth.models import User
-from rango.maxVal import maxLength128, maxLength150
+from rango.maxVal import maxLength128, maxLength150, maxLength256
+from datetime import date
 from django.core.validators import MaxValueValidator, MinValueValidator
 import datetime
 
@@ -58,11 +59,6 @@ class Page(models.Model):
     def __str__(self):
         return self.title
 
-class SavedPages(models.Model):
-    UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
-    Page = models.ForeignKey(Page, on_delete=models.CASCADE)
-
-
 #Table for storing user requests, suggestions, complaints and handling via admin
 class Enquiries(models.Model):
     #Basic user details
@@ -74,9 +70,10 @@ class Enquiries(models.Model):
    
 #Table for storing user comments on a category
 class Comments(models.Model):
+    profileInfo = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     #Link comment to the category it is meant for
-    Category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     #Comment description
-    description = models.TextField()
+    description = models.CharField(max_length=maxLength256)
     #date the comment was made
-    date = models.DateField()
+    date = models.DateField(default=date.today)
