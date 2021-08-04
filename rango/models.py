@@ -32,12 +32,12 @@ class Category(models.Model):
     #super_cat = models.ForeignKey(SuperCategories, on_delete=models.CASCADE)
     #user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     name = models.CharField(max_length=maxLength128, unique=True)
-    title = models.CharField(max_length=maxLength128, unique=True)
-    rating = models.IntegerField(default=0,
-        validators=[
-            MaxValueValidator(5),
-            MinValueValidator(0),
-        ])
+    # title = models.CharField(max_length=maxLength128, unique=True)
+    # rating = models.IntegerField(default=0,
+    #     validators=[
+    #         MaxValueValidator(5),
+    #         MinValueValidator(0),
+    #     ])
     #image = models.ImageField(upload_to='', blank=True)
     #last_modified = models.DateField()
 
