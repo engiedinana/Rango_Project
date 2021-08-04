@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from rango.maxVal import maxLength128, maxLength150
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class UserProfile(models.Model):
@@ -31,7 +32,12 @@ class Category(models.Model):
     #super_cat = models.ForeignKey(SuperCategories, on_delete=models.CASCADE)
     #user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     name = models.CharField(max_length=maxLength128, unique=True)
-    #rating = models.FloatField(max_length=maxLength128)
+    title = models.CharField(max_length=maxLength128, unique=True)
+    rating = models.IntegerField(default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0),
+        ])
     #image = models.ImageField(upload_to='', blank=True)
     #last_modified = models.DateField()
 
@@ -46,6 +52,7 @@ class Category(models.Model):
 
 class Page(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    #UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=maxLength128)
     url = models.URLField()
     views = models.IntegerField(default=0)
@@ -53,17 +60,20 @@ class Page(models.Model):
     favorite = models.ManyToManyField(User, related_name='pages')
     def __str__(self):
         return self.title
+"""
+class SavedPages(models.Model):
+    UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
+    Page = models.ForeignKey(Page, on_delete=models.CASCADE)
+"""
 
 class Enquiries(models.Model):
     first_name = models.CharField(max_length=maxLength128)
     last_name = models.CharField(max_length=maxLength128)
     description = models.CharField(max_length=maxLength150)
     email = models.EmailField(max_length=maxLength128)
-    
-"""
+
 class Comments(models.Model):
     UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     date = models.DateField()
-"""
