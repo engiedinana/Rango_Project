@@ -191,6 +191,7 @@ def get_cat(request):
     for category in category_list:
         page_list = Page.objects.all().filter(category_id=category.id)[:3]
         cat = {}
+        cat["title"]=category.name
         cat["slug"]=category.slug
         cat["rating"]=category.rating
         cat["image"]=str(category.image)
