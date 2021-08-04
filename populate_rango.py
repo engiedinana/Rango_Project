@@ -5,7 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 
 import django
 django.setup()
-from rango.models import Category, Page, SuperCategories, Comments
+from rango.models import Category, Page
 
 def populate():
     # First, we will create lists of dictionaries containing the pages
@@ -50,9 +50,9 @@ def populate():
         'url':'http://flask.pocoo.org'}
     ]
         
-    cats = {'Python': {'pages': python_pages, 'rating': 3.4},
-        'Django': {'pages': django_pages, 'rating': 2.5},
-        'Other Frameworks': {'pages': other_pages, 'rating': 3.1} }
+    cats = {'Python': {'pages': python_pages},
+        'Django': {'pages': django_pages},
+        'Other Frameworks': {'pages': other_pages} }
 
     comments = [
         {'description': 'This course was intriguing but at the same time interesting',

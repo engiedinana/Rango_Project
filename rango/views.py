@@ -99,12 +99,14 @@ def facebook_login(request):
                 #user exists in the DB, so they can login
                 user = User.objects.get(email=email, username=email)
                 login(request, user)
+                return redirect('/')
             except:
                 #user doesn't existin the DB, they need to register first
-                print("Sign up first") #need UI!
+                messages.error(request, 'Sign up first')
+                return redirect('/rango/login/')
         else:
             print('Unable to login with Facebook Please try again') #need UI!
-        return redirect('/')
+        
     else:
         url = return_string
         return redirect(url)
@@ -122,13 +124,14 @@ def facebook_register(request):
             try:
                 #user already exists in the DB, they can't register to the system multiple times
                 user = User.objects.get(email=email, username = email)
-                print('User Already Exists') #needs UI reflection!
+                messages.error(request, 'Account already exists')
+                return redirect('/rango/register/')
             except:
                 #user doesn't exist in the DB, so create a new user with appropriate data
                 create_facebook_user(request, email, user_data)
+                return redirect('/')
         else:
             print('Unable to login with Facebook Please try again')
-        return redirect('/')
     else:
         url = return_string
         return redirect(url)
