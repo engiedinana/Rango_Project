@@ -1,39 +1,43 @@
 from django.db import models
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import default, slugify
 from django.contrib.auth.models import User
 from rango.maxVal import maxLength128, maxLength150, maxLength256
 from datetime import date
+from django.core.validators import MaxValueValidator, MinValueValidator
+import datetime
 
 class UserProfile(models.Model):
-    """GENDER_CHOICES = (
+    GENDER_CHOICES = (
         ('F', 'Female'),
         ('M', 'Male'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    first_name = models.CharField(max_length=maxLength128)
-    last_name = models.CharField(max_length=maxLength128)
-    username = models.CharField(max_length=maxLength128, unique=True)
-    email = models.EmailField(max_length=maxLength128, unique=True)
-    dob = models.DateField()
-    facebook = models.BooleanField(blank=True)
-    """
+    # first_name = models.CharField(max_length=maxLength128)
+    # last_name = models.CharField(max_length=maxLength128)
+    dob = models.DateField(default="")
+    facebook = models.BooleanField(default = False)
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    website = models.URLField(blank=True)
-    picture = models.ImageField(upload_to='profile_images', blank=True)
+    website = models.URLField(default = "", blank = True)
+    picture = models.ImageField(upload_to='profile_images', default="", blank = True)
     def __str__(self):
         return self.user.username
-"""
+
 class SuperCategories(models.Model):
     title = models.CharField(max_length=maxLength128)
-"""
+
 class Category(models.Model):
-    #super_cat = models.ForeignKey(SuperCategories, on_delete=models.CASCADE)
-    #user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    super_cat = models.ForeignKey(SuperCategories, on_delete=models.CASCADE, default="")
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, default = "")
     name = models.CharField(max_length=maxLength128, unique=True)
-    #rating = models.FloatField(max_length=maxLength128)
-    #image = models.ImageField(upload_to='', blank=True)
-    #last_modified = models.DateField()
+    title = models.CharField(max_length=maxLength128, unique=True, default="")
+    rating = models.IntegerField(default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0),
+        ])
+    image = models.ImageField(upload_to='', blank=True)
+    last_modified = models.DateField(default=datetime.date.today, blank = True)
 
     slug = models.SlugField(unique=True)
     def save(self, *args, **kwargs):
@@ -46,6 +50,7 @@ class Category(models.Model):
 
 class Page(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    UserProfile = models.ForeignKey(User, on_delete=models.CASCADE, default = "")
     title = models.CharField(max_length=maxLength128)
     url = models.URLField()
     views = models.IntegerField(default=0)

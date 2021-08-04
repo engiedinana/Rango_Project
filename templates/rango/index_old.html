@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1 id = "greeting">Rango says...</h1>
+    <h1>Rango says...</h1>
     <div> 
         {% if user.is_authenticated %}
             howdy {{ user.first_name }} {{ user.last_name }}! <!--make sure all users have these!!-->
@@ -44,5 +44,4 @@
         <img src="{% static "images/rango.jpg" %}"
         alt="Picture of Rango" />
     </div>
-    <script src="{% static "js/index.js" %}" crossorigin="anonymous"></script>
 {% endblock %}

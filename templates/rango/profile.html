@@ -10,45 +10,39 @@
 <div class="container">
     <div class="row">
         {% if user_profile.picture %}
-        <p>{{user_profile.picture}}</p>
         <img src = "{{MEDIA_URL}}{{user_profile.picture}}"
              width="300"
              height="300"
              alt="{{ selected_user.username}}'s profile image"/>
         {% else %}
-        <img src = "{% static 'images/placeholder.jpeg' %}"
-             width="300"
+        <img src="{% static "images/default_profile_pic.png" %}"
+            width="300"
              height="300"
-             alt="fallback profile image"/>
+            alt="Picture of Rango"/>
         {% endif %}
         <br />
         <div id="user_profile" class="col-sm-12 col-md-6 col-lg-6">
-            <!--
-           
-            <form method="post" action="." enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}
-            </form>
-           
-        -->
                 {% if selected_user %}
                     <!--Change to first name last name-->
-                    <h6>{{selected_user.username}}</h6>
+                    <h6>{{selected_user.first_name}} {{selected_user.last_name}} </h6>
                     <div class="email_container">
-                        {% if user_profile.email %}
-                        <p class="email">email:</p><a href="{{ user_profile.email }}">{{user_profile.email}}</a>
-                        {% else %}
-                        <p class="email"> Email is not registered with us</p>
+                        {% if user.username %}
+                        <p class="username">Username: {{ user.username }}</p>
+                        {% endif %}
+                        {% if user.email %}
+                        <p class="email">Email:</p><a href="{{ user.email }}">{{ user.email }}</a>
+                        {% endif %}
+                        {% if user_profile.dob %}
+                        <p class="dob">Date of Birth: {{ user_profile.dob }}</p>
+                        {% endif %}
+                        {% if user_profile.gender %}
+                        <p class="gender">Gender: {{ user_profile.gender }}</p>
+                        {% endif %}
+                        {% if user_profile.website %}
+                        <p class="website">Website:</p><a href="{{ user_profile.website }}">{{ user_profile.website }}</a>
                         {% endif %}
                     </div>
-                    <!--Add DOB-->
-                {% else %}
-                    <h6>Mike Gibson</h6>
-                    <div class="email_container">
-                        <p class="email">email:</p><a href="#">mike.gibson@hotmail.com</a>
-                    </div>
-                {% endif %}
-        
+                {% endif %} 
         </div>
     </div>
 </div>

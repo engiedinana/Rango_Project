@@ -15,12 +15,15 @@ from rango.models import User
 from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib import messages
-import requests
+import requests 
+import json
+from django.core.serializers import serialize
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from datetime import date
+
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
 Params: request, request type (whether it is a login or a register)
@@ -100,12 +103,14 @@ def facebook_login(request):
                 #user exists in the DB, so they can login
                 user = User.objects.get(email=email, username=email)
                 login(request, user)
+                return redirect('/')
             except:
                 #user doesn't existin the DB, they need to register first
-                print("Sign up first") #need UI!
+                messages.error(request, 'Sign up first')
+                return redirect('/rango/login/')
         else:
             print('Unable to login with Facebook Please try again') #need UI!
-        return redirect('/')
+        
     else:
         url = return_string
         return redirect(url)
@@ -123,13 +128,14 @@ def facebook_register(request):
             try:
                 #user already exists in the DB, they can't register to the system multiple times
                 user = User.objects.get(email=email, username = email)
-                print('User Already Exists') #needs UI reflection!
+                messages.error(request, 'Account already exists')
+                return redirect('/rango/register/')
             except:
                 #user doesn't exist in the DB, so create a new user with appropriate data
                 create_facebook_user(request, email, user_data)
+                return redirect('/')
         else:
             print('Unable to login with Facebook Please try again')
-        return redirect('/')
     else:
         url = return_string
         return redirect(url)
@@ -179,6 +185,29 @@ def index(request):
     visitor_cookie_handler(request)
     response = render(request, 'rango/index.html', context=context_dict)
     return response
+
+def get_cat(request):
+    context_dict = {}
+    category_list = Category.objects.all()
+    listOfCat = []
+    for category in category_list:
+        page_list = Page.objects.all().filter(category_id=category.id)[:3]
+        cat = {}
+        cat["title"]=category.title
+        cat["slug"]=category.slug
+        cat["rating"]=category.rating
+        cat["image"]=str(category.image)
+        cat["last_modified"]=str(category.last_modified)
+        listOfPag = []
+        for page in page_list:
+            pag = {}
+            pag["title"]= page.title
+            pag["url"]= page.url
+            listOfPag.append(pag)
+        cat["pages"] = listOfPag
+        listOfCat.append(cat)
+        context_dict["categories"]=listOfCat
+    return HttpResponse(json.dumps(context_dict))
      
 def about(request):
     # Return a rendered response to send to the client.
@@ -461,12 +490,16 @@ class UnsaveFavoriteView(View):
 
 class ProfileView(View):
     def get_user_details(self, username):
+        print("HELLOO")
         try:
             user = User.objects.get(username=username)
+            print("HI THERE")
+            print(user)
         except User.DoesNotExist:
             return None
         
         user_profile = UserProfile.objects.get_or_create(user=user)[0]
+        print("NOTHING!")
         form = UserProfileForm({'website': user_profile.website, 'picture':user_profile.picture})
         return (user, user_profile, form)
     @method_decorator(login_required)
