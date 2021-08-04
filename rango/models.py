@@ -1,7 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from rango.maxVal import maxLength128
+from rango.maxVal import maxLength128, maxLength150
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 
@@ -64,14 +64,14 @@ class Page(models.Model):
 class SavedPages(models.Model):
     UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
     Page = models.ForeignKey(Page, on_delete=models.CASCADE)
+"""
 
 class Enquiries(models.Model):
     first_name = models.CharField(max_length=maxLength128)
     last_name = models.CharField(max_length=maxLength128)
     description = models.CharField(max_length=maxLength150)
     email = models.EmailField(max_length=maxLength128)
-    
-"""
+
 class Comments(models.Model):
     UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
