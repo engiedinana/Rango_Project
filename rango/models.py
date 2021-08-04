@@ -1,5 +1,5 @@
 from django.db import models
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import default, slugify
 from django.contrib.auth.models import User
 from rango.maxVal import maxLength128, maxLength150
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -10,17 +10,15 @@ class UserProfile(models.Model):
         ('F', 'Female'),
         ('M', 'Male'),
     )
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null = False)
-    first_name = models.CharField(max_length=maxLength128, null = False)
-    last_name = models.CharField(max_length=maxLength128, null = False)
-    username = models.CharField(max_length=maxLength128, unique=True, null = False)
-    email = models.EmailField(max_length=maxLength128, unique=True)
-    dob = models.DateField(default=datetime.date.today, blank = True)
-    facebook = models.BooleanField(blank=True, null = False)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    # first_name = models.CharField(max_length=maxLength128)
+    # last_name = models.CharField(max_length=maxLength128)
+    dob = models.DateField(default="")
+    facebook = models.BooleanField(default = False)
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    website = models.URLField(null=True)
-    picture = models.ImageField(upload_to='profile_images', null=True)
+    website = models.URLField(default = "", blank = True)
+    picture = models.ImageField(upload_to='profile_images', default="", blank = True)
     def __str__(self):
         return self.user.username
 
