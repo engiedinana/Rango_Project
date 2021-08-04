@@ -185,3 +185,9 @@ li.dropdown:last-child .dropdown-content{
 #notification a{
   border-bottom:3px solid #555;
 }
+
+.notification{
+  position: absolute;
+  top: 5rem;
+  right: 1rem;
+}
