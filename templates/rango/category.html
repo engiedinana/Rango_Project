@@ -11,11 +11,17 @@
 
 {% block body_block %}
     {% if category %}
-    <h1>{{ category.name }}</h1>
+    <div class="container-fluid">
+        <div class="row" id="about_category">
+            <img src={% static 'images/placeholder.jpeg' %}/>
+            <h1>{{ category.name }}</h1>
+        </div>
     {% if pages %}
-    <ul id="parentPage">
-        {% for page in pages %}
-            {% if user.is_authenticated %}
+    <div class="row" id="category_pages">
+        <div class="col-sm-8 col-md-8">
+            <ul id="parentPage">
+            {% for page in pages %}
+                {% if user.is_authenticated %}
                     {% if fav_list %}
                         {% if page in fav_list %}
                         <div>
@@ -49,15 +55,30 @@
                     </button>
                     </div>
                     {% endif %}
-            {% endif %}
-        {% endfor %}
-    </ul>
+                {% else %}
+                <div>
+                <li id="page"><a href="{{ page.url }}">{{ page.title }}</a></li>
+                </div>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
     {% else %}
     <strong>No pages currently in category.</strong>
     {% endif %}
     {% if user.is_authenticated %}
-        <a href="{% url 'rango:add_page' category.slug %}">Add Page</a> <br />
+    <div class="col-md-4" id="add_page">
+        <div class="row">
+            <a href="{% url 'rango:add_page' category.slug %}">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </div>
+        <!-- Add rating option -->
+    </div>
+</div>
+
     {% endif %}
+    </div>
     {% else %}
     The specified category does not exist.
     {% endif %}
