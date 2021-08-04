@@ -119,7 +119,7 @@
         {% endblock %}
         <footer id = "footer">
             <p id = 'copyright'>Copyright &copy; Rango &middot; All rights reserved.</p>
-            <p id = 'footer_links'><a href="#">Contact us</a> &middot;
+            <p id = 'footer_links'><a href="{% url 'rango:contact_us' %}">Contact us</a> &middot;
                 <a href="{% url 'rango:terms_of_use' %}">Terms of Use</a>
             </p>
         </footer>
