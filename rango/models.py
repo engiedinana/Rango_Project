@@ -1,8 +1,8 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-from rango.maxVal import maxLength128, maxLength150
-
+from rango.maxVal import maxLength128, maxLength150, maxLength256
+from datetime import date
 
 class UserProfile(models.Model):
     """GENDER_CHOICES = (
@@ -65,9 +65,10 @@ class Enquiries(models.Model):
    
 #Table for storing user comments on a category
 class Comments(models.Model):
+    profileInfo = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     #Link comment to the category it is meant for
-    Category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     #Comment description
-    description = models.TextField()
+    description = models.CharField(max_length=maxLength256)
     #date the comment was made
-    date = models.DateField()
+    date = models.DateField(default=date.today)
