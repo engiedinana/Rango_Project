@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from rango.maxVal import maxLength128
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class UserProfile(models.Model):
@@ -31,8 +32,12 @@ class Category(models.Model):
     #super_cat = models.ForeignKey(SuperCategories, on_delete=models.CASCADE)
     #user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     name = models.CharField(max_length=maxLength128, unique=True)
-    #title = models.CharField(max_length=maxLength128, unique=True)
-    #rating = models.FloatField(max_length=maxLength128)
+    title = models.CharField(max_length=maxLength128, unique=True)
+    rating = models.IntegerField(default=0,
+        validators=[
+            MaxValueValidator(5),
+            MinValueValidator(0),
+        ])
     #image = models.ImageField(upload_to='', blank=True)
     #last_modified = models.DateField()
 
