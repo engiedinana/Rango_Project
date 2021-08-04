@@ -4,15 +4,12 @@ window.addEventListener('load',  function() {
    var k;
    xhr.onreadystatechange = function() {
       if (xhr.readyState == XMLHttpRequest.DONE) {
-         var block_to_insert ;
-         var container_block ;
          const k = JSON.parse(xhr.responseText);
          var html=""
          for(var i = 0; i < k.categories.length; i++){
             console.log(k.categories[i].title)
-               html = html + `<div class="column">
-                        <div class="card">
-                           <img class = "img" src="/static/images/`+k.categories[i].image+`">
+               html = html + `<article class="article">
+                           <img class="image" src="/static/images/`+k.categories[i].image+`">
                            <div class="container">
                               <h2>` + k.categories[i].title + `</h2>
                               <p class="title"> Rating: `+k.categories[i].rating+`</p>
@@ -25,12 +22,11 @@ window.addEventListener('load',  function() {
             }
             html = html + `</ul> 
                         </div> 
-                     </div>
-                  </div>`
+                  </article>`
          }
-         document.getElementById('row').innerHTML = html
+         document.getElementById('archive').innerHTML = html
       }
   }
-   xhr.open("GET", "get_cat", true);
+   xhr.open("GET", "rango/get_cat", true);
    xhr.send(null);
 });
