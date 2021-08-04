@@ -16,6 +16,8 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.contrib import messages
 import requests 
+import json
+from django.core.serializers import serialize
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth import get_user_model
@@ -180,6 +182,29 @@ def index(request):
     visitor_cookie_handler(request)
     response = render(request, 'rango/index.html', context=context_dict)
     return response
+
+def get_cat(request):
+    context_dict = {}
+    category_list = Category.objects.all()
+    listOfCat = []
+    for category in category_list:
+        page_list = Page.objects.all().filter(category_id=category.id)[:3]
+        cat = {}
+        cat["title"]=category.title
+        cat["slug"]=category.slug
+        cat["rating"]=category.rating
+        cat["image"]=str(category.image)
+        cat["last_modified"]=str(category.last_modified)
+        listOfPag = []
+        for page in page_list:
+            pag = {}
+            pag["title"]= page.title
+            pag["url"]= page.url
+            listOfPag.append(pag)
+        cat["pages"] = listOfPag
+        listOfCat.append(cat)
+        context_dict["categories"]=listOfCat
+    return HttpResponse(json.dumps(context_dict))
      
 def about(request):
     # Return a rendered response to send to the client.
