@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rango.models import Category
+from rango.models import Category, SuperCategories
 from rango.models import Page, UserProfile
 from rango.forms import CategoryForm, ContactUsForm
 from django.shortcuts import redirect
@@ -190,7 +190,6 @@ def get_cat(request):
     for category in category_list:
         page_list = Page.objects.all().filter(category_id=category.id)[:3]
         cat = {}
-        cat["title"]=category.title
         cat["slug"]=category.slug
         cat["rating"]=category.rating
         cat["image"]=str(category.image)
@@ -258,15 +257,32 @@ def show_category(request, category_name_slug):
     return render(request, 'rango/category.html', context=context_dict)
 
 @login_required
-def add_category(request):
+def add_category(request, username):
     form = CategoryForm()
     # A HTTP POST?
     if request.method == 'POST':
         form = CategoryForm(request.POST)
+        mytitle = request.POST.get('title')
+        try:
+            super_category = SuperCategories.objects.get(title = mytitle)
+        except SuperCategories.DoesNotExist:
+            super_category = None
+
+        try:
+            user = User.objects.get(username = username)
+        except SuperCategories.DoesNotExist:
+            user = None
+
+         # You cannot add a page to a Category that does not exist...
+        if super_category is None:
+            return redirect('/rango/')
         # Have we been provided with a valid form?
         if form.is_valid():
             # Save the new category to the database.
-            form.save(commit=True)
+            category = form.save(commit=False)
+            category.super_cat = super_category
+            category.user = user
+            category.save()
             # Now that the category is saved, we could confirm this.
             # For now, just redirect the user back to the index view.
             return redirect('/rango/')
@@ -279,11 +295,17 @@ def add_category(request):
     return render(request, 'rango/add_category.html', {'form': form})
 
 @login_required
-def add_page(request, category_name_slug):
+def add_page(request, category_name_slug, username):
     try:
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
         category = None
+    
+    try:
+        user = User.objects.get(username = username)
+    except SuperCategories.DoesNotExist:
+        user = None
+
     # You cannot add a page to a Category that does not exist...
     if category is None:
         return redirect('/rango/')
@@ -295,6 +317,7 @@ def add_page(request, category_name_slug):
             if category:
                 page = form.save(commit=False)
                 page.category = category
+                page.UserProfile = user
                 page.views = 0
                 page.save()
                 return redirect(reverse('rango:show_category', kwargs={'category_name_slug': category_name_slug}))
