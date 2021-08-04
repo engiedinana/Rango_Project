@@ -51,39 +51,6 @@ ul#parentPage img, ul#favListParent img {
   font-size: 27px;
 }
 
-/*User Profile Page*/
-#user_profile {
-  padding-left:40px;
-}
-
-#user_profile p.email{
-  display: inline-block;
-}
-
-.email_container{
-  padding-top: 20px;
-}
-
-hr.userProfile{
-  margin-top: 4rem;
-  border-top: 5px solid rgba(0,0,0,.1);
-  background-color: black;
-}
-
-.favorites {
-  border: 3px solid 9cb39c;
-}
-
-.jumbotron {
-  background-color: #FFF !important;
-
-}
-
-div#user_profile.col-sm-12 {
-  margin-top: 5%;
-  margin-left: 5%;
-}
-
 
 /* Terms and conditions */
 .terms_elements{
@@ -120,7 +87,7 @@ div#user_profile.col-sm-12 {
 }
 
 a {
-  color:rgb(25, 90, 39);
+  color:rgb(45, 103, 158);
 }
 .navbar {
   background-color: #333;

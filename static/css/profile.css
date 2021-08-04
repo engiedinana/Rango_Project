@@ -1,0 +1,46 @@
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 100%;
+    margin: auto;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: rgb(209, 206, 206);
+}
+
+img.center {
+    display: block;
+    margin: 0 auto;
+}
+
+
+/*User Profile Page*/
+  
+  .jumbotron {
+    background-color: #FFF !important;
+    border: none;
+  }
+
+  h1 {
+    font-size: 45px;
+    color:rgb(15, 53, 23)
+  }
+
+  .favlist {
+    list-style-type: none;
+  }
+
+  #favListParent {
+    text-align: left;
+  }
+
+  .icon {
+    height: auto; 
+    width: auto; 
+    max-width: 20px; 
+    max-height: 20px;
+  }
+  
+  /* div#user_profile.col-sm-12 {
+    margin-top: 5%;
+    margin-left: 5%;
+  } */
