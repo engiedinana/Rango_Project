@@ -22,7 +22,7 @@
              alt="fallback profile image"/>
         {% endif %}
         <br />
-        <div id="user_profile">
+        <div id="user_profile" class="col-sm-12 col-md-6 col-lg-6">
             <!--
            
             <form method="post" action="." enctype="multipart/form-data">
@@ -38,7 +38,7 @@
                         {% if user_profile.email %}
                         <p class="email">email:</p><a href="{{ user_profile.email }}">{{user_profile.email}}</a>
                         {% else %}
-                        <p class="email">You do not have an email registered with us</p>
+                        <p class="email"> Email is not registered with us</p>
                         {% endif %}
                     </div>
                     <!--Add DOB-->

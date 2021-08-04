@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rango.models import Category
 from rango.models import Page, UserProfile
-from rango.forms import CategoryForm
+from rango.forms import CategoryForm, ContactUsForm
 from django.shortcuts import redirect
 from rango.forms import PageForm
 from django.urls import reverse
@@ -463,4 +463,25 @@ class ProfileView(View):
         else:
             print(form.errors)
         context_dict = {'user_profile': user_profile, 'selected_user': user, 'form':form}
-        return render(request, 'rangp/profile.html', context_dict)
+        return render(request, 'rango/profile.html', context_dict)
+    
+class ContactUsView(View):
+    def get(self,request):
+        form = ContactUsForm()
+        return render(request, 'rango/contact_us.html', {'form': form}) 
+    
+    def post(self, request):
+        form = ContactUsForm(request.POST)
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            # Save the details to the database.
+            form.save(commit=True)
+            # Now that the enquiry is made just redirect the user back to the index view.
+            return redirect(reverse('rango:index'))
+        else:
+            # The supplied form contained errors -
+            # just print them to the terminal.
+            print(form.errors)
+            # Will handle the bad form, new form, or no form supplied cases.
+            # Render the form with error messages (if any).
+        return render(request, 'rango/contact_us.html', {'form': form})
