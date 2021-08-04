@@ -7,7 +7,7 @@ window.addEventListener('load',  function() {
          var html=""
          for(var i = 0; i < k.categories.length; i++){
             console.log(k.categories[i].title)
-               html = html + `<article class="article">
+               html = html + `<div class="article">
                            <img class="image" src="/static/images/`+k.categories[i].image+`">
                            <div class="container">
                               <h2>` + k.categories[i].title + `</h2>
@@ -21,11 +21,11 @@ window.addEventListener('load',  function() {
             }
             html = html + `</ul> 
                         </div> 
-                  </article>`
+                  </div>`
          }
          document.getElementById('archive').innerHTML = html
       }
   }
-   xhr.open("GET", "rango/get_cat", true);
+   xhr.open("GET", "/rango/get_cat", true);
    xhr.send(null);
 });
