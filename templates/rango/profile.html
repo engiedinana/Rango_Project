@@ -1,5 +1,5 @@
 {% extends 'rango/base.html' %}
-{% load staticfiles %} <!-- New line -->
+{% load static %} <!-- New line -->
 
 {% block title_block %}
     Profile Page
@@ -22,7 +22,7 @@
              alt="fallback profile image"/>
         {% endif %}
         <br />
-        <div id="user_profile">
+        <div id="user_profile" class="col-sm-12 col-md-6 col-lg-6">
             <!--
            
             <form method="post" action="." enctype="multipart/form-data">
@@ -38,7 +38,7 @@
                         {% if user_profile.email %}
                         <p class="email">email:</p><a href="{{ user_profile.email }}">{{user_profile.email}}</a>
                         {% else %}
-                        <p class="email">You do not have an email registered with us</p>
+                        <p class="email"> Email is not registered with us</p>
                         {% endif %}
                     </div>
                     <!--Add DOB-->
@@ -60,9 +60,17 @@
         <h1 class="jumbotron-heading">Saved Pages</h1>
     </div>
     <div class="container favorites">
-        <ul>
+        <ul id="favListParent">
         {% for page in pages %}
-            <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+            <li><a href="{{ page.url }}">{{ page.title }}</a>
+                <button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
+                    <img src={% static 'images/unsaveIcon.png' %}/>
+                </button>
+                <button id="saveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
+                    <img src={% static 'images/saveIcon.png' %}/>
+                </button>
+            </li>
+
         {% endfor %}
         </ul>
     </div>

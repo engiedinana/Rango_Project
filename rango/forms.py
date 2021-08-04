@@ -1,8 +1,8 @@
 from django import forms
-from rango.models import Page, Category
+from rango.models import Page, Category, Enquiries
 from django.contrib.auth.models import User
 from rango.models import UserProfile
-from rango.maxVal import maxLength128,maxLength200
+from rango.maxVal import maxLength128,maxLength200, maxLength150
 import datetime
 
 class CategoryForm(forms.ModelForm):
@@ -53,3 +53,14 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture',)
+
+class ContactUsForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=maxLength128, widget=forms.TextInput(attrs={'placeholder':'First Name'}))
+    last_name = forms.CharField(max_length=maxLength128, widget=forms.TextInput(attrs={'placeholder':'Last Name'}))
+    description = forms.CharField(max_length=maxLength150, widget=forms.Textarea(attrs={'placeholder':'Write your enquiry here in 150 words'}))
+    email = forms.EmailField(max_length=maxLength128, widget=forms.EmailInput(attrs={'placeholder':'Email'}))
+    # An inline class to provide additional information on the form.
+    class Meta:
+        # Provide an association between the ModelForm and a model
+        model = Enquiries
+        fields = ('first_name','last_name', 'email', 'description',)

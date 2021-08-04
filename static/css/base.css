@@ -76,6 +76,26 @@ h6{
   display: none;
 }
 
+li#page{
+  display:inline-block;
+}
+
+ul#parentPage button,ul#favListParent button  {
+  border: transparent;
+  background: transparent;
+  cursor:pointer;
+}
+
+ul#parentPage img, ul#favListParent img {
+  width: 40px;
+  height: 42px;
+  display: inline-block;
+}
+
+#page a, ul#favListParent a{
+  font-size: 27px;
+}
+
 /*User Profile Page*/
 #user_profile {
   padding-left:40px;
@@ -89,7 +109,7 @@ h6{
   padding-top: 20px;
 }
 
-hr.userProfile {
+hr.userProfile{
   margin-top: 4rem;
   border-top: 5px solid rgba(0,0,0,.1);
   background-color: black;
@@ -103,14 +123,21 @@ hr.userProfile {
   background-color: #FFF !important;
 
 }
+
+div#user_profile.col-sm-12 {
+  margin-top: 5%;
+  margin-left: 5%;
+}
+
 /* Navigation bar */
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 960px) {
   .navbar-collapse {
     position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-130%, -66%);
+    /* left: 50%;
+    top: 50%; 
+    transform: translate(-130%, -66%);*/ 
+    padding-top: 500px;
     text-align: center;
     background-color: white;
   } 
@@ -156,5 +183,52 @@ hr.userProfile {
 
 .dropdown-item:hover{
   background-image:none !important;
-  color: #8ca08c
+  color: #8ca08c;
+}
+
+/*Contact us*/
+#id_description {
+  width: 300px;
+  height: 250px;
+  border: 2px solid #9cb39c;
+  border-radius: 8px;
+  text-align: center;
+}
+
+#contactus h1 {
+  color: #6e7e6e;
+  font-weight:500;
+  font-size: medium;
+}
+
+#contactus h6 {
+  font-weight: bolder;
+  font-size: -webkit-xxx-large;
+}
+
+#contactus input[type="submit"]
+{
+  width: 300px;
+  background-color: #8ca08c;
+  color: #ffffff;
+  font-weight: bolder;
+}
+
+#contactus input {
+  text-align: center;
+  border-bottom:solid #9cb39c;
+  border-top:solid #9cb39c;
+  border-left:solid #9cb39c;
+  border-right:solid #9cb39c;
+  border-width: 2px;
+  height: 50px;
+  width: 300px;
+  border-radius: 8px;
+}
+
+#contactus hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-top: 5px solid rgba(0,0,0,.1);
+  background-color: black;
 }

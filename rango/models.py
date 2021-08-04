@@ -66,12 +66,14 @@ class SavedPages(models.Model):
     Page = models.ForeignKey(Page, on_delete=models.CASCADE)
 
 class Enquiries(models.Model):
-    UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
-    Page = models.ForeignKey(Page, on_delete=models.CASCADE)
-
+    first_name = models.CharField(max_length=maxLength128)
+    last_name = models.CharField(max_length=maxLength128)
+    description = models.CharField(max_length=maxLength150)
+    email = models.EmailField(max_length=maxLength128)
+    
+"""
 class Comments(models.Model):
     UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
     Category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     date = models.DateField()
-"""
