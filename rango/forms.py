@@ -45,14 +45,20 @@ class PageForm(forms.ModelForm):
         # or specify the fields to include (don't include the category field).
         #fields = ('title', 'url', 'views')
 class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
+    password = forms.CharField(widget=forms.PasswordInput(), required=True)
+    first_name = forms.CharField(max_length=maxLength128, widget=forms.TextInput(attrs={'placeholder':'First Name'}))
+    last_name = forms.CharField(max_length=maxLength128, widget=forms.TextInput(attrs={'placeholder':'Last Name'}))
     class Meta:
         model = User
-        fields = ('username', 'email', 'password',)
+        fields = ('username', 'email', 'password', 'first_name', 'last_name')
+
 class UserProfileForm(forms.ModelForm):
+    # website = forms.URLField(widget=forms.URLInput(), required=True, initial='http://')
+    gender = forms.ChoiceField(choices=UserProfile.GENDER_CHOICES, widget=forms.RadioSelect(attrs={'class': "custom-radio-list"}))
+    dob = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=True)
     class Meta:
         model = UserProfile
-        fields = ('website', 'picture',)
+        fields = ('gender', 'dob', 'website', 'picture',)
 
 class ContactUsForm(forms.ModelForm):
     first_name = forms.CharField(max_length=maxLength128, widget=forms.TextInput(attrs={'placeholder':'First Name'}))

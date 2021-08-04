@@ -1,5 +1,5 @@
 window.addEventListener('load',  function() {
-   document.getElementById("greeting").innerHTML = "BAKRAHKO KOLOKO"
+   document.getElementById("greeting").innerHTML = "HOLA"
    var xhr = new XMLHttpRequest();
    var k;
    xhr.onreadystatechange = function() {

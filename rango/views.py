@@ -455,12 +455,16 @@ class UnsaveFavoriteView(View):
 
 class ProfileView(View):
     def get_user_details(self, username):
+        print("HELLOO")
         try:
             user = User.objects.get(username=username)
+            print("HI THERE")
+            print(user)
         except User.DoesNotExist:
             return None
         
         user_profile = UserProfile.objects.get_or_create(user=user)[0]
+        print("NOTHING!")
         form = UserProfileForm({'website': user_profile.website, 'picture':user_profile.picture})
         return (user, user_profile, form)
     @method_decorator(login_required)
