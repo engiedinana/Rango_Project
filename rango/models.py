@@ -23,6 +23,8 @@ class UserProfile(models.Model):
 
 class SuperCategories(models.Model):
     title = models.CharField(max_length=maxLength128)
+    def __str__(self):
+        return self.title
 
 class Category(models.Model):
     super_cat = models.ForeignKey(SuperCategories, on_delete=models.CASCADE)
