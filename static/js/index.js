@@ -8,10 +8,17 @@ window.addEventListener('load',  function() {
          const k = JSON.parse(xhr.responseText);
          var html=""
          for(var i = 0; i < k.categories.length; i++){
-            if(k.categories[i].image){
             console.log(k.categories[i].title)
                html = html + `<div class="article">
-                           <div id = "image_container"><img class="image" src="/media/`+k.categories[i].image+`"> </div>
+                           <div id = "image_container"><img class="image" src="/media/`
+            
+                           if(k.categories[i].image){
+                           html = html+k.categories[i].image 
+                           }else{
+                           html = html + `default.jpeg`
+                           }
+                           
+                           html = html+ `"> </div>
                            <div>
                               <h2> <a class = "Cat-name" href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
                               <p>`
@@ -32,32 +39,6 @@ window.addEventListener('load',  function() {
             html = html + `
                         </div> 
                   </div>`
-         }
-         else{
-            console.log(k.categories[i].title)
-            html = html + `<div class="article">
-                        <div id = "image_container"><img class="image" src="/media/default.jpeg"> </div>
-                        <div>
-                           <h2> <a class = "Cat-name" href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
-                           <p>`
-                           for(var z=0;z<5;z++){
-                              if(z<=k.categories[i].rating-1){
-                                 html = html + ratup;
-                              }else{
-                              html = html + ratdown;
-                              }
-                           }
-                           
-            html = html + ` </p>`
-         for(var j = 0; j < k.categories[i].pages.length; j++){
-            console.log(k.categories[i].pages[j])
-            html = html + `
-                              <a href=` + k.categories[i].pages[j].url + ` data-toggle="tooltip" title = "`+ k.categories[i].pages[j].description + `" > ` +k.categories[i].pages[j].title+`</a> </br>`
-         }
-         html = html + `
-                     </div> 
-               </div>`
-         }
          }
          document.getElementById('archive').innerHTML = html
       }
