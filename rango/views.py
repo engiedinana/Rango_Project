@@ -21,6 +21,7 @@ from django.views import View
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from datetime import date
+import urllib
 
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.

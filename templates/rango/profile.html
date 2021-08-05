@@ -12,10 +12,17 @@
 {% block body_block %}
 <div class="card">
     {% if user_profile.picture %}
+    {% if user_profile.facebook == 0 %}
         <img class = "center" src = "{{MEDIA_URL}}{{user_profile.picture}}"
              width="300"
              height="300"
              alt="{{ selected_user.username}}'s profile image"/>
+    {% else %}
+    <img id = fb class = "center" src = "{{ user_profile.picture }}"
+             width="300"
+             height="300"
+             alt="{{ selected_user.username}}'s profile image"/>
+    {% endif %}
         {% else %}
         <img class = "center" src="{% static "images/default_profile_pic.png" %}"
             width="300"

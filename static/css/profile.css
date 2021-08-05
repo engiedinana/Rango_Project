@@ -12,6 +12,10 @@ img.center {
     margin: 0 auto;
 }
 
+img{
+  image-rendering: auto;
+}
+
 
 /*User Profile Page*/
   
