@@ -6,7 +6,7 @@
 {% endblock %}
 
 
-{% include 'rango/message.html' %}
+
 
 {% block header_block %}
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
@@ -15,6 +15,7 @@
 
 
 {% block body_block %}
+{% include 'rango/message.html' %}
 <div id = "greeting_id">
 <h1 class = greeting>It's nice to see you again!</h1>
 </div>
