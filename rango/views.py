@@ -297,8 +297,9 @@ def add_category(request, username):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         mytitle = request.POST.get('title')
+        print(mytitle)
         try:
-            super_category = SuperCategories.objects.get(title = mytitle)
+            super_category = SuperCategories.objects.get(pk = mytitle)
         except SuperCategories.DoesNotExist:
             super_category = None
 

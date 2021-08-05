@@ -10,7 +10,7 @@ class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=maxLength128, help_text="Please enter the category name.")
     #views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     #likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    title = forms.ModelChoiceField(queryset=SuperCategories.objects.all().order_by('title'), empty_label="Select Topic")
+    title = forms.ModelChoiceField(queryset=SuperCategories.objects.all(), empty_label="Select Topic")
     #last_modified = forms.DateField(initial=datetime.date.today)
     #rating = forms.FloatField()
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
