@@ -36,6 +36,78 @@ def populate():
         }
     ]
 
+    flask_pages = [
+        {'title':'Introduction to Flask',
+        'url':'https://opensource.com/article/18/4/flask'},
+        {'title':'Documentation',
+        'url':'https://flask.palletsprojects.com/en/2.0.x/'},
+        {'title': 'Comparison with Django',
+        'url': 'https://www.guru99.com/flask-vs-django.html'}
+    ]
+
+    bottle_pages = [
+        {'title':'REST APIs with Bottle',
+        'url':'https://www.toptal.com/bottle/building-a-rest-api-with-bottle-framework'},
+        {'title':'Documentation',
+        'url':'https://bottlepy.org/docs/dev/tutorial.html'},
+        {'title': 'Comparison with Django',
+        'url': 'https://www.slant.co/versus/1741/1746/~bottle_vs_django'}
+    ]
+
+    KNN_pages = [
+        {'title':'KNN Introduction',
+        'url':'https://www.mygreatlearning.com/blog/knn-algorithm-introduction/'},
+        {'title':'When to Use KNN?',
+        'url':'https://www.linkedin.com/pulse/machine-learning-when-should-i-use-k-nn-classifier-over-swapnil-amin/'},
+        {'title': 'KNN VS KMeans',
+        'url': 'https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-2889-z'}
+    ]
+
+    regression_pages = [
+        {'title':'Regression Analysis Introduction',
+        'url':'https://www.codecademy.com/articles/introduction-regression-analysis'},
+        {'title':'Why Use Regression?',
+        'url':'https://statisticsbyjim.com/regression/when-use-regression-analysis/'},
+        {'title': 'Regression in Forecasting',
+        'url': 'https://smallbusiness.chron.com/advantages-regression-analysis-forecasting-61800.html'}
+    ]
+
+    sorting_pages = [
+        {'title':'Intro From Geeks For Geeks',
+        'url':''},
+        {'title':'Why Use Regression?',
+        'url':''},
+        {'title': 'Regression in Forecasting',
+        'url': ''}
+    ]
+
+    backtracking_pages = [
+        {'title':'Intro From Geeks For Geeks',
+        'url':''},
+        {'title':'Why Use Regression?',
+        'url':''},
+        {'title': 'Regression in Forecasting',
+        'url': ''}
+    ]
+
+    html_pages = [
+        {'title':'Intro From Geeks For Geeks',
+        'url':''},
+        {'title':'Why Use Regression?',
+        'url':''},
+        {'title': 'Regression in Forecasting',
+        'url': ''}
+    ]
+
+    API_pages = [
+        {'title':'Intro From Geeks For Geeks',
+        'url':''},
+        {'title':'Why Use Regression?',
+        'url':''},
+        {'title': 'Regression in Forecasting',
+        'url': ''}
+    ]
+
     sup_cat = [
         {'title': 'Machine Learning'},
         {'title': 'Frameworks'},
@@ -43,28 +115,18 @@ def populate():
         {'title': 'Web Design'},
     ]
 
-    other_pages = [
-        {'title':'Bottle',
-        'url':'http://bottlepy.org/docs/dev/'},
-        {'title':'Flask',
-        'url':'http://flask.pocoo.org'}
-    ]
-        
+    # each category now has pages and comments 
     cats = {'Python': {'pages': python_pages},
         'Django': {'pages': django_pages},
-        'Other Frameworks': {'pages': other_pages} }
-
-    comments = [
-        {'description': 'This course was intriguing but at the same time interesting',
-         'date': datetime.date(2021,7,3)
-         },
-        {'description': 'What a wonderful experience, thank you for the links! Glad I discovered it',
-         'date': datetime.date(2021,7,1)
-         },
-        {'description': 'I hated this, it was such a wasteful experience! I paid $10 for it as well',
-         'date': datetime.date(2021,7,1)
-         }
-    ]
+        'Flask': {'pages': flask_pages},
+        'Bottle': {'pages': bottle_pages},
+        'KNN': {'pages': KNN_pages},
+        'Regression': {'pages': regression_pages},
+        'Sorting': {'pages': sorting_pages},
+        'Backtracking': {'pages': backtracking_pages},
+        'HTML': {'pages': html_pages},
+        'APIs': {'pages': API_pages},
+    }
 
     # If you want to add more categories or pages,
     # add them to the dictionaries above.
