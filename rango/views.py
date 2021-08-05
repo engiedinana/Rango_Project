@@ -67,25 +67,27 @@ Description: This function creates a new user upon registration if the email doe
 Params: request, email, user_data
 """
 def create_facebook_user(request, email, user_data):
-    user, _ = User.objects.get_or_create(email=email, username=email)
+    user_auth, _ = User.objects.get_or_create(email=email, username=email)
     #extract all needed data to create a new user in the DB
     gender = user_data.get('gender', '').lower()
     data_of_birth = user_data.get('birthday')
+    dob = datetime.strptime(data_of_birth, "%m/%d/%Y") if data_of_birth else None
     gender = 'M' if gender == 'male' else 'F'
+    user_profile_picture = user_data.get('picture', {}).get('data', {}).get('url')
+    
     data = {
             'first_name': user_data.get('first_name'),
             'last_name': user_data.get('last_name'),
-            'user_profile_picture': user_data.get('picture', {}).get('data', {}).get('url'),
-            'gender': gender,
-            'data_of_birth': datetime.strptime(data_of_birth, "%m/%d/%Y") if data_of_birth else None,
-            'is_active': True
-            }
-    user.__dict__.update(data)
+    }
+    user_auth.__dict__.update(data)
     #Save the user to DB
-    user.save()
-    user.backend = settings.AUTHENTICATION_BACKENDS[0]
+    user_auth.save()
+    user_auth.backend = settings.AUTHENTICATION_BACKENDS[0]
+    #save metadata
+    user_metadata = UserProfile(gender = gender, dob = dob, facebook = 1, user = user_auth, picture = user_profile_picture)
+    user_metadata.save()
     #Login to view the homepage
-    login(request, user)
+    login(request, user_auth)
 
 """
 Description: This function allows users to login using Facebook
