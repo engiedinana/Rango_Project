@@ -1,6 +1,8 @@
 window.addEventListener('load',  function() {
    var xhr = new XMLHttpRequest();
    var k;
+   var ratup = `<span class="fa fa-star checked"></span>`
+   var ratdown = `<span class="fa fa-star"></span>`
    xhr.onreadystatechange = function() {
       if (xhr.readyState == XMLHttpRequest.DONE) {
          const k = JSON.parse(xhr.responseText);
@@ -11,7 +13,16 @@ window.addEventListener('load',  function() {
                            <div id = "image_container"><img class="image" src="/static/images/`+k.categories[i].image+`"> </div>
                            <div>
                               <h2> <a class = "Cat-name" href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
-                              <p> Rating: `+k.categories[i].rating+`</p>`
+                              <p>`
+                              for(var z=0;z<5;z++){
+                                 if(z<=k.categories[i].rating-1){
+                                    html = html + ratup;
+                                 }else{
+                                 html = html + ratdown;
+                                 }
+                              }
+                              
+               html = html + ` </p>`
             for(var j = 0; j < k.categories[i].pages.length; j++){
                console.log(k.categories[i].pages[j])
                html = html + `

@@ -210,7 +210,6 @@ def populate():
     # and then adds all the associated pages for that category.
     for sup_cat, sup_data in sup_cats.items():
         sup = add_sup_cat(sup_cat)
-        print(sup_data['categories'].items())
         for cat, cat_data in sup_data['categories'].items():
             c = add_cat(sup, cat, cat_data['rating'], cat_data['image'], cat_data['last_modified'])
             for p in cat_data['pages']:
