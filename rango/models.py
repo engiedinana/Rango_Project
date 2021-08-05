@@ -28,7 +28,7 @@ class SuperCategories(models.Model):
 
 class Category(models.Model):
     super_cat = models.ForeignKey(SuperCategories, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=maxLength128, unique=True)
     # title = models.CharField(max_length=maxLength128, unique=True, default="")
     rating = models.IntegerField(default=0,
@@ -36,7 +36,7 @@ class Category(models.Model):
             MaxValueValidator(5),
             MinValueValidator(0),
         ])
-    image = models.ImageField(upload_to='', blank=True)
+    image = models.ImageField(upload_to='', default="", blank = True)
     last_modified = models.DateField(default=datetime.date.today, blank = True)
 
     slug = models.SlugField(unique=True)
@@ -50,10 +50,13 @@ class Category(models.Model):
 
 class Page(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+<<<<<<< HEAD
     #UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
+=======
+    # UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
+>>>>>>> f1dacd7df6724dd62a81800cb16b182d10cff391
     title = models.CharField(max_length=maxLength128)
     url = models.URLField()
-    views = models.IntegerField(default=0)
     description = models.CharField(max_length=maxLength128, blank = False, default = "")
     #Many users can have many favorite pages
     favorite = models.ManyToManyField(User, related_name='pages')

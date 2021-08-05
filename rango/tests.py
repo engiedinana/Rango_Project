@@ -66,7 +66,7 @@ class TestFavoritesFeature(TestCase):
 
     def test_database_single_entry(self):
         self.response = self.client.get(reverse('rango:save_favorite'),{
-            'id': self.page.id
+            'page_id': self.page.id
         })
         self.assertEquals(self.response.status_code, 302)
         self.assertEquals(self.user.pages.first().title, 'learn x in y minutes')
