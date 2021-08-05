@@ -51,3 +51,24 @@ body, footer {
     flex-direction: row;
     justify-content: space-between;
 }
+
+.CharacterContainer {
+    text-align: center;
+    position: relative;
+    font-size: 1.4em;
+    color: rgb(50, 20, 184);
+    cursor: pointer;
+}
+.CharacterContainer:hover{
+    color: blanchedalmond;
+}
+.CharacterElement {
+    margin-right: 10px;
+}
+
+.Inactive {
+    color: grey;
+    cursor: default;
+}
+
+  
