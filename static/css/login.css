@@ -39,6 +39,14 @@
     text-align: center;
 }
 
+input[type="text"] {
+    width: 396px;
+}
+
+input[type="password"] {
+    width: 396px;
+}
+
 .btn-primary{
     text-transform: uppercase;
     background: #adc7e9;
