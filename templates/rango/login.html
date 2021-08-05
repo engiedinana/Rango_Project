@@ -1,12 +1,39 @@
 {% extends 'rango/base.html' %}
 {% load static %}
+
 {% block title_block %}
     Login
 {% endblock %}
 
 {% block body_block %}
-<h1>Login to Rango</h1>
+<h1>It's nice to see you again!</h1>
 {% include 'rango/message.html' %}
+
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+<div class ="login">
+    <div class="form">
+        <form class="login-form">
+            <input type="text" placeholder="Username" />
+            <input type="password" placeholder="Password" />
+            <p class="forgot-password"><a class= "fgt-password" href="">Forgot Password</a></p>
+            <button class="login-btn">
+                <a class="alogin" href="">Login</a>
+            </button>
+            <!--
+            <button class="login-btn">
+                <a href="">Login</a>
+            </button>
+            -->
+            <h7>--------------------------------- OR ---------------------------------</h7>
+            <button class="btn btn-primary mb-2">
+                <a class="afblogin" href="{% url 'rango:facebook_login' %}">Login with Facebook</a>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!--
 <form id="login_form" method="post" action="{% url 'rango:login' %}">
     {% csrf_token %}
     Username: <input type="text" name="username" value="" size="50" />
@@ -14,11 +41,13 @@
     Password: <input type="password" name="password" value="" size="50" />
     <br />
     <input type="submit" value="submit" />
-    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
     <button class="btn btn-primary mb-2">
         <a href="{% url 'rango:facebook_login' %}">Login with Facebook</a>
     </button>
-    <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
 </form>
+
+-->
 
 {% endblock %}
