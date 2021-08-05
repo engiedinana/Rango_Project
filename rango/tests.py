@@ -17,7 +17,7 @@ def create_user(username, password):
 def create_category(name, super, user):
     category, __ = Category.objects.update_or_create(
         name=name,
-        defaults={'super_cat': super, 'user': user}
+        defaults={'super_cat': super}
     )
     return category
 

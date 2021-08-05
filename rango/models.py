@@ -50,11 +50,7 @@ class Category(models.Model):
 
 class Page(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-<<<<<<< HEAD
-    #UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
-=======
     # UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
->>>>>>> f1dacd7df6724dd62a81800cb16b182d10cff391
     title = models.CharField(max_length=maxLength128)
     url = models.URLField()
     description = models.CharField(max_length=maxLength128, blank = False, default = "")
