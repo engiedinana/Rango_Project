@@ -24,6 +24,7 @@ Rango says: <strong>thank you for registering!</strong>
     {% csrf_token %}
 
     <!-- Display each form -->
+
         <h1>Account Information</h1>
         <br>
         <p>Username:</p>
@@ -41,6 +42,8 @@ Rango says: <strong>thank you for registering!</strong>
         <br />
         {{ user_form.last_name }}
         <br />
+
+        <!-- {{ user_form.as_p}} -->
     {{ profile_form.as_p }}
         <hr>
 
