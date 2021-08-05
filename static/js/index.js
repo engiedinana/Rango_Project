@@ -8,18 +8,16 @@ window.addEventListener('load',  function() {
          for(var i = 0; i < k.categories.length; i++){
             console.log(k.categories[i].title)
                html = html + `<div class="article">
-                           <img class="image" src="/static/images/`+k.categories[i].image+`">
+                           <div id = "image_container"><img class="image" src="/static/images/`+k.categories[i].image+`"> </div>
                            <div class="container">
                               <h2> <a href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
-                              <p class="title"> Rating: `+k.categories[i].rating+`</p>
-                              <ul>`
+                              <p class="rating"> Rating: `+k.categories[i].rating+`</p>`
             for(var j = 0; j < k.categories[i].pages.length; j++){
                console.log(k.categories[i].pages[j])
-               html = html + `<li>
-                                 <a href=` + k.categories[i].pages[j].url + ` data-toggle="tooltip" title = "`+ k.categories[i].pages[j].description + `" > ` +k.categories[i].pages[j].title+`</a>
-                              </li>`
+               html = html + `
+                                 <a class = "pages" href=` + k.categories[i].pages[j].url + ` data-toggle="tooltip" title = "`+ k.categories[i].pages[j].description + `" > ` +k.categories[i].pages[j].title+`</a> </br>`
             }
-            html = html + `</ul> 
+            html = html + `
                         </div> 
                   </div>`
          }
