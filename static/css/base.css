@@ -252,15 +252,15 @@ li.dropdown:last-child .dropdown-content{
 #comment_form input{
   display:block;
 }
-<<<<<<< HEAD
 #comment_form input[type="submit"] {
-  height: 20%;
+  height: 40px;
   width: 25%;
   margin-left: auto;
   margin-right:auto;
   background-color: #8ca08c;
   color: #ffffff;
   margin-top:20px;
+  cursor:pointer;
 }
 #comment_container {
   border: 2px solid #9cb39c;
@@ -270,6 +270,3 @@ li.dropdown:last-child .dropdown-content{
 #comment_container .row{
   width:100%;
 }
-=======
-
->>>>>>> beaded723d635511607a686d693467949a37f32d
