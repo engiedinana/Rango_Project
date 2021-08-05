@@ -5,27 +5,54 @@
 {% endblock %}
 
 {% block body_block %}
-<h1>Register for Rango</h1>
+<h1 class="register-title">Register for Rango</h1>
 {% include 'rango/message.html' %}
+
+{% block header_block %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
 {% if registered %}
 Rango says: <strong>thank you for registering!</strong>
 <a href="{% url 'rango:index' %}">Return to the homepage.</a><br />
 {% else %}
-Rango says: <strong>register here!</strong><br />
-<form id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
 
+<div class="container text-sm-center" id="registerform">
+    <form id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
+    Rango says: <strong>Register here!</strong><br />
+        <hr class="form-divider">
     {% csrf_token %}
 
     <!-- Display each form -->
-
-    {{ user_form.as_p }}
+        <h1>Account Information</h1>
+        <br>
+        <p>Username:</p>
+        {{ user_form.username }}
+        <br />
+        <p>Email:</p>
+        {{ user_form.email }}
+        <br />
+        <p>Password</p>
+        {{ user_form.password }}
+        <hr>
+        <h1>Personal Information</h1>
+        <br />
+        {{ user_form.first_name }}
+        <br />
+        {{ user_form.last_name }}
+        <br />
     {{ profile_form.as_p }}
+        <hr>
+
     <!-- Provide a button to click to submit the form. -->
     <input type="submit" name="submit" value="Register" />
+        <br>
     <button class="btn btn-primary mb-2">
         <a href="{% url 'rango:facebook_register' %}">SignUp with Facebook</a>
     </button>
 </form>
+</div>
+
 {% endif %}
 
 {% endblock %}
