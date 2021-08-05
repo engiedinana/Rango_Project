@@ -12,7 +12,7 @@ class UserProfile(models.Model):
         ('M', 'Male'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    dob = models.DateField(default="")
+    dob = models.DateField(blank=True, null=True)
     facebook = models.BooleanField(default = False)
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -50,7 +50,7 @@ class Category(models.Model):
 
 class Page(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
+    #UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=maxLength128)
     url = models.URLField()
     views = models.IntegerField(default=0)
@@ -77,4 +77,4 @@ class Comments(models.Model):
     #Comment description
     description = models.CharField(max_length=maxLength256)
     #date the comment was made
-    date = models.DateField(default=date.today)
+    date = models.DateField(default=date.today, blank=True, null=True)
