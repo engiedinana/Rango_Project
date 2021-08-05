@@ -25,7 +25,6 @@
                     {% if fav_list %}
                         {% if page in fav_list %}
                         <div>
-                            <abbr title="World Health Organization"></abbr>WHO</abbr>
                         <li id="page"><a href="{{ page.url }}">{{ page.title }}</a></li>
                         <button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
                             <img src={% static 'images/unsaveIcon.png' %}/>
