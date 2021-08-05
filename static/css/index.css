@@ -27,3 +27,27 @@ body, footer {
       0 5px 10px rgba(0, 0, 0, 0.1),
       0 20px 20px rgba(0, 0, 0, 0.05);
   }
+
+#add_cat {
+    color:black;
+    font-size:50px;
+    display: flex;
+    align-self: flex-end;
+    margin-right: 15px;
+    text-decoration: none;
+}
+
+
+#cat_title {
+    text-align: left;
+    float: top;
+    display: flex;
+}
+
+#cat_ul{
+    list-style-type: none;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+}
