@@ -16,12 +16,8 @@
             </li>
     <li id = "add_cat">
     {% if user.is_authenticated %}
-<<<<<<< HEAD
     <div class="col-md-4" id="add_category">
-            <a href="{% url 'rango:add_category' user.username %}" data-toggle="tooltip" title = "Add Category">
-=======
-            <a id = "add_cat" href="{% url 'rango:add_category' user.username %}">
->>>>>>> 01b10e9df0e884dd244b3a90f870eea2d716b536
+            <a id = "add_cat" href="{% url 'rango:add_category' user.username %}" data-toggle="tooltip" title = "Add Category">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
     {% endif %}
