@@ -19,7 +19,7 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         # Provide an association between the ModelForm and a model
         model = Category
-        fields = ('name', 'title')
+        fields = ('name', 'title', 'image')
 
 class PageForm(forms.ModelForm):
     title = forms.CharField(max_length=maxLength128, help_text="Please enter the title of the page.")
