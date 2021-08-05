@@ -9,16 +9,20 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
 {% endblock %}
 {% block body_block %}
+<div class="page">
+    <ul id = "cat_ul">
+        <li id = cat_title>
+            <h1>Categories</h1>
+            </li>
+    <li id = "add_cat">
     {% if user.is_authenticated %}
-    <div class="col-md-4" id="add_category">
-            <a href="{% url 'rango:add_category' user.username %}">
+            <a id = "add_cat" href="{% url 'rango:add_category' user.username %}">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
-        <!-- Add rating option -->
-    </div>
     {% endif %}
-<div class="page">
-    <h1>Categories</h1>
+        </li>
+    
+</ul>
     <div id="archive">
     </div>
   </div>
