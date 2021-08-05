@@ -233,6 +233,7 @@ def show_category(request, category_name_slug):
     # to the template rendering engine.
     context_dict = {}
     current_user = get_user(request)
+    
     try:
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
@@ -241,10 +242,11 @@ def show_category(request, category_name_slug):
         return redirect(reverse('rango:index'))
     
     try:
-        profile = UserProfile.objects.get(user=current_user)
+        if (not current_user.is_anonymous) and (current_user is not None):
+            profile = UserProfile.objects.get(user=current_user)
     except UserProfile.DoesNotExist:
         profile = None
-    
+        
     try:
         # Can we find a category name slug with the given name?
         # If we can't, the .get() method raises a DoesNotExist exception.
@@ -269,19 +271,19 @@ def show_category(request, category_name_slug):
             context_dict['fav_list'] = user.pages.all()
         else:
             context_dict['fav_list'] = None
-            
-        if request.method == 'POST':
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                if category and profile:
-                    comment = form.save(commit=False)
-                    comment.category = category
-                    comment.date = date.today()
-                    comment.profileInfo = profile
-                    comment.save()
-                return redirect(reverse('rango:show_category', kwargs={'category_name_slug':category_name_slug}))
-            else:
-                print(form.errors)          
+        if (not user.is_anonymous) and (user is not None):    
+            if request.method == 'POST':
+                form = CommentForm(request.POST)
+                if form.is_valid():
+                    if category and profile:
+                        comment = form.save(commit=False)
+                        comment.category = category
+                        comment.date = date.today()
+                        comment.profileInfo = profile
+                        comment.save()
+                    return redirect(reverse('rango:show_category', kwargs={'category_name_slug':category_name_slug}))
+                else:
+                    print(form.errors)        
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything -
@@ -302,7 +304,6 @@ def add_category(request, username):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         mytitle = request.POST.get('title')
-        print(mytitle)
         try:
             super_category = SuperCategories.objects.get(pk = mytitle)
         except SuperCategories.DoesNotExist:
@@ -541,16 +542,13 @@ class UnsaveFavoriteView(View):
 
 class ProfileView(View):
     def get_user_details(self, username):
-        print("HELLOO")
         try:
             user = User.objects.get(username=username)
-            print("HI THERE")
             print(user)
         except User.DoesNotExist:
             return None
         
         user_profile = UserProfile.objects.get_or_create(user=user)[0]
-        print("NOTHING!")
         form = UserProfileForm({'website': user_profile.website, 'picture':user_profile.picture})
         return (user, user_profile, form)
     @method_decorator(login_required)

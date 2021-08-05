@@ -1,0 +1,30 @@
+#registerform input {
+    text-align: center;
+    border-bottom:solid #9cb39c;
+    border-top:solid #9cb39c;
+    border-left:solid #9cb39c;
+    border-right:solid #9cb39c;
+    border-width: 2px;
+    height: 50px;
+    width: 300px;
+    border-radius: 8px;
+    margin: 5px
+}
+
+.btn {
+    height: 50px;
+    width: 300px;
+    border-radius: 8px;
+    margin: 5px
+}
+
+.register-title{
+    text-align: center;
+}
+
+.form-divider{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-top: 5px solid rgba(0,0,0,.1);
+  background-color: black;
+}
