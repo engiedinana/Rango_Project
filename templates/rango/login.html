@@ -5,49 +5,33 @@
     Login
 {% endblock %}
 
-{% block body_block %}
-<h1>It's nice to see you again!</h1>
+
 {% include 'rango/message.html' %}
 
-<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% block header_block %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
 
-<div class ="login">
-    <div class="form">
-        <form class="login-form">
-            <input type="text" placeholder="Username" />
-            <input type="password" placeholder="Password" />
-            <p class="forgot-password"><a class= "fgt-password" href="">Forgot Password</a></p>
-            <button class="login-btn">
-                <a class="alogin" href="">Login</a>
-            </button>
-            <!--
-            <button class="login-btn">
-                <a href="">Login</a>
-            </button>
-            -->
-            <h7>--------------------------------- OR ---------------------------------</h7>
-            <button class="btn btn-primary mb-2">
-                <a class="afblogin" href="{% url 'rango:facebook_login' %}">Login with Facebook</a>
-            </button>
-        </form>
-    </div>
+
+
+{% block body_block %}
+<div id = "greeting_id">
+<h1 class = greeting>It's nice to see you again!</h1>
 </div>
-
-<!--
-<form id="login_form" method="post" action="{% url 'rango:login' %}">
+<div id = login>
+<form class="login_form" method="post" action="{% url 'rango:login' %}">
     {% csrf_token %}
-    Username: <input type="text" name="username" value="" size="50" />
+    <input class = "default" type="text" placeholder="Username" name="username" value="" size="48" />
     <br />
-    Password: <input type="password" name="password" value="" size="50" />
     <br />
-    <input type="submit" value="submit" />
-
+    <input class = "default" type="password" placeholder="Password" name="password" value="" size="48" />
+    <br />
+    <p class="forgot-password"><a class= "fgt-password" href="">Forgot Password</a></p>
+    <input class="btn btn-primary mb-2" id = "alogin" type="submit" value="Login" />
+    <br />
     <button class="btn btn-primary mb-2">
         <a href="{% url 'rango:facebook_login' %}">Login with Facebook</a>
     </button>
-
 </form>
-
--->
-
+</div>
 {% endblock %}
