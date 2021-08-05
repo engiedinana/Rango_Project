@@ -36,7 +36,7 @@ class Category(models.Model):
             MaxValueValidator(5),
             MinValueValidator(0),
         ])
-    image = models.ImageField(upload_to='', blank=True)
+    image = models.ImageField(upload_to='', default="", blank = True)
     last_modified = models.DateField(default=datetime.date.today, blank = True)
 
     slug = models.SlugField(unique=True)

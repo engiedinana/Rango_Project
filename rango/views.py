@@ -317,10 +317,14 @@ def add_category(request, username):
             return redirect('/rango/')
         # Have we been provided with a valid form?
         if form.is_valid():
+            print("byE!")
             # Save the new category to the database.
             category = form.save(commit=False)
+            if 'image' in request.FILES:
+                print("HELLO!")
+                category.image = request.FILES.get('image')
             category.super_cat = super_category
-            category.user = user
+            # category.user = user
             category.save()
             # Now that the category is saved, we could confirm this.
             # For now, just redirect the user back to the index view.
