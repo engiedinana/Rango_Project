@@ -28,7 +28,7 @@ class SuperCategories(models.Model):
 
 class Category(models.Model):
     super_cat = models.ForeignKey(SuperCategories, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=maxLength128, unique=True)
     # title = models.CharField(max_length=maxLength128, unique=True, default="")
     rating = models.IntegerField(default=0,
@@ -50,10 +50,9 @@ class Category(models.Model):
 
 class Page(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
+    # UserProfile = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=maxLength128)
     url = models.URLField()
-    views = models.IntegerField(default=0)
     description = models.CharField(max_length=maxLength128, blank = False, default = "")
     #Many users can have many favorite pages
     favorite = models.ManyToManyField(User, related_name='pages')
