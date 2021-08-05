@@ -54,6 +54,7 @@ class Page(models.Model):
     title = models.CharField(max_length=maxLength128)
     url = models.URLField()
     views = models.IntegerField(default=0)
+    description = models.CharField(max_length=maxLength128, blank = False, default = "")
     #Many users can have many favorite pages
     favorite = models.ManyToManyField(User, related_name='pages')
     def __str__(self):
