@@ -10,7 +10,7 @@ window.addEventListener('load',  function() {
                html = html + `<div class="article">
                            <div id = "image_container"><img class="image" src="/static/images/`+k.categories[i].image+`"> </div>
                            <div>
-                              <h2> <a href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
+                              <h2> <a class = "Cat-name" href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
                               <p> Rating: `+k.categories[i].rating+`</p>`
             for(var j = 0; j < k.categories[i].pages.length; j++){
                console.log(k.categories[i].pages[j])
@@ -29,13 +29,28 @@ window.addEventListener('load',  function() {
    
 $('.AlphabetNav a').click(function(evt) {
    evt.preventDefault();
-   var $navItem = $(this)
+   var $navItem = $(this),
+   $articles = $('.article');
+   $articles.show();
    
    if ($navItem.hasClass('active')) {
      $navItem.removeClass('active');
    } else {
-    $('.AlphabetNav a').removeClass('active');
-     $navItem.addClass('active');
+      $('.AlphabetNav a').removeClass('active');
+      $navItem.addClass('active');
+
+      if($navItem.text().toLowerCase() != "all"){
+         
+
+      $.each($articles, function(key, article) {
+            var $article = $(article),
+               $CatName = $article.find('.Cat-name'),
+               $nameArr = $CatName.text().split(' ');
+            if ($nameArr[0].split('')[0].toLowerCase() !== $navItem.text().toLowerCase()) {
+            $article.hide();
+      }
+    });
+   }
        }
  }); 
 });
