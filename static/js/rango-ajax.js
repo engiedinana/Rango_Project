@@ -50,7 +50,9 @@ $(document).ready(function(){
     //Fetch all buttons and add a click handler to all 
     var buttons = $("ul#parentPage").find('button');
     var favListButtons = $("ul#favListParent").find('button');
-
+    $('[data-toggle="tooltip"]').tooltip();
+    $('.hamada').tooltip();
+    
     //For each button decide which handler to add , either add or remove from favorites list
     buttons.each(function(index, elm) {
         if(elm.id.startsWith('save')) {
@@ -71,7 +73,5 @@ $(document).ready(function(){
             removeLink(elm);
         }
     });
-
-
 });
 

@@ -11,8 +11,9 @@
     box-sizing: border-box;
   }
   
-  *, *:before, *:after {
-    box-sizing: inherit;
+  h1 {
+    font-size: 45px;
+    color:rgb(15, 53, 23)
   }
   
   .column {
@@ -30,8 +31,8 @@
   .about-section {
     padding: 50px;
     text-align: center;
-    background-color:rgb(35, 36, 35);
-    color: white;
+    background-color:rgb(209, 206, 206);
+    color: black;
   }
   
   .container {
@@ -49,7 +50,7 @@
   }
   
   
-  @media screen and (max-width: 650px) {
+  @media screen and (max-width: 50px) {
     .column {
       width: 100%;
       display: block;
@@ -58,7 +59,21 @@
   .img{
     width: 100%;
     height: 100%;
+    float: left;
+    object-fit: cover;
   }
   #team{
     text-align:center;
+  }
+
+  .wrapper {
+    width: 90%;
+    display: grid;
+    grid-gap: 2%;
+    grid-template-columns: repeat(6, 10%);
+    border:1px solid #000;
+    margin-bottom: 2em;
+  }
+  .with-height {
+    height: 400px;
   }
