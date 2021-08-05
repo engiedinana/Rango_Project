@@ -10,7 +10,7 @@ window.addEventListener('load',  function() {
                html = html + `<div class="article">
                            <img class="image" src="/static/images/`+k.categories[i].image+`">
                            <div class="container">
-                              <h2>` + k.categories[i].title + `</h2>
+                              <h2> <a href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
                               <p class="title"> Rating: `+k.categories[i].rating+`</p>
                               <ul>`
             for(var j = 0; j < k.categories[i].pages.length; j++){
