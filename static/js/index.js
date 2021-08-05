@@ -9,13 +9,13 @@ window.addEventListener('load',  function() {
             console.log(k.categories[i].title)
                html = html + `<div class="article">
                            <div id = "image_container"><img class="image" src="/static/images/`+k.categories[i].image+`"> </div>
-                           <div class="container">
+                           <div>
                               <h2> <a href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
-                              <p class="rating"> Rating: `+k.categories[i].rating+`</p>`
+                              <p> Rating: `+k.categories[i].rating+`</p>`
             for(var j = 0; j < k.categories[i].pages.length; j++){
                console.log(k.categories[i].pages[j])
                html = html + `
-                                 <a class = "pages" href=` + k.categories[i].pages[j].url + ` data-toggle="tooltip" title = "`+ k.categories[i].pages[j].description + `" > ` +k.categories[i].pages[j].title+`</a> </br>`
+                                 <a href=` + k.categories[i].pages[j].url + ` data-toggle="tooltip" title = "`+ k.categories[i].pages[j].description + `" > ` +k.categories[i].pages[j].title+`</a> </br>`
             }
             html = html + `
                         </div> 
