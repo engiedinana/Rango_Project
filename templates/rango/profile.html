@@ -51,10 +51,10 @@
         <ul id="favListParent">
         {% for page in pages %}
             <li class = favlist><button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
-                <img class = "icon" src={% static 'images/unsaveIcon.png' %}/>
+                <img class = "icon" src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
             </button>
             <button id="saveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
-                <img class = "icon" src={% static 'images/saveIcon.png' %}/>
+                <img class = "icon" src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to save Page"/>
             </button><a href="{{ page.url }}">{{ page.title }}</a>
             </li>
         {% endfor %}
