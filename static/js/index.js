@@ -16,7 +16,7 @@ window.addEventListener('load',  function() {
             for(var j = 0; j < k.categories[i].pages.length; j++){
                console.log(k.categories[i].pages[j])
                html = html + `<li>
-                                 <a href=` + k.categories[i].pages[j].url +`>`+k.categories[i].pages[j].title+`</a>
+                                 <a href=` + k.categories[i].pages[j].url + ` data-toggle="tooltip" title = "`+ k.categories[i].pages[j].description + `" > ` +k.categories[i].pages[j].title+`</a>
                               </li>`
             }
             html = html + `</ul> 

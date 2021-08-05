@@ -201,6 +201,7 @@ def get_cat(request):
             pag = {}
             pag["title"]= page.title
             pag["url"]= page.url
+            pag["description"]= page.description
             listOfPag.append(pag)
         cat["pages"] = listOfPag
         listOfCat.append(cat)
