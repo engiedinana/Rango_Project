@@ -22,6 +22,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from datetime import date
 import urllib
+import math
 
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
@@ -334,6 +335,27 @@ def add_category(request, username):
             # Will handle the bad form, new form, or no form supplied cases.
             # Render the form with error messages (if any).
     return render(request, 'rango/add_category.html', {'form': form})
+
+def rate_category(request, category_name_slug):
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
+    # You cannot add a page to a Category that does not exist...
+    if category is None:
+        return redirect('/rango/')
+    sum = category.rating_sum_val
+    count = category.rating_sum_val 
+    if request.method == 'POST':
+        category.rating_sum_val = sum + request.get('rating')
+        category.rating_count_val = count + 1
+        try:
+            category.rating = math.ceil(sum / count) #divide by zero!
+        except:
+            category.rating = sum
+        category.save()
+    return HttpResponse("success")
+    
 
 @login_required
 def add_page(request, category_name_slug, username):
