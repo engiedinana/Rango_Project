@@ -10,7 +10,15 @@ window.addEventListener('load',  function() {
          for(var i = 0; i < k.categories.length; i++){
             console.log(k.categories[i].title)
                html = html + `<div class="article">
-                           <div id = "image_container"><img class="image" src="/static/images/`+k.categories[i].image+`"> </div>
+                           <div id = "image_container"><img class="image" src="/media/`
+            
+                           if(k.categories[i].image){
+                           html = html+k.categories[i].image 
+                           }else{
+                           html = html + `default.jpeg`
+                           }
+                           
+                           html = html+ `"> </div>
                            <div>
                               <h2> <a class = "Cat-name" href= /rango/category/`+ k.categories[i].slug +`>` + k.categories[i].title + `</a></h2>
                               <p>`

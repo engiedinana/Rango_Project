@@ -22,6 +22,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from datetime import date
 import urllib
+import math
 
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
@@ -232,6 +233,7 @@ def show_category(request, category_name_slug):
     # to the template rendering engine.
     context_dict = {}
     current_user = get_user(request)
+    
     try:
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
@@ -240,10 +242,11 @@ def show_category(request, category_name_slug):
         return redirect(reverse('rango:index'))
     
     try:
-        profile = UserProfile.objects.get(user=current_user)
+        if (not current_user.is_anonymous) and (current_user is not None):
+            profile = UserProfile.objects.get(user=current_user)
     except UserProfile.DoesNotExist:
         profile = None
-    
+        
     try:
         # Can we find a category name slug with the given name?
         # If we can't, the .get() method raises a DoesNotExist exception.
@@ -268,19 +271,19 @@ def show_category(request, category_name_slug):
             context_dict['fav_list'] = user.pages.all()
         else:
             context_dict['fav_list'] = None
-            
-        if request.method == 'POST':
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                if category and profile:
-                    comment = form.save(commit=False)
-                    comment.category = category
-                    comment.date = date.today()
-                    comment.profileInfo = profile
-                    comment.save()
-                return redirect(reverse('rango:show_category', kwargs={'category_name_slug':category_name_slug}))
-            else:
-                print(form.errors)          
+        if (not user.is_anonymous) and (user is not None):    
+            if request.method == 'POST':
+                form = CommentForm(request.POST)
+                if form.is_valid():
+                    if category and profile:
+                        comment = form.save(commit=False)
+                        comment.category = category
+                        comment.date = date.today()
+                        comment.profileInfo = profile
+                        comment.save()
+                    return redirect(reverse('rango:show_category', kwargs={'category_name_slug':category_name_slug}))
+                else:
+                    print(form.errors)        
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything -
@@ -301,7 +304,6 @@ def add_category(request, username):
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         mytitle = request.POST.get('title')
-        print(mytitle)
         try:
             super_category = SuperCategories.objects.get(pk = mytitle)
         except SuperCategories.DoesNotExist:
@@ -319,8 +321,10 @@ def add_category(request, username):
         if form.is_valid():
             # Save the new category to the database.
             category = form.save(commit=False)
+            if 'image' in request.FILES:
+                category.image = request.FILES.get('image')
             category.super_cat = super_category
-            category.user = user
+            # category.user = user
             category.save()
             # Now that the category is saved, we could confirm this.
             # For now, just redirect the user back to the index view.
@@ -332,6 +336,27 @@ def add_category(request, username):
             # Will handle the bad form, new form, or no form supplied cases.
             # Render the form with error messages (if any).
     return render(request, 'rango/add_category.html', {'form': form})
+
+def rate_category(request, category_name_slug):
+    try:
+        category = Category.objects.get(slug=category_name_slug)
+    except Category.DoesNotExist:
+        category = None
+    # You cannot add a page to a Category that does not exist...
+    if category is None:
+        return redirect('/rango/')
+    sum = category.rating_sum_val
+    count = category.rating_sum_val 
+    if request.method == 'POST':
+        category.rating_sum_val = sum + request.get('rating')
+        category.rating_count_val = count + 1
+        try:
+            category.rating = math.ceil(sum / count) #divide by zero!
+        except:
+            category.rating = sum
+        category.save()
+    return HttpResponse("success")
+    
 
 @login_required
 def add_page(request, category_name_slug, username):
@@ -517,16 +542,13 @@ class UnsaveFavoriteView(View):
 
 class ProfileView(View):
     def get_user_details(self, username):
-        print("HELLOO")
         try:
             user = User.objects.get(username=username)
-            print("HI THERE")
             print(user)
         except User.DoesNotExist:
             return None
         
         user_profile = UserProfile.objects.get_or_create(user=user)[0]
-        print("NOTHING!")
         form = UserProfileForm({'website': user_profile.website, 'picture':user_profile.picture})
         return (user, user_profile, form)
     @method_decorator(login_required)
