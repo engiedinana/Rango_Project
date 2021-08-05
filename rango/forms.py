@@ -24,6 +24,7 @@ class CategoryForm(forms.ModelForm):
 class PageForm(forms.ModelForm):
     title = forms.CharField(max_length=maxLength128, help_text="Please enter the title of the page.")
     url = forms.URLField(max_length=maxLength200, help_text="Please enter the URL of the page.")
+    description = forms.CharField(max_length=maxLength128, help_text="Please enter the description of the page.")
     views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 
     def clean(self):
