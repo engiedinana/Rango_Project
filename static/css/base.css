@@ -34,6 +34,10 @@ li#page{
   display:inline-block;
 }
 
+#parentPage {
+  padding-left: 0;
+}
+
 ul#parentPage button,ul#favListParent button  {
   border: transparent;
   background: transparent;
@@ -68,6 +72,9 @@ ul#parentPage img, ul#favListParent img {
   line-height: 1.5em;
 }
 
+.row{
+  position: relative;
+}
 #termsId{
   color: #525151;
   font: "Source Sans Pro";
@@ -172,7 +179,7 @@ li.dropdown:last-child .dropdown-content{
 
 /*Contact us*/
 #contactus #id_description {
-  width: 300px;
+  width: auto;
   height: 250px;
   border: 2px solid #9cb39c;
   border-radius: 8px;
@@ -210,7 +217,7 @@ li.dropdown:last-child .dropdown-content{
   border-radius: 8px;
 }
 
-#contactus hr {
+hr {
   margin-top: 1rem;
   margin-bottom: 1rem;
   border-top: 5px solid rgba(0,0,0,.1);
@@ -232,10 +239,13 @@ li.dropdown:last-child .dropdown-content{
 #add_page i {
   font-size:-webkit-xxx-large ;
   color:black;
+  text-align: right;
+  float:right;
 }
 
 #category_pages {
   border: 2px solid #9cb39c;
+  border-radius: 7px;
 }
 
 #comment_container p {
@@ -243,7 +253,7 @@ li.dropdown:last-child .dropdown-content{
 }
 
 #comment_form #id_description {
-  width: 200px;
+  width: 100%;
   height: 100px;
   border: 2px solid #9cb39c;
   border-radius: 8px;
@@ -251,4 +261,35 @@ li.dropdown:last-child .dropdown-content{
 }
 #comment_form input{
   display:block;
+}
+
+.btn .btn-dark{
+  float:right;
+  text-align: right;
+}
+
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  text-align: center;
+  font-size: 2em;
+  position: absolute; 
+  bottom: 0;
+  left:400px;
+}
+.rating > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+.rating > span:hover,
+.rating > span:hover ~ span {
+  color: transparent;
+}
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+   left: 0; 
+   color: orange;
 }

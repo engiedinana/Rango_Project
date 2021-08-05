@@ -75,7 +75,9 @@ class ContactUsForm(forms.ModelForm):
         
 class CommentForm(forms.ModelForm):
     #description in comment
-    description = forms.CharField(max_length=maxLength256, widget=forms.TextInput(attrs={'placeholder': 'Write your comment in 256 words'}))
+    description = forms.CharField(max_length=maxLength256, widget=forms.TextInput(attrs={'placeholder': 'Write your comment in 256 words',
+                                  'autocomplete': 'off',
+                                  'size': '100%'}))
     class Meta:
         model = Comments
         fields=('description',)

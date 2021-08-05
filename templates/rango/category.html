@@ -9,12 +9,18 @@
     {% endif %}
 {% endblock %}
 
+{% block header_block %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
 {% block body_block %}
     {% if category %}
     <div class="container">
-        <div class="row" id="about_category">
-            <img src={% static 'images/placeholder.jpeg' %}/>
+        <div class="row " id="about_category">
+            <img id ="image" src="/static/images/{{category.image}}">
             <h1>{{ category.name }}</h1>
+            <!-- rating -->
+            <div class = "rating"><span>☆</span><span>☆</span><span>☆</span><span >☆</span><span>☆</span> </div>
         </div>
     {% if pages %}
     <div class="row" id="category_pages">
@@ -25,34 +31,36 @@
                     {% if fav_list %}
                         {% if page in fav_list %}
                         <div>
-                        <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
+                        
                         <button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
-                            <img src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
+                            <img class = "icon" src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
                         </button>
                         <button id="saveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
-                            <img src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to Save Page"/>
+                            <img class = "icon" src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to Save Page"/>
                         </button>
+                        <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
+                        
                         </div>
                         {% else %}
                         <div>
-                        <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
-                        <button id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
-                            <img src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
-                        </button>
-                        <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
-                            <img src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to save Page"/>
-                        </button>
+                            <button id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
+                                <img class = "icon" src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
+                            </button>
+                            <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
+                                <img class = "icon" src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to save Page"/>
+                            </button>
+                            <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
                         </div>
                         {% endif %}
                     {% else %}
                     <div>
+                        <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
+                            <img class = "icon" src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to save Page"/>
+                        </button>
+                        <button  id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
+                            <img class = "icon" src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
+                        </button>
                     <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
-                    <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
-                        <img src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to save Page"/>
-                    </button>
-                    <button id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
-                        <img src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
-                    </button>
                     </div>
                     {% endif %}
                 {% else %}
@@ -68,14 +76,13 @@
     {% endif %}
     {% if user.is_authenticated %}
     <div class="col-md-4" id="add_page">
-        <div class="row">
             <a href="{% url 'rango:add_page' category.slug user.username %}" data-toggle="tooltip" title = "Add Page">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
         </div>
         <!-- Add rating option -->
     </div>
-    </div>
+    <hr>
     {% if comments or pages %}
     <div class="conainer">
         <div class="row">
@@ -97,6 +104,7 @@
     {% endfor %}
     {% endif %}
     {% if pages %}
+    <div class= row>
     <form id="comment_form" method="post" action="/rango/category/{{ category.slug }}/">
         <div class="form-group">
         {% csrf_token %}
@@ -106,10 +114,12 @@
         {% for field in form.visible_fields %}
             {{ field.errors }}
             {{ field.help_text }}
-            {{ field }}
+            {{ field }}         
         {% endfor %}
-        <input type="submit" name="submit" value="Post" />
-        </div>
+        
+        <input class="btn btn-dark"type="submit" name="submit" value="Post" />
+    </div>
+    </div>
     </form>
     {% endif %}
     {% endif %}
@@ -117,4 +127,5 @@
     {% else %}
     The specified category does not exist.
     {% endif %}
+    <!-- <script src="{% static 'js/category.js' %}" crossorigin="anonymous"></script> -->
 {% endblock %}
