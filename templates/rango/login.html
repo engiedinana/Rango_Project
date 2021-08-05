@@ -21,10 +21,10 @@
 <div id = login>
 <form class="login_form" method="post" action="{% url 'rango:login' %}">
     {% csrf_token %}
-    <input class = "default" type="text" placeholder="Username" name="username" value="" size="48" />
+    <input type="text" class = "default"  placeholder="Username" name="username" value=""/>
     <br />
     <br />
-    <input class = "default" type="password" placeholder="Password" name="password" value="" size="48" />
+    <input type="password" class = "default"  placeholder="Password" name="password" value=""/>
     <br />
     <p class="forgot-password"><a class= "fgt-password" href="">Forgot Password</a></p>
     <input class="btn btn-primary mb-2" id = "alogin" type="submit" value="Login" />
