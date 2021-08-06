@@ -644,7 +644,6 @@ class ProfileView(View):
     def get_user_details(self, username):
         try:
             user = User.objects.get(username=username)
-            print(user)
         except User.DoesNotExist:
             return None
         
