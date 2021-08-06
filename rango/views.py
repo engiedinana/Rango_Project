@@ -625,6 +625,7 @@ class ContactUsView(View):
         return render(request, 'rango/contact_us.html', {'form': form})
 
 def password_reset_request(request):
+    context_dict = add_cat_supcat_pages_context()
     if request.method == "POST":
         password_reset_form = PasswordResetForm(request.POST)
         if password_reset_form.is_valid():
@@ -638,7 +639,7 @@ def password_reset_request(request):
                         "email": user.email,
                         'domain': '127.0.0.1:8000',
                         'site_name': 'Website',
-                        "uid": urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                         "user": user,
                         'token': default_token_generator.make_token(user),
                         'protocol': 'http',
@@ -650,5 +651,6 @@ def password_reset_request(request):
                         return HttpResponse('Invalid header found.')
                     return redirect("done/")
     password_reset_form = PasswordResetForm()
+    context_dict["password_reset_form"] =  password_reset_form
     return render(request=request, template_name="rango/password/password_reset.html",
-                  context={"password_reset_form": password_reset_form})
+                  context=context_dict)
