@@ -1,20 +1,26 @@
 {% extends 'rango/base.html' %}
 {% load static %}
 
+<!-- Title block -->
 {% block title_block %}
     Login
 {% endblock %}
 
+<!-- Header block utilizing login.css-->
 {% block header_block %}
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
+<!-- Error messages for invalid login -->
 {% include 'rango/message.html' %}
+
 <div id = "greeting_id">
 <h1 class = greeting>It's nice to see you again!</h1>
 </div>
 <div id = login>
+<!-- Utilize login form and add CSS on top of it -->
 <form class="login_form" method="post" action="{% url 'rango:login' %}">
     {% csrf_token %}
     <input type="text" class = "default"  placeholder="Username" name="username" value=""/>
@@ -25,6 +31,7 @@
     <p class="forgot-password"><a class= "fgt-password" href="/password_reset">Forgot Password</a></p>
     <input class="btn btn-primary mb-2" id = "alogin" type="submit" value="Login" />
     <br />
+    <!-- login with FB option -->
     <button class="btn btn-primary mb-2">
         <a href="{% url 'rango:facebook_login' %}">Login with Facebook</a>
     </button>

@@ -1,3 +1,6 @@
+"""
+This file is used to populate the category, pages and super categories tables to be able to utilize the webapp
+"""
 import os
 import datetime
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
@@ -13,6 +16,8 @@ def populate():
     # Then we will create a dictionary of dictionaries for our categories.
     # This might seem a little bit confusing, but it allows us to iterate
     # through each data structure, and add the data to our models.
+
+    # Pages Data
     python_pages = [
         {'title': 'Official Python Tutorial',
         'url':'http://docs.python.org/3/tutorial/',
@@ -138,42 +143,8 @@ def populate():
         'description': 'NoSQL Introduction in databases'}
     ]
 
-    python_comments = [
-        {'profileInfo': 'Jasmine Mesbah',
-        'description':'This category helped me develop my first python code! thank you!!',
-        'date':datetime.date.today(),},
-        {'profileInfo': 'Mike Gibson',
-        'description':'Totally agree with Jasmine!',
-        'date':datetime.date.today(),},
-        {'profileInfo': 'John Lewis',
-        'description':'It is useful but i will add some more links',
-        'date':datetime.date.today(),}
-    ]
-
-    django_comments = [
-        {'profileInfo': 'Karen Jordan',
-        'description':'I am new to web design and this was very useful',
-        'date':datetime.date.today(),},
-        {'profileInfo': 'Waleed Dinana',
-        'description':'Totally agree with Jasmine!',
-        'date':datetime.date.today(),},
-        {'profileInfo': 'Johnny Dep',
-        'description':'It is useful but i will add some more links',
-        'date':datetime.date.today(),}
-    ]
-    # each category now has pages and comments and ratings 
-    cats = {'Python': {'pages': python_pages, 'rating': 5, 'image': 'Python.png', 'last_modified': datetime.date.today()},
-        'Django': {'pages': django_pages, 'rating': 5, 'image': 'Django.png', 'last_modified': datetime.date.today()},
-        'Flask': {'pages': flask_pages, 'rating': 5,  'image': 'Flask.png', 'last_modified': datetime.date.today()},
-        'Bottle': {'pages': bottle_pages, 'rating': 4,  'image': 'Bottle.png', 'last_modified': datetime.date.today()},
-        'KNN': {'pages': KNN_pages, 'rating': 4, 'image': 'KNN.png', 'last_modified': datetime.date.today()},
-        'Regression': {'pages': regression_pages, 'rating': 4, 'image': 'Regression.png', 'last_modified': datetime.date.today()},
-        'Sorting': {'pages': sorting_pages, 'rating': 3,'image': 'Sorting.jpeg', 'last_modified': datetime.date.today()},
-        'Backtracking': {'pages': backtracking_pages, 'rating': 3, 'image': 'Backtracking.jpeg', 'last_modified': datetime.date.today()},
-        'HTML': {'pages': html_pages, 'rating': 2, 'image': 'HTML.png', 'last_modified': datetime.date.today()},
-        'Database': {'pages': database_pages, 'rating': 1, 'image': 'Database.png', 'last_modified': datetime.date.today()},
-    }
-
+    # Category Section
+    # each category now has pages, ratings, image and last modified date
     ml_categories = {
         'KNN': {'pages': KNN_pages, 'rating': 4, 'image': 'KNN.png', 'last_modified': datetime.date.today()},
         'Regression': {'pages': regression_pages, 'rating': 4, 'image': 'Regression.png', 'last_modified': datetime.date.today()},
@@ -203,11 +174,8 @@ def populate():
         'Web Design':{'categories':web_categories},
     }
 
-    # If you want to add more categories or pages,
-    # add them to the dictionaries above.
-
-    # The code below goes through the cats dictionary, then adds each category,
-    # and then adds all the associated pages for that category.
+    # Populate the super categories and then the categories and then the pages
+    # the order is important in order to accommodate the table relations
     for sup_cat, sup_data in sup_cats.items():
         sup = add_sup_cat(sup_cat)
         for cat, cat_data in sup_data['categories'].items():
@@ -215,6 +183,7 @@ def populate():
             for p in cat_data['pages']:
                 add_page(c, p['title'], p['url'], p['description'])
 
+# add a page to the pages DB
 def add_page(category, title, url, description):
     p = Page.objects.get_or_create(category=category, title=title)[0]
     p.url=url
@@ -222,6 +191,7 @@ def add_page(category, title, url, description):
     p.save()
     return p
 
+# add a category to the category DB
 def add_cat(super_cat, name, rating, image, last_modified):
     c = Category.objects.get_or_create(super_cat=super_cat, name = name)[0]
     c.rating = rating
@@ -230,6 +200,7 @@ def add_cat(super_cat, name, rating, image, last_modified):
     c.save()
     return c
 
+# add a super category to the supercategory table
 def add_sup_cat(title):
     sc = SuperCategories.objects.get_or_create(title=title)[0]
     sc.save()

@@ -1,19 +1,23 @@
 {% extends 'rango/base.html' %}
 {% load static %} <!-- New line -->
 
+<!-- Title block -->
 {% block title_block %}
     Add a Page
 {% endblock %}
 
+<!-- Header block, utilizing the forms.css -->
 {% block header_block %}
-    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
 <div id = "greeting_id">
     <h1 class = greeting><strong> Add a Page </strong>
         <p>Thank you for collaborating!</p>
     </h1></div>
+    <!-- Utilizes the PageForm and adds css on top of that -->
     <div class="container text-sm-center" id="add_cat">
         <form id="page_form" method="post" action="/rango/category/{{ category.slug }}/add_page/">
             {% csrf_token %}
