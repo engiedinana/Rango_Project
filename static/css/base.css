@@ -223,10 +223,19 @@ li.dropdown:last-child .dropdown-content{
 #add_page i {
   font-size:-webkit-xxx-large ;
   color:black;
+  bottom: 0;
+  float: right;
+  
+  width:100%;
 }
-
+#add_page {
+  align-items: flex-end;
+  display: flex;
+  position: relative;
+}
 #category_pages {
   border: 2px solid #9cb39c;
+  border-radius: 8px;
 }
 
 #comment_container p {

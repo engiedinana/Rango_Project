@@ -224,7 +224,7 @@ def get_cat(request):
     listOfCat = []
     # get categories in the system to display in homepage
     for category in category_list:
-        page_list = Page.objects.all().filter(category_id=category.id)[:3]
+        page_list = Page.objects.all().filter(category_id=category.id)[:2]
         cat = {}
         cat["title"]=category.name
         cat["slug"]=category.slug
