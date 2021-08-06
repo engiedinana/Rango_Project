@@ -37,6 +37,12 @@ ul {
     background: #9cb39c;
 }
 
+#submit {
+    color: white;
+    background-color: #9cb39c;
+    width: 15%;
+}
+
 input[type="text"] {
     width: 396px;
 }
