@@ -1,38 +1,37 @@
+from django.http import HttpResponse
 from django.http.response import JsonResponse
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
 from rango.models import Category, SuperCategories, Page, UserProfile, Comments, User
-from rango.forms import CategoryForm, ContactUsForm, CommentForm
-from django.shortcuts import redirect
-from rango.forms import PageForm
-from django.urls import reverse
-from rango.forms import UserForm, UserProfileForm
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout, get_user
-from datetime import datetime
-from urllib.parse import urlencode
-from django.conf import settings
+from rango.forms import CategoryForm, ContactUsForm, CommentForm, PageForm, UserForm, UserProfileForm
+from django.contrib.auth.forms import PasswordResetForm
+from django.db.models.query_utils import Q
 from django.contrib import messages
+from django.views import View
+from django.contrib.auth.models import User
 import requests 
 import json
-from django.core.serializers import serialize
-from django.utils.decorators import method_decorator
-from django.views import View
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from datetime import date
-import urllib
-from django.core.mail import send_mail, BadHeaderError
-from django.contrib.auth.forms import PasswordResetForm
-from django.template.loader import render_to_string
-from django.db.models.query_utils import Q
-from django.utils.http import urlsafe_base64_encode
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
 import math
+from django.core.mail import send_mail, BadHeaderError
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.contrib.auth import authenticate, login, logout, get_user, get_user_model
+from django.contrib.auth.decorators import login_required
+from datetime import datetime, date
+from urllib.parse import urlencode
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.utils.decorators import method_decorator
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
+
+# first get the user model for use in the following views
+User = get_user_model()
+
+
+#FB related functions
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
 Params: request, request type (whether it is a login or a register)
@@ -120,7 +119,7 @@ def facebook_login(request):
                 messages.error(request, 'Sign up first')
                 return redirect('/rango/login/')
         else:
-            print('Unable to login with Facebook Please try again') #need UI!
+            print('Unable to login with Facebook Please try again')
         
     else:
         url = return_string
@@ -150,22 +149,30 @@ def facebook_register(request):
     else:
         url = return_string
         return redirect(url)
-#-----------------------------------------------------
 
-User = get_user_model()
-
+"""
+Description: This is a helper function to add the default values needed for navigation bar in the context dictionary
+Params: N/A
+Return: context dictionary containing supercategories, categories and their pages for the navigation bar
+"""
 def add_cat_supcat_pages_context():
     context_dict = {}
-    category_list = Category.objects.all()#.order_by('-likes')[:5]
+    category_list = Category.objects.all()
     super_categories_list = SuperCategories.objects.all()[:4] #only taking first 4 to appear in the nav-bar
     page_list = Page.objects.all()
+    # list of all categories 
     context_dict['categories'] = category_list
-    #superCategories
+    # list of top 4 superCategories
     context_dict['super_categories'] = super_categories_list
+    # list of all pages
     context_dict['pages'] = page_list
     return context_dict
 
-# A helper method
+"""
+Description: This is a helper function to retrieve serverside cookie
+Params: request, cookie, default_val
+Return: session cookie from server side
+"""
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
     if not val:
@@ -366,23 +373,22 @@ def rate_category(request, category_name_slug,star):
     if request.method == 'GET':
         category.rating_sum_val = sum + int(star)
         category.rating_count_val = count + 1
-        msg = ""
+        print(category.rating_count_val)
         try:
             value  = math.floor((sum + int(star)) / (count + 1))
             if (value>5):
                 category.rating  = 5
-                msg = "Rating cannot exceed 5"
             else:
                 category.rating = math.floor(category.rating_sum_val / category.rating_count_val) #divide by zero!
-                msg = "Success"
         except:
+            if (sum>5):
+                category.rating  = 5
+                # return HttpResponse("rating greater than five, adjusted to equal 5")
+            else:
                 category.rating = category.rating_sum_val
-                msg = "Divide by zero exception"
         category.save()
-        return HttpResponse(msg)
+    return HttpResponse("success")
    
-
-
 @login_required
 def add_page(request, category_name_slug):
     try:
