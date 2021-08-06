@@ -7,7 +7,7 @@ Run the following commands in the terminal to try Rango:
 2. run: pip install -r requirements.txt
 3. run: python manage.py makemigrations rango
 4. run: python manage.py migrate
-5. run: python pupulate_rango.py
+5. run: python populate_rango.py
 6. run: python manage.py runserver
 7. navigate to: http://localhost:8000/
 
