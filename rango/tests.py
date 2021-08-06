@@ -106,10 +106,7 @@ class TestRatingFeature(TestCase):
     #     self.content = self.response.content.decode()
 
 
-
-    def test_view_url_exists_at_desired_location(self):
-        response = self.client.get('/rango/get_cat/')
-        self.assertEqual(response.status_code, 200)
+    #-ve rating boundries super categories
 
     def test_view_url_accessible_by_name(self):
         response = self.client.get(reverse('rango:get_cat', kwargs={}))
@@ -128,17 +125,14 @@ class TestRatingFeature(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'rango/index.html')
 
-
-
-
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/rango/get_cat/')
         self.assertEqual(response.status_code, 200)
         self.assertJSONEqual(response.content, {"categories": [{"title": "python", "slug": "python", "rating": 0, "image": "", "last_modified":datetime.datetime.now().date().strftime('%Y-%m-%d'), "pages": [{"title": "learn x in y minutes", "url":"https://learnxinyminutes.com/docs/python", "description": ""}]}]})
-        # self.assertJSONEqual(
-        #     str(response.content, encoding='utf8'),
-        #     {'status': 'success'}
-        # )
+    # self.assertJSONEqual(
+    #     str(response.content, encoding='utf8'),
+    #     {'status': 'success'}
+    # )
     # def test_lists_all_authors(self):
     #     # Get second page and confirm it has (exactly) remaining 3 items
     #     response = self.client.get(reverse('index'))
