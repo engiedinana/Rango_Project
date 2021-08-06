@@ -196,7 +196,7 @@ def index(request):
 
 def get_cat(request):
     context_dict = {}
-    category_list = Category.objects.all()
+    category_list = Category.objects.all().order_by('-rating')
     listOfCat = []
     for category in category_list:
         page_list = Page.objects.all().filter(category_id=category.id)[:3]
