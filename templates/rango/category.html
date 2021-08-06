@@ -35,7 +35,19 @@
                 <input type="radio" id="star1" name="rate" value="1" />
                 <label for="star1" title="1">1 star</label>
               </div>
+              {% if user.is_authenticated %}
+    <!-- add page button for authenticated users -->
+    <div class="col-sm-4" id="add_page">
+        <div class="row pull-right">
+            <!-- hovering over this button will show "Add page" -->
+            <a href="{% url 'rango:add_page' category.slug %}" data-toggle="tooltip" title = "Add Page">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
         </div>
+    </div>
+    {% endif %}
+        </div>
+
     {% if pages %}
     <!-- show all pages related to the category and save/unsave buttons -->
     <div class="row" id="category_pages">
@@ -82,17 +94,7 @@
     {% else %}
     <strong>No pages currently in category.</strong>
     {% endif %}
-    {% if user.is_authenticated %}
-    <!-- add page button for authenticated users -->
-    <div class="col-sm-4" id="add_page">
-        <div class="row pull-right">
-            <!-- hovering over this button will show "Add page" -->
-            <a href="{% url 'rango:add_page' category.slug %}" data-toggle="tooltip" title = "Add Page">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-            </a>
-        </div>
-    </div>
-    {% endif %}
+    
     </div>
 
     {% if comments %}
