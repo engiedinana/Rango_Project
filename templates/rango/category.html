@@ -13,7 +13,11 @@
     {% if category %}
     <div class="container">
         <div class="row" id="about_category">
+            {% if category.image %}
             <img src="/media/{{category.image}}"/>
+            {% else %}
+            <img src="/media/default.jpeg"/>
+            {% endif %}
             <h1>{{ category.name }}</h1>
             <div class="rate">
                 <input type="radio" id="star5" name="rate" value="5" />
