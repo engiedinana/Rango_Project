@@ -145,6 +145,17 @@ def facebook_register(request):
 
 User = get_user_model()
 
+def add_cat_supcat_pages_context():
+    context_dict = {}
+    category_list = Category.objects.all()#.order_by('-likes')[:5]
+    super_categories_list = SuperCategories.objects.all()[:4] #only taking first 4 to appear in the nav-bar
+    page_list = Page.objects.all()
+    context_dict['categories'] = category_list
+    #superCategories
+    context_dict['super_categories'] = super_categories_list
+    context_dict['pages'] = page_list
+    return context_dict
+
 # A helper method
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
@@ -176,13 +187,8 @@ def index(request):
     # Retrieve the top 5 only -- or all if less than 5.
     # Place the list in our context_dict dictionary (with our boldmessage!)
     # that will be passed to the template engine.
-    category_list = Category.objects.all()#.order_by('-likes')[:5]
-    page_list = Page.objects.all()#.order_by('-views')[:5]
-    
-    context_dict = {}
+    context_dict = add_cat_supcat_pages_context()
     context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
-    context_dict['categories'] = category_list
-    context_dict['pages'] = page_list
     # Render the response and send it back!
     visitor_cookie_handler(request)
     response = render(request, 'rango/index.html', context=context_dict)
@@ -216,22 +222,22 @@ def about(request):
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
-    context_dict = {}
+    context_dict = add_cat_supcat_pages_context()
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
     response = render(request, 'rango/about.html', context=context_dict)
     return response
-    #return render(request, 'rango/about.html', context = {"MEDIA_URL":"/media/"})
 
 def terms_of_use(request):
-    response = render(request, 'rango/terms_of_use.html', {})
+    context_dict = add_cat_supcat_pages_context()
+    response = render(request, 'rango/terms_of_use.html', context_dict)
     return response
 
 # Create your views here.
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
     # to the template rendering engine.
-    context_dict = {}
+    context_dict = add_cat_supcat_pages_context()
     current_user = get_user(request)
     
     try:
@@ -299,6 +305,7 @@ def show_category(request, category_name_slug):
 
 @login_required
 def add_category(request, username):
+    context_dict = add_cat_supcat_pages_context()
     form = CategoryForm()
     # A HTTP POST?
     if request.method == 'POST':
@@ -335,7 +342,8 @@ def add_category(request, username):
             print(form.errors)
             # Will handle the bad form, new form, or no form supplied cases.
             # Render the form with error messages (if any).
-    return render(request, 'rango/add_category.html', {'form': form})
+    context_dict['form'] = form
+    return render(request, 'rango/add_category.html', context_dict)
 
 def rate_category(request, category_name_slug):
     try:
@@ -387,7 +395,9 @@ def add_page(request, category_name_slug, username):
                 return redirect(reverse('rango:show_category', kwargs={'category_name_slug': category_name_slug}))
         else:
             print(form.errors)
-    context_dict = {'form': form, 'category': category}
+    context_dict = add_cat_supcat_pages_context()
+    context_dict['form'] = form
+    context_dict['category'] = category
     return render(request, 'rango/add_page.html', context=context_dict)
 
 def register(request):
@@ -443,12 +453,16 @@ def register(request):
         # These forms will be blank, ready for user input.
         user_form = UserForm()
         profile_form = UserProfileForm()
-
+    context_dict = add_cat_supcat_pages_context()
+    context_dict['user_form']= user_form
+    context_dict['profile_form']= profile_form
+    context_dict['registered'] =  registered
     # Render the template depending on the context.
-    return render(request,'rango/register.html',context = {'user_form': user_form,'profile_form': profile_form,'registered': registered})
+    return render(request,'rango/register.html',context = context_dict)
 
 def user_login(request):
     # If the request is a HTTP POST, try to pull out the relevant information.
+    context_dict = add_cat_supcat_pages_context()
     if request.method == 'POST':
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
@@ -485,7 +499,7 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render(request, 'rango/login.html')
+        return render(request, 'rango/login.html', context_dict)
 
 #Use the login_required() decorator to ensure only those logged in can
 # access the view.
@@ -559,15 +573,16 @@ class ProfileView(View):
             (user, user_profile, form) = self.get_user_details(username)
         except TypeError:
             return redirect(reverse('rango:index'))
-        
-        context_dict = {'user_profile': user_profile,
-                        'selected_user': user,
-                        'form': form, 
-                        'pages':fav_list}
+        context_dict = add_cat_supcat_pages_context()
+        context_dict['user_profile'] = user_profile
+        context_dict['selected_user']= user
+        context_dict['form'] = form 
+        context_dict['pages']=fav_list
         return render(request, 'rango/profile.html', context_dict)
     
     @method_decorator(login_required)
     def post(self, request, username):
+        context_dict = add_cat_supcat_pages_context()
         try:
             (user, user_profile, form) = self. get_user_details(username)
         except TypeError:
@@ -579,18 +594,23 @@ class ProfileView(View):
             return redirect('rango:profile', user.username)
         else:
             print(form.errors)
-        context_dict = {'user_profile': user_profile, 'selected_user': user, 'form':form}
+        context_dict['user_profile'] = user_profile
+        context_dict['selected_user']= user, 
+        context_dict['form']=form
         return render(request, 'rango/profile.html', context_dict)
 
 #View for the cantact us form
 class ContactUsView(View):
     #get request to show user the empty form
     def get(self,request):
+        context_dict = add_cat_supcat_pages_context()
         form = ContactUsForm()
-        return render(request, 'rango/contact_us.html', {'form': form}) 
+        context_dict['form'] = form
+        return render(request, 'rango/contact_us.html', context_dict) 
     
     #post request to take input from user in a form and store it in the database
     def post(self, request):
+        context_dict = add_cat_supcat_pages_context()
         form = ContactUsForm(request.POST)
         #verify form is valid
         if form.is_valid():
@@ -601,5 +621,6 @@ class ContactUsView(View):
         else:
             print(form.errors)
         #If the user reaches here there was some error in the form so re render the form
-        return render(request, 'rango/contact_us.html', {'form': form})
+        context_dict['form'] = form
+        return render(request, 'rango/contact_us.html', context_dict)
  

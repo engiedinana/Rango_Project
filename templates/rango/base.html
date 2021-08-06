@@ -23,51 +23,24 @@
 
 <ul class="navbar">
     <li><img id = "img_logo" src="{% static 'images/logo.png' %}" alt="Picture of Rango" class="pull-left"/></li>
-    <li><a class="active" href="{% url 'rango:index' %}"><i class="fa fa-fw fa-home"></i> Home</a></li> 
+    <li><a class="active" href="{% url 'rango:index' %}"><i class="fa fa-fw fa-home"></i> Home</a></li>   
 
-    <li class="dropdown">
-        <button class="dropbtn"><i class="fa fa-fw fa-folder"></i>Machine Learning 
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a>
-        </div>
-    </li> 
-
-      <li class="dropdown">
-        <button class="dropbtn"><i class="fa fa-fw fa-folder"></i>Frameworks 
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a class="dropdown-item" href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a>
-        </div>
-    </li> 
-
-      <li class="dropdown">
-        <button class="dropbtn"><i class="fa fa-fw fa-folder"></i>Algorithms 
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a>
-        </div>
-    </li> 
-
-      <li class="dropdown">
-        <button class="dropbtn"><i class="fa fa-fw fa-folder"></i>Web Design 
-          <i class="fa fa-caret-down"></i>
-        </button>
-        <div class="dropdown-content">
-          <a href="#">Link 1</a>
-          <a href="#">Link 2</a>
-          <a href="#">Link 3</a>
-        </div>
-    </li> 
+    {% if super_categories %}
+        {% for sup in super_categories %}
+          <li class="dropdown">
+            <button class="dropbtn"><i class="fa fa-fw fa-folder"></i> {{ sup.title }}
+              <i class="fa fa-caret-down"></i>
+              <div class="dropdown-content">
+                {% for cat in categories %}
+                {% if cat.super_cat == sup %}
+                  <a href="{% url 'rango:show_category' cat.slug %}">{{ cat.name }}</a><!--should be clickable!-->
+                {% endif %}
+                {% endfor %}
+              </div>
+            </button>
+          </li>
+        {% endfor %}
+    {% endif %}
 
     <li><a class="active" href="{% url 'rango:about' %}"><i class="fa fa-fw fa-users"></i> About Us</a></li>
 
