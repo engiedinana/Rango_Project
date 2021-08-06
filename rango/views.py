@@ -345,25 +345,24 @@ def add_category(request, username):
     context_dict['form'] = form
     return render(request, 'rango/add_category.html', context_dict)
 
-def rate_category(request, category_name_slug):
+def rate_category(request, category_name_slug,star):
     try:
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
         category = None
+        return HttpResponse("Failed to get") 
     # You cannot add a page to a Category that does not exist...
-    if category is None:
-        return redirect('/rango/')
     sum = category.rating_sum_val
     count = category.rating_sum_val 
-    if request.method == 'POST':
-        category.rating_sum_val = sum + request.get('rating')
+    if request.method == 'GET':
+        category.rating_sum_val = sum + int(star)
         category.rating_count_val = count + 1
         try:
-            category.rating = math.ceil(sum / count) #divide by zero!
+            category.rating = math.ceil(category.rating_sum_val / category.rating_count_val) #divide by zero!
         except:
-            category.rating = sum
+            category.rating = category.rating_sum_val
         category.save()
-    return HttpResponse("success")
+    return HttpResponse("success")   
     
 
 @login_required
