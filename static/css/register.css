@@ -1,14 +1,5 @@
 #registerform input {
     text-align: center;
-    /* border-bottom:solid #9cb39c;
-    border-top:solid #9cb39c;
-    border-left:solid #9cb39c;
-    border-right:solid #9cb39c; */
-    /* border-width: 2px;
-    height: 50px;
-    width: 300px;
-    border-radius: 8px;
-    margin: 5px; */
     font-family: 'Times New Roman', Times, serif;
     list-style-type: none;
 }
@@ -16,27 +7,7 @@
 ul {
     list-style-type: none;
 }
-/*
-.btn {
-    height: 50px;
-    width: 300px;
-    border-radius: 8px;
-    margin: 5px
-}
 
-.register-title{
-    text-align: center;
-}
-
-.form-divider{
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border-top: 5px solid rgba(0,0,0,.1);
-  background-color: black;
-} */
-
-
-/* path -> static/css/login.css */
 
 @import url(https://fonts.googleapis.com/css?family=Lato:300);
 /* top part */
@@ -66,8 +37,10 @@ ul {
     background: #9cb39c;
 }
 
-.default{
-    text-align: center;
+#submit {
+    color: white;
+    background-color: #9cb39c;
+    width: 15%;
 }
 
 input[type="text"] {

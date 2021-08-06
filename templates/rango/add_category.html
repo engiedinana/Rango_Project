@@ -5,9 +5,16 @@
     Add a Category
 {% endblock %}
 
+{% block header_block %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
 {% block body_block %}
-    <h1>Add a Category</h1>
-    <div>
+    <div id = "greeting_id">
+    <h1 class = greeting><strong> Add a Category </strong>
+        <p>Thank you for collaborating!</p>
+    </h1></div>
+    <div class="container text-sm-center" id="add_cat">
         <form id="category_form" method="post" action="/rango/add_category/{{ user.username }}/" enctype="multipart/form-data">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
@@ -17,8 +24,10 @@
                 {{ field.errors }}
                 {{ field.help_text }}
                 {{ field }}
+                <br />
+                <br />
             {% endfor %}
-            <input type="submit" name="submit" value="Create Category" />
+            <input class="btn btn-primary mb-2" id = "submit" type="submit" name="submit" value="Create Category" />
         </form>
     </div>
 {% endblock %}

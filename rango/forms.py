@@ -10,9 +10,10 @@ class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=maxLength128, help_text="Please enter the category name.")
     #views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     #likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    title = forms.ModelChoiceField(queryset=SuperCategories.objects.all(), empty_label="Select Topic")
+    title = forms.ModelChoiceField(queryset=SuperCategories.objects.all(), empty_label="Select Topic", help_text= "Select a topic that fits the category:")
     #last_modified = forms.DateField(initial=datetime.date.today)
     #rating = forms.FloatField()
+    image = forms.ImageField(help_text="Please add an image:", required=False)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     # An inline class to provide additional information on the form.
