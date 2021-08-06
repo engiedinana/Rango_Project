@@ -364,6 +364,7 @@ def rate_category(request, category_name_slug,star):
     if request.method == 'GET':
         category.rating_sum_val = sum + int(star)
         category.rating_count_val = count + 1
+        print(category.rating_count_val)
         try:
             value  = math.floor((sum + int(star)) / (count + 1))
             if (value>5):
