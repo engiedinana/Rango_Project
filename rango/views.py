@@ -364,20 +364,21 @@ def rate_category(request, category_name_slug,star):
     if request.method == 'GET':
         category.rating_sum_val = sum + int(star)
         category.rating_count_val = count + 1
-        print(category.rating_count_val)
+        msg = ""
         try:
             value  = math.floor((sum + int(star)) / (count + 1))
             if (value>5):
                 category.rating  = 5
+                msg = "Rating cannot exceed 5"
             else:
                 category.rating = math.floor(category.rating_sum_val / category.rating_count_val) #divide by zero!
+                msg = "Success"
         except:
-            if (sum>5):
-                category.rating  = 5
-            else:
                 category.rating = category.rating_sum_val
+                msg = "Divide by zero exception"
         category.save()
-    return HttpResponse("success")
+        return HttpResponse(msg)
+   
 
 
 @login_required
