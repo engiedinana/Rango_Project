@@ -11,8 +11,6 @@ import datetime
 FAILURE_HEADER = f"{os.linesep}{os.linesep}{os.linesep}==================================={os.linesep}TEST FAILURE={os.linesep}=================================={os.linesep}"
 FAILURE_FOOTER = f"{os.linesep}"
 
-
-
 #helper function to populat database
 def create_user(username, password):
     user = get_user_model().objects.create_user(username=username)
@@ -22,7 +20,9 @@ def create_user(username, password):
 
 def create_user_profile(user):
     profile = UserProfile.objects.update_or_create(gender = 'F',
-                                                   user = user)
+                                                   defaults={
+                                                   'user': user})
+    return profile
 #helper function to populat database
 def create_category(name, super, user,date):
     category, __ = Category.objects.update_or_create(
@@ -49,9 +49,8 @@ def add_page(title, url, cat , user):
 
 def create_comment(profile, cat):
     comment, __ = Comments.objects.update_or_create(
-        profile_info = profile,
-        category = cat,
-        description = "This is a comment"
+        defaults= {'profileInfo' : profile,
+        'category' : cat}
     )
     return comment
 
@@ -176,7 +175,78 @@ class ContactUsFeature(TestCase):
         self.assertEqual(enquiry1.last_name, 'Gartner', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         self.assertEqual(enquiry1.email, 'test@test.com', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         self.assertEqual(enquiry1.description, 'This is test enquiry, can be a maximum of 150 words', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
-   
+
+"""
+class CommentsFeature(TestCase):
+    def setUp(self):
+        self.user = create_user("testUser", "testPassword")
+        login = self.client.login(username='testUser', password='testPassword')
+        self.super = create_super_category('Frameworks')
+        self.cat = create_category('python', self.super, self.user, datetime.datetime.now().date())
+        self.profile = create_user_profile(self.user) 
+        self.comment = create_comment(self.profile, self.cat)
+        
+        
+    def tearDown(self):
+        self.user.delete()
+        self.super.delete()
+        self.cat.delete()
+        self.profile.delete()
+        self.comment.delete()
+        
+    def test_comments_view(self):
+        
+        self.response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        self.content = self.response.content.decode()
+
+        self.assertEqual(self.response.status_code, 200)
+        self.assertTemplateUsed(self.response, 'rango/category.html')
+    
+    def test_comments_form(self):
+        comment_form = CommentForm()
+        self.assertEqual(type(comment_form.__dict__['instance']), Comments, f"{FAILURE_HEADER}The class comments form could not be found in forms.py module.{FAILURE_FOOTER}")
+        
+        fields = comment_form.fields
+        
+        expected_fields = {
+            'description': django_fields.CharField
+        }
+        
+        for expected_field_name in expected_fields:
+            expected_field = expected_fields[expected_field_name]
+            # f"{FAILURE_HEADER}{FAILURE_FOOTER}"
+            self.assertTrue(expected_field_name in fields.keys(), f"{FAILURE_HEADER}The field '{expected_field_name}' was not found in CommentsForm implementation'{FAILURE_FOOTER}")
+            self.assertEqual(expected_field, type(fields[expected_field_name]), f"{FAILURE_HEADER}The field '{expected_field_name}' in CommentsForm was not of the expected type '{type(fields[expected_field_name])}'{FAILURE_FOOTER}")
+
+    def test_response(self):
+        response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        context = response.context
+        content = response.content.decode()
+        
+        self.assertTrue('form' in context)
+        self.assertTrue('<h1>Comments</h1>' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('<div id="comment_container" class="container"></div>' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('name="description"' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('<input type="submit" name="submit" value="Post" />' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('action="/rango/category/python"' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+    
+    def test_functionality(self):
+        self.client.post(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}),
+                         {  'profileInfo': self.user.profile,
+                             'category': self.user.category,
+                             'description':'This is test enquiry, can be a maximum of 256 words'})
+        
+        enquiry = Comments.objects.filter(first_name='Erlang')
+        enquiry1 = enquiry[0]
+        self.assertEqual(len(enquiry), 1, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertEqual(enquiry1.profileInfo, self.user.profile,  f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertEqual(enquiry1.category, 'python', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertEqual(enquiry1.description, 'This is test enquiry, can be a maximum of 256 words', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        #Date not in future
+"""
+
+
+
 """
 class TestRatingFeature(TestCase):
     @classmethod
