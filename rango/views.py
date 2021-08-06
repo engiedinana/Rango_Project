@@ -1,5 +1,6 @@
+from django.http.response import JsonResponse
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rango.models import Category, SuperCategories, Page, UserProfile, Comments, User
 from rango.forms import CategoryForm, ContactUsForm, CommentForm
 from django.shortcuts import redirect
@@ -30,6 +31,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 import math
+from django.views.decorators.csrf import csrf_exempt
 
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
@@ -520,48 +522,54 @@ def user_logout(request):
     return redirect(reverse('rango:index'))
 
 #View for saving a favorite page
+
 class SaveFavoriteView(View):
     #only authenticated users can add a favorite page
     @method_decorator(login_required)
     #handle ajax get request
-    def get(self, request):
+    def post(self, request):
         #Fetch id of page to save
-        page_id = request.GET['page_id']
+        page_id = request.POST.get('page_id')
+        data = {'response' : -1}
         #exception handling for fetching the page from DB
         try:
             page = Page.objects.get(id=int(page_id))
         except Page.DoesNotExist:
-            return HttpResponse(-1)
+            return JsonResponse(data)
         except ValueError:
-            return HttpResponse(-1)
+            return JsonResponse(data)
         #Link user to the saved page and save the association in database
         page.favorite.add(get_user(request))
         page.save()
         #return response 
-        return HttpResponse("success")
-        
+        return JsonResponse({'response' : 1})
+    
+    #def get(self, request):
+     #   return render(request, 'rango/category.html') 
+     
 #View for removing a page from favorites
 class UnsaveFavoriteView(View):
     #only authenticated users can add a favorite page
     @method_decorator(login_required)
     #handle ajax get request
-    def get(self, request):
+    def post(self, request):
         #Fetch id of page to save
-        page_id = request.GET['page_id']
+        page_id = request.POST.get('page_id')
+        data = {'response' : -1}
         #exception handling for fetching the page from DB
         try:
             page= Page.objects.get(id=int(page_id))
         except Page.DoesNotExist:
-                return HttpResponse(-1)
+                return JsonResponse(data)
         except ValueError:
-                return HttpResponse(-1)
+                return JsonResponse(data)
         #Delete saved page from the fav list
         user = get_user(request)
         to_remove = user.pages.all().filter(id=page_id)
         user.pages.remove(to_remove[0])
         user.save()
         #return response
-        return HttpResponse("success")
+        return JsonResponse({'response' : 1})
 
 class ProfileView(View):
     def get_user_details(self, username):
