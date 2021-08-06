@@ -1,30 +1,63 @@
 #registerform input {
     text-align: center;
-    border-bottom:solid #9cb39c;
-    border-top:solid #9cb39c;
-    border-left:solid #9cb39c;
-    border-right:solid #9cb39c;
-    border-width: 2px;
-    height: 50px;
-    width: 300px;
-    border-radius: 8px;
-    margin: 5px
+    font-family: 'Times New Roman', Times, serif;
+    list-style-type: none;
 }
 
-.btn {
-    height: 50px;
-    width: 300px;
-    border-radius: 8px;
-    margin: 5px
+ul {
+    list-style-type: none;
 }
 
-.register-title{
+
+@import url(https://fonts.googleapis.com/css?family=Lato:300);
+/* top part */
+.greeting {
+    padding: 50px;
     text-align: center;
+    background-color:rgb(209, 206, 206);
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 200px;
+}
+  #greeting_id h1 {
+    color:rgb(15, 53, 23);
+    font-weight:500;
+    font-size: 45px;
+  }
+
+
+.btn-primary:hover{
+    background: grey;
+}
+#alogin:hover {
+    background: grey;
 }
 
-.form-divider{
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border-top: 5px solid rgba(0,0,0,.1);
-  background-color: black;
+#alogin {
+    color:rgb(40, 94, 145);
+    background: #9cb39c;
+}
+
+#submit {
+    color: white;
+    background-color: #9cb39c;
+    width: 15%;
+}
+
+input[type="text"] {
+    width: 396px;
+}
+
+input[type="password"] {
+    width: 396px;
+}
+
+.btn-primary{
+    text-transform: uppercase;
+    background: #adc7e9;
+    color: white;
+    width: 20%;
+    border: 0;
+    font-size: 14px;
+    transition: all 0.3 ease;
+    cursor: pointer;
 }

@@ -1,6 +1,7 @@
 from django.urls import path
 from rango import views
 app_name = 'rango'
+
 urlpatterns = [
 path('', views.index, name='index'),
 path('about/', views.about, name='about'),
@@ -15,6 +16,8 @@ path('facebook_login/', views.facebook_login, name="facebook_login"),
 path('facebook_register/', views.facebook_register, name="facebook_register"),
 path('terms_of_use/', views.terms_of_use, name="terms_of_use"),
 path('get_cat/', views.get_cat, name="get_cat"),
+path('rate_category/<slug:category_name_slug>/<star>', views.rate_category, name="rate_category"),
+
 
 #route for saving a favorite page and view to fire
 path('save_favorite/',views.SaveFavoriteView.as_view(), name="save_favorite"),
@@ -23,5 +26,5 @@ path('unsave_favorite/', views.UnsaveFavoriteView.as_view(), name="unsave_favori
 #route to display a user's profile and corresponding view to fire
 path('profile/<username>/', views.ProfileView.as_view(), name='profile'),
 #route for contactus page
-path('contactus/', views.ContactUsView.as_view(), name="contact_us")
+path('contactus/', views.ContactUsView.as_view(), name="contact_us"),
 ]

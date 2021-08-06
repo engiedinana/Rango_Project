@@ -4,13 +4,18 @@
     Register
 {% endblock %}
 
-{% block body_block %}
-<h1 class="register-title">Register for Rango</h1>
-{% include 'rango/message.html' %}
-
 {% block header_block %}
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
 {% endblock %}
+
+{% block body_block %}
+<div id = "greeting_id">
+<h1 class = greeting class="register-title"><strong>Register for Rango</strong>
+    <p>Thank you for your interest!</p>
+</h1>
+</div>
+{% include 'rango/message.html' %}
+
 
 {% if registered %}
 Rango says: <strong>thank you for registering!</strong>
@@ -19,12 +24,12 @@ Rango says: <strong>thank you for registering!</strong>
 
 <div class="container text-sm-center" id="registerform">
     <form id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
-    Rango says: <strong>Register here!</strong><br />
+        <br/>
         <hr class="form-divider">
     {% csrf_token %}
 
     <!-- Display each form -->
-
+<div>
         <h1>Account Information</h1>
         <br>
         <p>Username:</p>
@@ -33,22 +38,25 @@ Rango says: <strong>thank you for registering!</strong>
         <p>Email:</p>
         {{ user_form.email }}
         <br />
-        <p>Password</p>
+        <p>Password:</p>
         {{ user_form.password }}
         <hr>
         <h1>Personal Information</h1>
         <br />
         {{ user_form.first_name }}
         <br />
+        <br />
         {{ user_form.last_name }}
         <br />
+        <br />
+        {{ user_form.gender }}
 
-        <!-- {{ user_form.as_p}} -->
     {{ profile_form.as_p }}
+</div>
         <hr>
 
     <!-- Provide a button to click to submit the form. -->
-    <input type="submit" name="submit" value="Register" />
+    <input class="btn btn-primary mb-2" id = "alogin" type="submit" name="submit" value="Register" />
         <br>
     <button class="btn btn-primary mb-2">
         <a href="{% url 'rango:facebook_register' %}">SignUp with Facebook</a>
