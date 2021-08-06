@@ -57,6 +57,7 @@
                 {% if user.is_authenticated %}
                     {% if fav_list %}
                         {% if page in fav_list %}
+                        <!-- If the page is in fav list show the unsave icon but keep the save button hidden for interaction by the user -->
                         <div>
                             <button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
                                 <img src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
@@ -65,6 +66,7 @@
                                 <img src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to Save Page"/>
                             </button>
                         {% else %}
+                        <!--If the page is not in fav list show the save icon but keep the unsave hidden for manipulation by user-->
                         <div>
                             <button id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
                                 <img src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
@@ -74,6 +76,7 @@
                             </button>
                         {% endif %}
                     {% else %}
+                    <!--If there is no fav list but user is authenticated meaning user has just created a category and added pages-->
                     <div>
                         <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
                             <img src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to save Page"/>
@@ -85,7 +88,7 @@
                 {% else %}
                 <div>
                 {% endif %}
-                    <!-- shows the description of the page when hovering over its title -->
+                    <!-- shows the page title and description of the page when hovering over its title -->
                     <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
                 </div>
             {% endfor %}
