@@ -12,7 +12,7 @@ class UserProfile(models.Model):
         ('M', 'Male'),
     )
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    dob = models.DateField(default="")
+    dob = models.DateField(blank=True, null=True)
     facebook = models.BooleanField(default = False)
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -36,6 +36,8 @@ class Category(models.Model):
             MaxValueValidator(5),
             MinValueValidator(0),
         ])
+    rating_sum_val = models.IntegerField(default=0, blank = True)
+    rating_count_val = models.IntegerField(default=0, blank=True)
     image = models.ImageField(upload_to='', default="", blank = True)
     last_modified = models.DateField(default=datetime.date.today, blank = True)
 
@@ -76,4 +78,4 @@ class Comments(models.Model):
     #Comment description
     description = models.CharField(max_length=maxLength256)
     #date the comment was made
-    date = models.DateField(default=date.today)
+    date = models.DateField(default=date.today, blank=True, null=True)
