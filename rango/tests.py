@@ -93,3 +93,5 @@ class TestFavoritesFeature(TestCase):
     def test_database_get_saved_and_save_unsaved_pages(self):
         pass
 """
+# class TestRatingFeature(TestCase):
+    
