@@ -4,7 +4,7 @@ body, footer {
   line-height: 1.15;
 }
 
-.image { /*dummy content*/
+.image { 
   max-width: 100%;
   max-height: 100%;
 } 
@@ -25,7 +25,7 @@ body, footer {
   box-shadow:
     0 5px 10px rgba(0, 0, 0, 0.1),
     0 20px 20px rgba(0, 0, 0, 0.05);
-  text-align: center; /*da gded*/
+  text-align: center; 
 }
 
 #cat_title {
@@ -57,9 +57,6 @@ body, footer {
     margin: 3px;
     padding: 3px;
   }
-
-
-
   
   .AlphabetNav a {
     display: flex;

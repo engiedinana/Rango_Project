@@ -1,16 +1,20 @@
+<!-- This is an information providing page and its content was referenced from online templates at: 
+https://templatelab.com/terms-and-conditions-templates/ -->
 {% extends 'rango/base.html' %}
 {% load static %} <!-- New line -->
 
 
+<!-- Title block -->
 {% block title_block %}
     Terms of Use
-    <!-- Refrence= https://templatelab.com/terms-and-conditions-templates/ -->
 {% endblock %}
 
+<!-- Header block utilizing info.css -->
 {% block header_block %}
-    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+    <link rel="stylesheet" href="{% static 'css/info.css' %}">
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
     <div class="about-section">
         <h1><strong>Terms of Use</strong></h1>
@@ -34,7 +38,6 @@
 
         </ul><br /> 
     </div>
-    
 {% endblock %}
 
 

@@ -1,6 +1,7 @@
 {% extends 'rango/base.html' %}
 {% load static %}
 
+<!-- Title block -->
 {% block title_block %}
     {% if category %}
         {{ category.name }}
@@ -9,13 +10,16 @@
     {% endif %}
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
     {% if category %}
     <div class="container">
         <div class="row" id="about_category">
             {% if category.image %}
+            <!-- category has an image -->
             <img src="/media/{{category.image}}"/>
             {% else %}
+            <!-- category does not have an image so use default one -->
             <img src="/media/default.jpeg"/>
             {% endif %}
             <h1>{{ category.name }}</h1>
@@ -33,6 +37,7 @@
               </div>
         </div>
     {% if pages %}
+    <!-- show all pages related to the category and save/unsave buttons -->
     <div class="row" id="category_pages">
         <div class="col-sm-8 col-md-8">
             <ul id="parentPage">
@@ -68,6 +73,7 @@
                 {% else %}
                 <div>
                 {% endif %}
+                    <!-- shows the description of the page when hovering over its title -->
                     <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
                 </div>
             {% endfor %}
@@ -77,17 +83,20 @@
     <strong>No pages currently in category.</strong>
     {% endif %}
     {% if user.is_authenticated %}
+    <!-- add page button for authenticated users -->
     <div class="col-sm-4" id="add_page">
         <div class="row pull-right">
+            <!-- hovering over this button will show "Add page" -->
             <a href="{% url 'rango:add_page' category.slug %}" data-toggle="tooltip" title = "Add Page">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
         </div>
-        <!-- Add rating option -->
     </div>
     {% endif %}
     </div>
+
     {% if comments %}
+    <!-- show comments of the category if any -->
     <div class="conainer">
         <h1>Comments</h1>
     </div>
@@ -108,7 +117,9 @@
         <br />
         {% endfor %}
     {% endif %}
+
     {% if pages and user.is_authenticated %}
+    <!-- if user is logged in and there exists pages, the user will be able to post comments to the category page -->
         <br/>
         <form id="comment_form" method="post" action="/rango/category/{{ category.slug }}/">
             <div class="form-group">
@@ -126,7 +137,7 @@
     {% endif %}
     </div>
     {% else %}
-    The specified category does not exist.
+        The specified category does not exist.
     {% endif %}
     <script src="{% static 'js/category.js' %}" crossorigin="anonymous"></script>
 {% endblock %}

@@ -1,22 +1,24 @@
 {% extends 'rango/base.html' %}
 {% load static %} <!-- New line -->
 
-
+<!-- Title Block -->
 {% block title_block %}
     About Us
 {% endblock %}
 
+<!-- Header block to define which css to use -->
 {% block header_block %}
-    <link rel="stylesheet" href="{% static 'css/about_us.css' %}">
+    <link rel="stylesheet" href="{% static 'css/info.css' %}">
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
 <div class="about-section">
     <h1><strong>About Us</strong></h1>
     <p>Rango is a collaborative platform designed to bring together CS geeks -  beginners and experts - to express their passion, share knowledge and learn through browsing/adding different topics and their supporting websites, saving page-links for future references, and engaging with others through comments and ratings.
     </p>
 </div>
-  
+  <!-- Show all contributors to the rango project profiles -->
   <h2 id = "team">Our Team</h2>
   <div class="row">
     <div class="column">
@@ -67,6 +69,7 @@
         </div>
       </div>   
   </div>
+
 {% endblock %}
 
 

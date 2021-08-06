@@ -1,19 +1,23 @@
 {% extends 'rango/base.html' %}
 {% load static %} <!-- New line -->
 
+<!-- Title block -->
 {% block title_block %}
     Add a Category
 {% endblock %}
 
+<!-- Header block to utilize a css file -->
 {% block header_block %}
-    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
     <div id = "greeting_id">
     <h1 class = greeting><strong> Add a Category </strong>
         <p>Thank you for collaborating!</p>
     </h1></div>
+    <!-- utilize the form to show the fields and add css on top of that -->
     <div class="container text-sm-center" id="add_cat">
         <form id="category_form" method="post" action="/rango/add_category/{{ user.username }}/" enctype="multipart/form-data">
             {% csrf_token %}

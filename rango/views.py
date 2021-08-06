@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 import requests 
 import json
 import math
+import string
 from django.core.mail import send_mail, BadHeaderError
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -208,6 +209,7 @@ def index(request):
     context_dict = add_cat_supcat_pages_context()
     # Render the response and send it back!
     visitor_cookie_handler(request)
+    context_dict['alphabets'] = string.ascii_uppercase
     response = render(request, 'rango/index.html', context=context_dict)
     return response
 
@@ -249,6 +251,7 @@ def about(request):
     context_dict = add_cat_supcat_pages_context() # to show everything in the navigation bar
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
+    context_dict['authors'] = ['Engie', 'Ghazian', 'Nikhita', 'Sara']
     response = render(request, 'rango/about.html', context=context_dict)
     return response
 

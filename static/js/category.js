@@ -1,3 +1,8 @@
+/*
+This file is responsible for updating the category rating in 
+the database depending on the number of stars clicked
+it triggers the rate category view to update the value in the db.
+*/
 window.addEventListener('load',  function() {
     var star = ""
     var directories = $(location).attr('href').split("/");
@@ -34,7 +39,4 @@ $("#star5").click(function(){
        xhr.open("GET", `/rango/rate_category/`+category +`/`+star, true);
        xhr.send(null);
 });
-
-
-
 });

@@ -1,14 +1,3 @@
-#registerform input {
-    text-align: center;
-    font-family: 'Times New Roman', Times, serif;
-    list-style-type: none;
-}
-
-ul {
-    list-style-type: none;
-}
-
-
 @import url(https://fonts.googleapis.com/css?family=Lato:300);
 /* top part */
 .greeting {
@@ -60,4 +49,14 @@ input[type="password"] {
     font-size: 14px;
     transition: all 0.3 ease;
     cursor: pointer;
+}
+
+#registerform input {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    list-style-type: none;
+}
+
+ul {
+    list-style-type: none;
 }
