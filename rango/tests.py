@@ -255,31 +255,23 @@ class TestRatingFeature(TestCase):
         self.super = create_super_category('Frameworks')
         self.cat = create_category('python', self.super, self.user, datetime.datetime.now().date())
         self.page= add_page('learn x in y minutes','https://learnxinyminutes.com/docs/python', self.cat,self.user) 
-
     # def test_rating_view(self):
     #     self.response = self.client.get(reverse('rango:get', kwargs={'category_name_slug': 'python'}))
     #     self.content = self.response.content.decode()
-
-
     #-ve rating boundries super categories
-
     def test_view_url_accessible_by_name(self):
         response = self.client.get(reverse('rango:get_cat', kwargs={}))
         self.assertEqual(response.status_code, 200)
-
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/rango/')
         self.assertEqual(response.status_code, 200)
-
     def test_view_url_accessible_by_name(self):
         response = self.client.get(reverse('rango:index', kwargs={}))
         self.assertEqual(response.status_code, 200)
-
     def test_view_uses_correct_template(self):
         response = self.client.get(reverse('rango:index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'rango/index.html')
-
     def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/rango/get_cat/')
         self.assertEqual(response.status_code, 200)
