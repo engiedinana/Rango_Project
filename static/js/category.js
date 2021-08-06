@@ -37,9 +37,4 @@ $("#star5").click(function(){
 
 
 
-
-
-
-
-
 });

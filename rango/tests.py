@@ -6,9 +6,12 @@ from rango.models import Enquiries, Page, Category, SuperCategories, UserProfile
 from django.contrib.auth import get_user_model
 from rango.forms import CommentForm, ContactUsForm
 from django.forms import fields as django_fields
+import datetime
 
 FAILURE_HEADER = f"{os.linesep}{os.linesep}{os.linesep}==================================={os.linesep}TEST FAILURE={os.linesep}=================================={os.linesep}"
 FAILURE_FOOTER = f"{os.linesep}"
+
+
 
 #helper function to populat database
 def create_user(username, password):
@@ -21,10 +24,11 @@ def create_user_profile(user):
     profile = UserProfile.objects.update_or_create(gender = 'F',
                                                    user = user)
 #helper function to populat database
-def create_category(name, super, user):
+def create_category(name, super, user,date):
     category, __ = Category.objects.update_or_create(
-        name = name, 
-        defaults = {'super_cat':super}
+        name=name,
+        defaults={'super_cat': super},
+        last_modified = date
     )
     return category
 
@@ -67,9 +71,9 @@ class TestFavoritesFeature(TestCase):
     def setUp(self):
         self.user = create_user("testUser", "testPassword")
         self.super = create_super_category('Frameworks')
-        self.cat = create_category('python', self.super, self.user)
-        self.page = add_page("learn x in y minutes", "https://github.com/maxwelld90/tango_with_django_2_code/blob/master/progress_tests/tests_chapter7.py", self.cat, self.user)     
-        login=self.client.login(username='testUser', password='testPassword')
+        self.cat = create_category('python', self.super, self.user,datetime.datetime.now().date())
+        self.page= add_page('learn x in y minutes','https://learnxinyminutes.com/docs/python', self.cat,self.user)        
+        login = self.client.login(username='testUser', password='testPassword')
         
     def tearDown(self):
         self.user.delete()
@@ -100,12 +104,16 @@ class TestFavoritesFeature(TestCase):
         self.assertEquals(self.response.status_code, 200)
         self.assertNotEquals(len(self.user.pages.all()),1 )
         self.assertEquals(len(self.user.pages.all()),0 )
-        
+    def test_database_no_entry(self):
+        pass
+    def test_database_get_saved_and_save_unsaved_pages(self):
+        pass
+    
 class ContactUsFeature(TestCase):
     def setUp(self):
         self.user = create_user("testUser", "testPassword")
         self.super = create_super_category('Frameworks')
-        self.cat = create_category('python', self.super, self.user) 
+        self.cat = create_category('python', self.super, self.user, datetime.datetime.now().date()) 
         self.enquiry = create_enquiry("John", "Doe", "test@test.com")
         login = self.client.login(username='testUser', password='testPassword')
         
@@ -168,3 +176,53 @@ class ContactUsFeature(TestCase):
         self.assertEqual(enquiry1.last_name, 'Gartner', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         self.assertEqual(enquiry1.email, 'test@test.com', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         self.assertEqual(enquiry1.description, 'This is test enquiry, can be a maximum of 150 words', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+   
+"""
+class TestRatingFeature(TestCase):
+    @classmethod
+    def setUpTestData(self):
+        self.user = create_user("testUser", "testPassword")
+        self.super = create_super_category('Frameworks')
+        self.cat = create_category('python', self.super, self.user, datetime.datetime.now().date())
+        self.page= add_page('learn x in y minutes','https://learnxinyminutes.com/docs/python', self.cat,self.user) 
+
+    # def test_rating_view(self):
+    #     self.response = self.client.get(reverse('rango:get', kwargs={'category_name_slug': 'python'}))
+    #     self.content = self.response.content.decode()
+
+
+    #-ve rating boundries super categories
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('rango:get_cat', kwargs={}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/rango/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('rango:index', kwargs={}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('rango:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'rango/index.html')
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/rango/get_cat/')
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {"categories": [{"title": "python", "slug": "python", "rating": 0, "image": "", "last_modified":datetime.datetime.now().date().strftime('%Y-%m-%d'), "pages": [{"title": "learn x in y minutes", "url":"https://learnxinyminutes.com/docs/python", "description": ""}]}]})
+    # self.assertJSONEqual(
+    #     str(response.content, encoding='utf8'),
+    #     {'status': 'success'}
+    # )
+    # def test_lists_all_authors(self):
+    #     # Get second page and confirm it has (exactly) remaining 3 items
+    #     response = self.client.get(reverse('index'))
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertTrue('is_paginated' in response.context)
+    #     self.assertTrue(response.context['is_paginated'] == True)
+    #     self.assertEqual(len(response.context['author_list']), 3)
+    """
