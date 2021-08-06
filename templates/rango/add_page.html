@@ -5,9 +5,16 @@
     Add a Page
 {% endblock %}
 
+{% block header_block %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
 {% block body_block %}
-    <h1>Add a Page</h1>
-    <div>
+<div id = "greeting_id">
+    <h1 class = greeting><strong> Add a Page </strong>
+        <p>Thank you for collaborating!</p>
+    </h1></div>
+    <div class="container text-sm-center" id="add_cat">
         <form id="page_form" method="post" action="/rango/category/{{ category.slug }}/add_page/">
             {% csrf_token %}
             {% for hidden in form.hidden_fields %}
@@ -17,8 +24,10 @@
                 {{ field.errors }}
                 {{ field.help_text }}
                 {{ field }}
+                <br />
+                <br />
             {% endfor %}
-            <input type="submit" name="submit" value="Create Page" />
+            <input class="btn btn-primary mb-2" id = "submit" type="submit" name="submit" value="Create Page" />
         </form>
     </div>
 {% endblock %}

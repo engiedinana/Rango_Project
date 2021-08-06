@@ -366,16 +366,11 @@ def rate_category(request, category_name_slug,star):
     
 
 @login_required
-def add_page(request, category_name_slug, username):
+def add_page(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
         category = None
-    
-    try:
-        user = User.objects.get(username = username)
-    except SuperCategories.DoesNotExist:
-        user = None
 
     # You cannot add a page to a Category that does not exist...
     if category is None:
@@ -388,7 +383,6 @@ def add_page(request, category_name_slug, username):
             if category:
                 page = form.save(commit=False)
                 page.category = category
-                page.UserProfile = user
                 page.views = 0
                 page.save()
                 return redirect(reverse('rango:show_category', kwargs={'category_name_slug': category_name_slug}))
