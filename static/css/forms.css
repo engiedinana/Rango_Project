@@ -26,6 +26,10 @@
     background: #9cb39c;
 }
 
+#add_cat #submit {
+    width: 30%;
+}
+
 #submit {
     color: white;
     background-color: #9cb39c;
