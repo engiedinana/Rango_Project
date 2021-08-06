@@ -4,8 +4,9 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from rango.models import Enquiries, Page, Category, SuperCategories, UserProfile, Comments
 from django.contrib.auth import get_user_model
-from rango.forms import CommentForm, ContactUsForm
+from rango.forms import CommentForm, ContactUsForm, CategoryForm
 from django.forms import fields as django_fields
+from django.forms import ModelChoiceField
 import datetime
 
 FAILURE_HEADER = f"{os.linesep}{os.linesep}{os.linesep}==================================={os.linesep}TEST FAILURE={os.linesep}=================================={os.linesep}"
@@ -24,11 +25,13 @@ def create_user_profile(user):
                                                    'user': user})
     return profile
 #helper function to populat database
-def create_category(name, super, user,date):
+def create_category(name, super, user,date,sum=0,count=0):
     category, __ = Category.objects.update_or_create(
         name=name,
         defaults={'super_cat': super},
-        last_modified = date
+        last_modified = date,
+        rating_sum_val = sum,
+        rating_count_val = count
     )
     return category
 
@@ -248,45 +251,75 @@ class CommentsFeature(TestCase):
         #Date not in future
 
 
-
-"""
-class TestRatingFeature(TestCase):
+#testinf the rating functionality in both home page and category page
+class Rating_Feature_In_Home_and_Category_Pages(TestCase):
+    #creating some records to test with
     @classmethod
     def setUpTestData(self):
         self.user = create_user("testUser", "testPassword")
         self.super = create_super_category('Frameworks')
-        self.cat = create_category('python', self.super, self.user, datetime.datetime.now().date())
-        self.page= add_page('learn x in y minutes','https://learnxinyminutes.com/docs/python', self.cat,self.user) 
-    # def test_rating_view(self):
-    #     self.response = self.client.get(reverse('rango:get', kwargs={'category_name_slug': 'python'}))
-    #     self.content = self.response.content.decode()
-    #-ve rating boundries super categories
-    def test_view_url_accessible_by_name(self):
-        response = self.client.get(reverse('rango:get_cat', kwargs={}))
+        self.cat1 = create_category('python', self.super, self.user, datetime.datetime.now().date(),110,16)
+        self.page= add_page('learn x in y minutes','https://learnxinyminutes.com/docs/python', self.cat1,self.user)
+        self.cat2 = create_category('algorithms', self.super, self.user, datetime.datetime.now().date())
+
+    #testing that all urls work fine
+    def test_getcategories_and_index_view_url_exists_at_desired_location(self):
+        response = self.client.get('/rango/get_cat/')
         self.assertEqual(response.status_code, 200)
-    def test_view_url_exists_at_desired_location(self):
         response = self.client.get('/rango/')
         self.assertEqual(response.status_code, 200)
-    def test_view_url_accessible_by_name(self):
+        response = self.client.get('/rango/category/python/')
+        self.assertEqual(response.status_code, 200)
+        response = self.client.get('/rango/rate_category/python/0')
+        self.assertEqual(response.status_code, 200)
+
+    #testing all views working by name
+    def test_getcategories_and_index_view_url_accessible_by_name(self):
+        response = self.client.get(reverse('rango:get_cat', kwargs={}))
+        self.assertEqual(response.status_code, 200)
         response = self.client.get(reverse('rango:index', kwargs={}))
         self.assertEqual(response.status_code, 200)
-    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        self.assertEqual(response.status_code, 200)
+        response = self.response = self.client.get(reverse('rango:rate_category', kwargs={'category_name_slug': 'python','star':'0'}))
+        self.assertEqual(response.status_code, 200)
+
+    #testing that index view uses the correct template index.html
+    def test_index_view_uses_correct_template(self):
         response = self.client.get(reverse('rango:index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'rango/index.html')
-    def test_view_url_exists_at_desired_location(self):
+
+    #testing json response of get categories  api
+    def test_getcategories_view_json_response(self):
         response = self.client.get('/rango/get_cat/')
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(response.content, {"categories": [{"title": "python", "slug": "python", "rating": 0, "image": "", "last_modified":datetime.datetime.now().date().strftime('%Y-%m-%d'), "pages": [{"title": "learn x in y minutes", "url":"https://learnxinyminutes.com/docs/python", "description": ""}]}]})
-    # self.assertJSONEqual(
-    #     str(response.content, encoding='utf8'),
-    #     {'status': 'success'}
-    # )
-    # def test_lists_all_authors(self):
-    #     # Get second page and confirm it has (exactly) remaining 3 items
-    #     response = self.client.get(reverse('index'))
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTrue('is_paginated' in response.context)
-    #     self.assertTrue(response.context['is_paginated'] == True)
-    #     self.assertEqual(len(response.context['author_list']), 3)
-    """
+        self.assertJSONEqual(response.content, {"categories": [{"title": "python", "slug": "python", "rating": 0, "image": "", "last_modified":datetime.datetime.now().date().strftime('%Y-%m-%d'), "pages": [{"title": "learn x in y minutes", "url":"https://learnxinyminutes.com/docs/python", "description": ""}]},{"title": "algorithms", "slug": "algorithms", "rating": 0, "image": "", "last_modified":datetime.datetime.now().date().strftime('%Y-%m-%d'), "pages": []}]})
+    
+    #testing http response of rateCategory api based on different rating inputs
+    def test_rateCategory_view_response(self):
+        response = self.response = self.client.get(reverse('rango:rate_category', kwargs={'category_name_slug': 'python','star':'5'}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Rating cannot exceed 5')
+        response = self.response = self.client.get(reverse('rango:rate_category', kwargs={'category_name_slug': 'algorithms','star':'0'}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Success')
+
+    #testind database record update (rating) after calling rate_category api
+    def test_database_rating_update_entry(self):
+        response = self.response = self.client.get(reverse('rango:rate_category', kwargs={'category_name_slug': 'algorithms','star':'5'}))
+        category = Category.objects.get(name='algorithms')
+        self.assertEquals(response.status_code, 200)
+        self.assertEquals(category.rating, 5)
+    
+        #testing html response includes rating part
+    def test_show_category_response_html(self):
+        response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        content = response.content.decode()
+
+        self.assertTrue('<div class="rate">' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('<input type="radio" id="star5" name="rate" value="5" />' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('<input type="radio" id="star4" name="rate" value="4" />' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('<input type="radio" id="star3" name="rate" value="3" />' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('<input type="radio" id="star2" name="rate" value="2" />' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('<input type="radio" id="star1" name="rate" value="1" />' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
