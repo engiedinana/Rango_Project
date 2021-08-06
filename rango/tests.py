@@ -19,7 +19,7 @@ def create_user(username, password):
     return user
 
 def create_user_profile(user):
-    profile = UserProfile.objects.update_or_create(gender = 'F',
+    profile,__ = UserProfile.objects.update_or_create(gender = 'F',
                                                    defaults={
                                                    'user': user})
     return profile
@@ -89,14 +89,14 @@ class TestFavoritesFeature(TestCase):
         self.assertTemplateUsed(self.response, 'rango/category.html')
 
     def test_database_single_entry(self):
-        self.response = self.client.get(reverse('rango:save_favorite'),{
+        self.response = self.client.post(reverse('rango:save_favorite'),{
             'page_id': self.page.id
         })
         self.assertEquals(self.response.status_code, 200)
         self.assertEquals(self.user.pages.first().title, 'learn x in y minutes')
         self.assertEquals(len(self.user.pages.all()), 1)
         
-        self.response = self.client.get(reverse('rango:unsave_favorite'),{
+        self.response = self.client.post(reverse('rango:unsave_favorite'),{
             'page_id': self.page.id
         })
         #print(self.response.context)
@@ -176,16 +176,17 @@ class ContactUsFeature(TestCase):
         self.assertEqual(enquiry1.email, 'test@test.com', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         self.assertEqual(enquiry1.description, 'This is test enquiry, can be a maximum of 150 words', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
 
-"""
+
 class CommentsFeature(TestCase):
     def setUp(self):
         self.user = create_user("testUser", "testPassword")
         login = self.client.login(username='testUser', password='testPassword')
+        
         self.super = create_super_category('Frameworks')
         self.cat = create_category('python', self.super, self.user, datetime.datetime.now().date())
         self.profile = create_user_profile(self.user) 
+        self.page= add_page('learn x in y minutes','https://learnxinyminutes.com/docs/python', self.cat,self.user)
         self.comment = create_comment(self.profile, self.cat)
-        
         
     def tearDown(self):
         self.user.delete()
@@ -193,6 +194,7 @@ class CommentsFeature(TestCase):
         self.cat.delete()
         self.profile.delete()
         self.comment.delete()
+        self.page.delete()
         
     def test_comments_view(self):
         
@@ -224,26 +226,26 @@ class CommentsFeature(TestCase):
         content = response.content.decode()
         
         self.assertTrue('form' in context)
+        self.assertTrue('comments' in context)
         self.assertTrue('<h1>Comments</h1>' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
-        self.assertTrue('<div id="comment_container" class="container"></div>' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        #if context.comments != None
+        self.assertTrue('id="comment_container"' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         self.assertTrue('name="description"' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         self.assertTrue('<input type="submit" name="submit" value="Post" />' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
-        self.assertTrue('action="/rango/category/python"' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('action="/rango/category/python/"' in content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
     
     def test_functionality(self):
         self.client.post(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}),
-                         {  'profileInfo': self.user.profile,
-                             'category': self.user.category,
+                         {  'profileInfo': self.profile,
                              'description':'This is test enquiry, can be a maximum of 256 words'})
         
-        enquiry = Comments.objects.filter(first_name='Erlang')
-        enquiry1 = enquiry[0]
-        self.assertEqual(len(enquiry), 1, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
-        self.assertEqual(enquiry1.profileInfo, self.user.profile,  f"{FAILURE_HEADER}{FAILURE_FOOTER}")
-        self.assertEqual(enquiry1.category, 'python', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
-        self.assertEqual(enquiry1.description, 'This is test enquiry, can be a maximum of 256 words', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        comment = Comments.objects.filter(description='This is test enquiry, can be a maximum of 256 words')
+        comment1 = comment[0]
+        self.assertEqual(len(comment), 1, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertEqual(comment1.profileInfo, self.profile,  f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertEqual(comment1.category.name, 'python', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertEqual(comment1.description, 'This is test enquiry, can be a maximum of 256 words', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         #Date not in future
-"""
 
 
 
