@@ -22,6 +22,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from datetime import date
 import urllib
+from django.core.mail import send_mail, BadHeaderError
+from django.contrib.auth.forms import PasswordResetForm
+from django.template.loader import render_to_string
+from django.db.models.query_utils import Q
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
 import math
 
 """
@@ -239,7 +246,7 @@ def show_category(request, category_name_slug):
     # to the template rendering engine.
     context_dict = add_cat_supcat_pages_context()
     current_user = get_user(request)
-    
+
     try:
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
@@ -252,7 +259,7 @@ def show_category(request, category_name_slug):
             profile = UserProfile.objects.get(user=current_user)
     except UserProfile.DoesNotExist:
         profile = None
-        
+
     try:
         # Can we find a category name slug with the given name?
         # If we can't, the .get() method raises a DoesNotExist exception.
@@ -277,7 +284,7 @@ def show_category(request, category_name_slug):
             context_dict['fav_list'] = user.pages.all()
         else:
             context_dict['fav_list'] = None
-        if (not user.is_anonymous) and (user is not None):    
+        if (not user.is_anonymous) and (user is not None):
             if request.method == 'POST':
                 form = CommentForm(request.POST)
                 if form.is_valid():
@@ -289,7 +296,7 @@ def show_category(request, category_name_slug):
                         comment.save()
                     return redirect(reverse('rango:show_category', kwargs={'category_name_slug':category_name_slug}))
                 else:
-                    print(form.errors)        
+                    print(form.errors)
     except Category.DoesNotExist:
         # We get here if we didn't find the specified category.
         # Don't do anything -
@@ -350,10 +357,10 @@ def rate_category(request, category_name_slug,star):
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
         category = None
-        return HttpResponse("Failed to get") 
+        return HttpResponse("Failed to get")
     # You cannot add a page to a Category that does not exist...
     sum = category.rating_sum_val
-    count = category.rating_sum_val 
+    count = category.rating_sum_val
     if request.method == 'GET':
         category.rating_sum_val = sum + int(star)
         category.rating_count_val = count + 1
@@ -362,8 +369,8 @@ def rate_category(request, category_name_slug,star):
         except:
             category.rating = category.rating_sum_val
         category.save()
-    return HttpResponse("success")   
-    
+    return HttpResponse("success")
+
 
 @login_required
 def add_page(request, category_name_slug, username):
@@ -575,7 +582,7 @@ class ProfileView(View):
         context_dict = add_cat_supcat_pages_context()
         context_dict['user_profile'] = user_profile
         context_dict['selected_user']= user
-        context_dict['form'] = form 
+        context_dict['form'] = form
         context_dict['pages']=fav_list
         return render(request, 'rango/profile.html', context_dict)
     
@@ -594,18 +601,18 @@ class ProfileView(View):
         else:
             print(form.errors)
         context_dict['user_profile'] = user_profile
-        context_dict['selected_user']= user, 
+        context_dict['selected_user']= user,
         context_dict['form']=form
         return render(request, 'rango/profile.html', context_dict)
 
-#View for the cantact us form
+#View for the contact us form
 class ContactUsView(View):
     #get request to show user the empty form
     def get(self,request):
         context_dict = add_cat_supcat_pages_context()
         form = ContactUsForm()
         context_dict['form'] = form
-        return render(request, 'rango/contact_us.html', context_dict) 
+        return render(request, 'rango/contact_us.html', context_dict)
     
     #post request to take input from user in a form and store it in the database
     def post(self, request):
@@ -621,5 +628,33 @@ class ContactUsView(View):
             print(form.errors)
         #If the user reaches here there was some error in the form so re render the form
         context_dict['form'] = form
-        return render(request, 'rango/contact_us.html', context_dict)
- 
+        return render(request, 'rango/contact_us.html', {'form': form})
+
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "rango/password/password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'admin@example.com', [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("done/")
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="rango/password/password_reset.html",
+                  context={"password_reset_form": password_reset_form})
