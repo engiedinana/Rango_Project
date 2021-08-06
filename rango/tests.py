@@ -18,11 +18,13 @@ def create_user(username, password):
     user.save()
     return user
 
+#helper function to populat database
 def create_user_profile(user):
     profile,__ = UserProfile.objects.update_or_create(gender = 'F',
                                                    defaults={
                                                    'user': user})
     return profile
+
 #helper function to populat database
 def create_category(name, super, user,date):
     category, __ = Category.objects.update_or_create(
@@ -32,6 +34,7 @@ def create_category(name, super, user,date):
     )
     return category
 
+#helper function to populat database
 def create_super_category(title):
     super = SuperCategories.objects.create(title=title)
     super.save()
@@ -45,8 +48,8 @@ def add_page(title, url, cat , user):
         defaults={'category':cat}
     )
     return page
-    #page.favorite.add(user)
-
+    
+#helper function to populat database
 def create_comment(profile, cat):
     comment, __ = Comments.objects.update_or_create(
         defaults= {'profileInfo' : profile,
@@ -54,6 +57,7 @@ def create_comment(profile, cat):
     )
     return comment
 
+#helper function to populat database
 def create_enquiry(fname, lname, email):
     enquiry, __ = Enquiries.objects.update_or_create(
     first_name = fname,
@@ -63,51 +67,188 @@ def create_enquiry(fname, lname, email):
     #Field to store comments of user for the issue, suggestion etc.
     'description': "This is first enquiry"})
     return enquiry
-    
+
 # The following test is for the save and deleting of
 # a page from the favorites list
 class TestFavoritesFeature(TestCase):
+    #Create a single entry of a category and a page to get started
     def setUp(self):
         self.user = create_user("testUser", "testPassword")
         self.super = create_super_category('Frameworks')
         self.cat = create_category('python', self.super, self.user,datetime.datetime.now().date())
         self.page= add_page('learn x in y minutes','https://learnxinyminutes.com/docs/python', self.cat,self.user)        
         login = self.client.login(username='testUser', password='testPassword')
-        
+
     def tearDown(self):
-        self.user.delete()
-        self.super.delete()
         self.cat.delete()
-        self.page.delete()
+        self.super.delete()
         
+    #This test was just a first test to see this file works. It tests rango's show_category page is routable    
     def test_save_list_view(self):
-        #self.response= self.client.get(reverse('rango:profile', kwargs={'username':self.user.username}))
+        
         self.response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
         self.content = self.response.content.decode()
         
         self.assertEqual(self.response.status_code, 200)
         self.assertTemplateUsed(self.response, 'rango/category.html')
-
+        
+    #This test is for testing the corner case of just a single entry of page(done in setup function) 
+    # in the show category page
     def test_database_single_entry(self):
+        # Test a post request for saving page
         self.response = self.client.post(reverse('rango:save_favorite'),{
             'page_id': self.page.id
         })
         self.assertEquals(self.response.status_code, 200)
+        #Retrievable from DB after the post request
         self.assertEquals(self.user.pages.first().title, 'learn x in y minutes')
         self.assertEquals(len(self.user.pages.all()), 1)
         
+        #Create a post request for removing page from the saved list
         self.response = self.client.post(reverse('rango:unsave_favorite'),{
             'page_id': self.page.id
-        })
-        #print(self.response.context)
+        })  
         self.assertEquals(self.response.status_code, 200)
+        #Change is reflected in the DB from the old state to the new state
         self.assertNotEquals(len(self.user.pages.all()),1 )
         self.assertEquals(len(self.user.pages.all()),0 )
-    def test_database_no_entry(self):
-        pass
-    def test_database_get_saved_and_save_unsaved_pages(self):
-        pass
     
+    #This test checks for the saving and unsaving of pages when many pages are present in 
+    #a single category
+    def test_database_multiple_pages_in_category(self):
+        self.page1= add_page('dummies','https://www.dummies.com/computers/', self.cat,self.user)        
+        self.page2= add_page('official','https://www.python.org/', self.cat,self.user)
+        self.assertIsInstance(self.cat, Category)
+        self.assertIsInstance(self.super,SuperCategories)
+        
+        #First vist the show category page
+        self.response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        self.assertEquals(self.response.status_code, 200)
+        self.content = self.response.content.decode()
+        #Verify appropritae buttons/icons are displayed/hidden on the UI since the
+        #user is logged in and there are pages on the page, The feature is supposed to be active
+        self.assertTrue('class="hide"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('class="show"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        
+        #Save multiple pages in a category
+        self.response = self.client.post(reverse('rango:save_favorite'),{
+            'page_id': self.page1.id
+        })
+        self.assertEquals(self.response.status_code, 200)
+        
+        self.response = self.client.post(reverse('rango:save_favorite'),{
+            'page_id': self.page2.id
+        })
+        self.assertEquals(self.response.status_code, 200)
+        #Now verify 
+        #Verify the post request has updated the database
+        self.assertEquals(self.user.pages.all()[0].title, 'dummies')
+        self.assertEquals(self.user.pages.all()[1].title, 'official')
+        #There are two post request so 2 pages should be there in the fav list
+        self.assertEquals(len(self.user.pages.all()), 2)
+        
+        #Create a post request for removing page from the saved list
+        self.response = self.client.post(reverse('rango:unsave_favorite'),{
+            'page_id': self.page1.id
+        })  
+        
+        #Route to another page and come back to the page to see the same fav list with one saved
+        #entry and three total entry
+        self.response = self.client.get(reverse('rango:index'))
+        self.assertEquals(self.response.status_code, 200)
+        
+        self.response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        self.content = self.response.content.decode()
+        self.assertEquals(self.response.status_code, 200)
+        
+        #DB should be updated and shows one less entry
+        self.assertEquals(len(self.user.pages.all()), 1)
+        #self.assertEquals(len(self.cat.pages(), 3))
+        
+        #Now try unsaving and saving again the same page
+        #Create a post request for removing page from the saved list
+        self.response = self.client.post(reverse('rango:unsave_favorite'),{
+            'page_id': self.page2.id
+        }) 
+        self.assertEquals(self.response.status_code, 200)
+        self.assertEquals(len(self.user.pages.all()), 0)
+        #self.assertEquals(len(self.category.pages(), 3))
+        
+        self.response = self.client.post(reverse('rango:save_favorite'),{
+            'page_id': self.page2.id
+        })
+        self.assertEquals(self.response.status_code, 200)
+        #Now verify 
+        #Verify the post request has updated the database
+        self.assertEquals(self.user.pages.all()[0].title, 'official')
+        #There are two post request so 2 pages should be there in the fav list
+        self.assertEquals(len(self.user.pages.all()), 1)
+        
+    #Test for favorites list on the user profile page
+    def test_user_profile_page(self):
+        self.page1= add_page('dummies','https://www.dummies.com/computers/', self.cat,self.user)        
+        self.page2= add_page('official','https://www.python.org/', self.cat,self.user)
+        self.assertIsInstance(self.cat, Category)
+        self.assertIsInstance(self.super,SuperCategories)
+        
+        #First vist the show category page
+        self.response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        #Save multiple pages in a category
+        self.response = self.client.post(reverse('rango:save_favorite'),{
+            'page_id': self.page1.id
+        })
+        self.response = self.client.post(reverse('rango:save_favorite'),{
+            'page_id': self.page2.id
+        })
+        #Now vist user profile page to view the changes
+        self.response= self.client.get(reverse('rango:profile', kwargs={'username':self.user.username}))
+        #The feature for saving and unsaving is supposed to be presented to the user via UI buttons
+        #with hide show classes
+        self.content = self.response.content.decode()
+        self.context = self.response.context
+        
+        self.assertTrue('class="hide"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertTrue('class="show"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}") 
+        self.assertIsNotNone(self.context['pages'] ,f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        
+        self.assertEquals(len(self.user.pages.all()), 2)
+        self.assertEquals(len(self.context['pages']), len(self.user.pages.all()))
+        
+    #Now user logs out and visiting show_Category
+    def test_user_log_out(self):
+        self.client.logout()
+        self.response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        self.assertEquals(self.response.status_code, 200)
+        self.content = self.response.content.decode()
+        self.context = self.response.context
+        #user is logged out and there are pages on the page, The feature is supposed to be not active
+        self.assertFalse('class="hide"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertFalse('class="show"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        
+        #Verify there is no saved pages present to be retrieved
+        self.assertIsNone(self.context['fav_list'] ,f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+      #On this page user can see all the saved pages
+      
+    #This test tests for the corner case when there is just the category and no pages in it at all.
+    def test_database_no_entry(self):
+        #After login, logout and delete all pages
+        self.client.logout()
+        self.page.delete()
+        #Query the page when only category is created and exists and there is no data inside it
+        self.response = self.client.get(reverse('rango:show_category', kwargs={'category_name_slug': 'python'}))
+        self.assertEquals(self.response.status_code, 200)
+        self.content = self.response.content.decode()
+        self.context = self.response.context
+        #Verify there is no saved pages present to be retrieved
+        self.assertIsNone(self.context['fav_list'] ,f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        #Make sure UI doesn't unnecesarily render the content
+        self.assertFalse('class="hide"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        self.assertFalse('class="show"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        #Making sure pages container is not displayed either
+        self.assertFalse('id="category_pages"' in self.content, f"{FAILURE_HEADER}{FAILURE_FOOTER}")
+        
+
+#These are tests for the contact us feature
 class ContactUsFeature(TestCase):
     def setUp(self):
         self.user = create_user("testUser", "testPassword")
@@ -216,7 +357,6 @@ class CommentsFeature(TestCase):
         
         for expected_field_name in expected_fields:
             expected_field = expected_fields[expected_field_name]
-            # f"{FAILURE_HEADER}{FAILURE_FOOTER}"
             self.assertTrue(expected_field_name in fields.keys(), f"{FAILURE_HEADER}The field '{expected_field_name}' was not found in CommentsForm implementation'{FAILURE_FOOTER}")
             self.assertEqual(expected_field, type(fields[expected_field_name]), f"{FAILURE_HEADER}The field '{expected_field_name}' in CommentsForm was not of the expected type '{type(fields[expected_field_name])}'{FAILURE_FOOTER}")
 
@@ -246,7 +386,9 @@ class CommentsFeature(TestCase):
         self.assertEqual(comment1.category.name, 'python', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         self.assertEqual(comment1.description, 'This is test enquiry, can be a maximum of 256 words', f"{FAILURE_HEADER}{FAILURE_FOOTER}")
         #Date not in future
-
+#comments for a new category are 0 but comment form appears
+# comments on multiple categories are different 
+# comments on a empty category are not allowed unless pages are added in
 
 
 """
