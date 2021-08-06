@@ -5,14 +5,9 @@
     Login
 {% endblock %}
 
-
-
-
 {% block header_block %}
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
-
-
 
 {% block body_block %}
 {% include 'rango/message.html' %}
@@ -27,7 +22,7 @@
     <br />
     <input type="password" class = "default"  placeholder="Password" name="password" value=""/>
     <br />
-    <p class="forgot-password"><a class= "fgt-password" href="">Forgot Password</a></p>
+    <p class="forgot-password"><a class= "fgt-password" href="/password_reset">Forgot Password</a></p>
     <input class="btn btn-primary mb-2" id = "alogin" type="submit" value="Login" />
     <br />
     <button class="btn btn-primary mb-2">

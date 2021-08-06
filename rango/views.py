@@ -22,6 +22,14 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from datetime import date
 import urllib
+from django.core.mail import send_mail, BadHeaderError
+from django.contrib.auth.forms import PasswordResetForm
+from django.template.loader import render_to_string
+from django.db.models.query_utils import Q
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+
 
 """
 Description: This function connects to the FB API utilizing the API and Secret Key obtained from FB development webpage.
@@ -562,7 +570,7 @@ class ProfileView(View):
         context_dict = {'user_profile': user_profile, 'selected_user': user, 'form':form}
         return render(request, 'rango/profile.html', context_dict)
 
-#View for the cantact us form
+#View for the contact us form
 class ContactUsView(View):
     #get request to show user the empty form
     def get(self,request):
@@ -582,4 +590,32 @@ class ContactUsView(View):
             print(form.errors)
         #If the user reaches here there was some error in the form so re render the form
         return render(request, 'rango/contact_us.html', {'form': form})
- 
+
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "rango/password/password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, 'admin@example.com', [user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("done/")
+    password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="rango/password/password_reset.html",
+                  context={"password_reset_form": password_reset_form})

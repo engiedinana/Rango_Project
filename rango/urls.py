@@ -1,6 +1,7 @@
 from django.urls import path
 from rango import views
 app_name = 'rango'
+
 urlpatterns = [
 path('', views.index, name='index'),
 path('about/', views.about, name='about'),
@@ -23,5 +24,5 @@ path('unsave_favorite/', views.UnsaveFavoriteView.as_view(), name="unsave_favori
 #route to display a user's profile and corresponding view to fire
 path('profile/<username>/', views.ProfileView.as_view(), name='profile'),
 #route for contactus page
-path('contactus/', views.ContactUsView.as_view(), name="contact_us")
+path('contactus/', views.ContactUsView.as_view(), name="contact_us"),
 ]
