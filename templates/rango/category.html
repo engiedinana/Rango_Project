@@ -25,34 +25,37 @@
                     {% if fav_list %}
                         {% if page in fav_list %}
                         <div>
-                        <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
+                        
                         <button id="unsaveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
                             <img src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
                         </button>
                         <button id="saveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
                             <img src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to Save Page"/>
                         </button>
+                        <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
                         </div>
                         {% else %}
                         <div>
-                        <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
+                        
                         <button id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
                             <img src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
                         </button>
                         <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
                             <img src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to save Page"/>
                         </button>
+                        <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
                         </div>
                         {% endif %}
                     {% else %}
                     <div>
-                    <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
+                    
                     <button id="saveFavorite{{forloop.counter0}}" class="show" data-pageid="{{page.id}}">
                         <img src={% static 'images/saveIcon.png' %} data-toggle="tooltip" title = "Click to save Page"/>
                     </button>
                     <button id="unsaveFavorite{{forloop.counter0}}" class="hide" data-pageid="{{page.id}}">
                         <img src={% static 'images/unsaveIcon.png' %} data-toggle="tooltip" title = "Click to Unsave Page"/>
                     </button>
+                    <li id="page"><a href="{{ page.url }}" data-toggle="tooltip" title = "{{ page.description }}">{{ page.title }}</a></li>
                     </div>
                     {% endif %}
                 {% else %}
@@ -68,8 +71,8 @@
     {% endif %}
     {% if user.is_authenticated %}
     <div class="col-md-4" id="add_page">
-        <div class="row">
-            <a href="{% url 'rango:add_page' category.slug user.username %}" data-toggle="tooltip" title = "Add Page">
+        <div class="row pull-right">
+            <a href="{% url 'rango:add_page' category.slug %}" data-toggle="tooltip" title = "Add Page">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
         </div>
@@ -78,25 +81,29 @@
     </div>
     {% if comments or pages %}
     <div class="conainer">
-        <div class="row">
-            <h1>Comments</h1>
-        </div>
+        <h1>Comments</h1>
     </div>
     {% endif %}
     {% if comments %}
     {% for comment in comments %}
     <div id="comment_container" class="container">
-        <div class="container">
-            <p>{{comment.profileInfo}}" "{{comment.profileInfo}}</p>
+        <div class="row">
+        <div class="col-sm-6 text-left">
+            <p>{{comment.profileInfo.user.username}}</p>
+        </div>
+        <div class="col-sm-6 text-right">
             <p>{{comment.date}}</p>
         </div>
-        <div class="container">
+        </div>
+        <div class="row col-sm-12">
             <p id="comment">{{comment.description}}</p>
         </div>
     </div>
+    <br />
     {% endfor %}
     {% endif %}
     {% if pages %}
+    <br/>
     <form id="comment_form" method="post" action="/rango/category/{{ category.slug }}/">
         <div class="form-group">
         {% csrf_token %}
