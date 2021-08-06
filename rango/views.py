@@ -357,17 +357,24 @@ def rate_category(request, category_name_slug,star):
         category = Category.objects.get(slug=category_name_slug)
     except Category.DoesNotExist:
         category = None
-        return HttpResponse("Failed to get")
+        return HttpResponse("Failed to get") 
     # You cannot add a page to a Category that does not exist...
     sum = category.rating_sum_val
-    count = category.rating_sum_val
+    count = category.rating_count_val 
     if request.method == 'GET':
         category.rating_sum_val = sum + int(star)
         category.rating_count_val = count + 1
         try:
-            category.rating = math.ceil(category.rating_sum_val / category.rating_count_val) #divide by zero!
+            value  = math.floor((sum + int(star)) / (count + 1))
+            if (value>5):
+                category.rating  = 5
+            else:
+                category.rating = math.floor(category.rating_sum_val / category.rating_count_val) #divide by zero!
         except:
-            category.rating = category.rating_sum_val
+            if (sum>5):
+                category.rating  = 5
+            else:
+                category.rating = category.rating_sum_val
         category.save()
     return HttpResponse("success")
 
