@@ -1,69 +1,76 @@
 {% extends 'rango/base.html' %}
 {% load static %}
+
+<!-- Title block -->
 {% block title_block %}
     Register
 {% endblock %}
 
+<!-- Header block utlizing forms.css -->
 {% block header_block %}
-    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
-<div id = "greeting_id">
-<h1 class = greeting class="register-title"><strong>Register for Rango</strong>
-    <p>Thank you for your interest!</p>
-</h1>
-</div>
-{% include 'rango/message.html' %}
+    <div id = "greeting_id">
+    <h1 class = greeting class="register-title"><strong>Register for Rango</strong>
+        <p>Thank you for your interest!</p>
+    </h1>
+    </div>
+
+    <!-- add error messages for invalid registrations -->
+    {% include 'rango/message.html' %}
 
 
-{% if registered %}
-Rango says: <strong>thank you for registering!</strong>
-<a href="{% url 'rango:index' %}">Return to the homepage.</a><br />
-{% else %}
+    {% if registered %}
+        <!-- successful registration -->
+        Rango says: <strong>thank you for registering!</strong>
+        <a href="{% url 'rango:index' %}">Return to the homepage.</a><br />
+    {% else %}
 
-<div class="container text-sm-center" id="registerform">
-    <form id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
-        <br/>
-        <hr class="form-divider">
-    {% csrf_token %}
+        <!-- utilize register form and add css on top of it -->
+        <div class="container text-sm-center" id="registerform">
+            <form id="user_form" method="post" action="{% url 'rango:register' %}" enctype="multipart/form-data">
+                <br/>
+                <hr class="form-divider">
+            {% csrf_token %}
 
-    <!-- Display each form -->
-<div>
-        <h1>Account Information</h1>
-        <br>
-        <p>Username:</p>
-        {{ user_form.username }}
-        <br />
-        <p>Email:</p>
-        {{ user_form.email }}
-        <br />
-        <p>Password:</p>
-        {{ user_form.password }}
-        <hr>
-        <h1>Personal Information</h1>
-        <br />
-        {{ user_form.first_name }}
-        <br />
-        <br />
-        {{ user_form.last_name }}
-        <br />
-        <br />
-        {{ user_form.gender }}
+            <!-- User details to be retrieved -->
+        <div>
+                <h1>Account Information</h1>
+                <br>
+                <p>Username:</p>
+                {{ user_form.username }}
+                <br />
+                <p>Email:</p>
+                {{ user_form.email }}
+                <br />
+                <p>Password:</p>
+                {{ user_form.password }}
+                <hr>
+                <h1>Personal Information</h1>
+                <br />
+                {{ user_form.first_name }}
+                <br />
+                <br />
+                {{ user_form.last_name }}
+                <br />
+                <br />
+                {{ user_form.gender }}
 
-    {{ profile_form.as_p }}
-</div>
-        <hr>
+            {{ profile_form.as_p }}
+        </div>
+                <hr>
 
-    <!-- Provide a button to click to submit the form. -->
-    <input class="btn btn-primary mb-2" id = "alogin" type="submit" name="submit" value="Register" />
-        <br>
-    <button class="btn btn-primary mb-2">
-        <a href="{% url 'rango:facebook_register' %}">SignUp with Facebook</a>
-    </button>
-</form>
-</div>
-
-{% endif %}
+            <!-- Provide a button to click to submit the form. -->
+            <input class="btn btn-primary mb-2" id = "alogin" type="submit" name="submit" value="Register" />
+                <br>
+            <button class="btn btn-primary mb-2">
+                <a href="{% url 'rango:facebook_register' %}">SignUp with Facebook</a>
+            </button>
+        </form>
+        </div>
+    {% endif %}
 
 {% endblock %}

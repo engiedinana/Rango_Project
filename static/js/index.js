@@ -1,3 +1,10 @@
+/*
+This file is responsible for handling the content of the index (home) page. It triggers the get_cat view to get all
+categories available in the system to view their details (name, pages, ratings and images) in the homepage by using innerhtml. 
+It is also responsible for filtering the categories according to the chosen letter from the search bar.
+
+The homepage is dynamic; in the sense whenever a new category is added, it will be reflected automatically in a new card.
+*/
 window.addEventListener('load',  function() {
    var xhr = new XMLHttpRequest();
    var k;

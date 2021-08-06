@@ -1,60 +1,44 @@
 {% extends 'rango/base.html' %}
 {% load static %} <!-- New line -->
 
+<!-- Title block -->
 {% block title_block %}
     Home Page
 {% endblock %}
 
+<!-- Header block utilizing index.css -->
 {% block header_block %}
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
 {% endblock %}
+
+<!-- Body block -->
 {% block body_block %}
 <div class="page">
     <nav class="AlphabetNav">
-        <a href="#A">A</a>
-        <a href="#B">B</a>
-        <a href="#C">C</a>
-        <a href="#D">D</a>
-        <a href="#E">E</a>
-        <a href="#F">F</a>
-        <a href="#G">G</a>
-        <a href="#H">H</a>
-        <a href="#I">I</a>
-        <a href="#J">J</a>
-        <a href="#K">K</a>
-        <a href="#L">L</a>
-        <a href="#M">M</a>
-        <a href="#N">N</a>
-        <a href="#O">O</a>
-        <a href="#P">P</a>
-        <a href="#Q">Q</a>
-        <a href="#R">R</a>
-        <a href="#S">S</a>
-        <a href="#T">T</a>
-        <a href="#U">U</a>
-        <a href="#V">V</a>
-        <a href="#W">W</a>
-        <a href="#X">X</a>
-        <a href="#Y">Y</a>
-        <a href="#Z">Z</a>
-        <a href="#Z">ALL</a>
+        <!-- show all alphabets in search bar -->
+        {% for alphabet in alphabets %}
+            <a href="">{{alphabet}}</a>
+        {% endfor %}
       </nav>
+
     <ul id = "cat_ul">
         <li id = cat_title>
             <h1>Categories</h1>
             </li>
     <li id = "add_cat">
+    <!-- Show the add category button only if user is logged in -->
     {% if user.is_authenticated %}
             <a id = "add_cat" href="{% url 'rango:add_category' user.username %}" data-toggle="tooltip" title = "Add Category">
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </a>
     {% endif %}
-        </li>
-</ul>
+    </li>
+    </ul>
 
     <div id="archive">
     </div>
   </div>
+  <!-- Java script files utilized -->
   <script src="{% static 'js/index.js' %}" crossorigin="anonymous"></script>
   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 {% endblock %}

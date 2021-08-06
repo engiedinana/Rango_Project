@@ -1,34 +1,41 @@
 {% extends 'rango/base.html' %}
 {% load static %} <!-- New line -->
 
+<!-- Title block -->
 {% block title_block %}
     Profile Page
 {% endblock %}
 
+<!-- Header block utilizing profile.css -->
 {% block header_block %}
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
 <div class="card">
     {% if user_profile.picture %}
+    <!-- if user has a profile image and was not registered via facebook show the stored image from media-->
     {% if user_profile.facebook == 0 %}
         <img class = "center" src = "{{MEDIA_URL}}{{user_profile.picture}}"
              width="300"
              height="300"
              alt="{{ selected_user.username}}'s profile image"/>
     {% else %}
+    <!-- has an image but registered from facebook, get image from facebook provided image link -->
     <img id = fb class = "center" src = "{{ user_profile.picture }}"
              width="300"
              height="300"
              alt="{{ selected_user.username}}'s profile image"/>
     {% endif %}
         {% else %}
+        <!-- does not have an image,use default image -->
         <img class = "center" src="{% static "images/default_profile_pic.png" %}"
             width="300"
              height="300"
             alt="Picture of Rango"/>
         {% endif %}
+    <!-- show user's details -->
     <h1><strong>{{selected_user.first_name}} {{selected_user.last_name}} </strong></h1>
     {% if user.username %}
                         <p class="username"><strong>Username:</strong> {{ user.username }}</p>
@@ -47,6 +54,7 @@
     {% endif %}
 </div>
 
+<!-- show user's saved page links and allow him to unsave -->
 <div class="jumbotron p-4">
 <hr class="userProfile"/>
 <div class="jumbotron p-0"></div>

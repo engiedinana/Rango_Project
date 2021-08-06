@@ -85,6 +85,7 @@ ul#parentPage img, ul#favListParent img {
   text-justify: inter-word;
 }
 
+/* Navigation bar */
 a {
   color:rgb(40, 94, 145);
 }
@@ -153,16 +154,6 @@ li.dropdown:last-child .dropdown-content{
 
 .dropdown:hover .dropdown-content {
   display: block;
-}
-
-#notification a{
-  border-bottom:3px solid #555;
-}
-
-.notification{
-  position: absolute;
-  top: 5rem;
-  right: 1rem;
 }
 
 .dropdown-item:hover{

@@ -1,3 +1,4 @@
+<!-- retrieves all available categories -->
 <ul>
 {% if categories %}
     {% for c in categories %}
@@ -13,7 +14,6 @@
         </li>
         {% endif %}
     {% endfor %}
-
 
 {% else %}
     <li><strong>There are no categories present.</strong></li>

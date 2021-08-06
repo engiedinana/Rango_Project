@@ -1,15 +1,18 @@
 {% extends 'rango/base.html' %}
 {% load static %} <!-- New line -->
 
+<!-- Title block -->
 {% block title_block %}
     Add a Category
 {% endblock %}
 
+<!-- Body block -->
 {% block body_block %}
 <div class="container text-sm-center" id="contactus">
     <h6>Contact Us</h6>
     <h1>Tell us your enquiry, we will get back to you in 3 to 5 working days</h1>
     <hr />
+        <!-- utilize the contact us form whilst adding CSS on top of it-->
         <form id="category_form" method="post" action="/rango/contactus/">
             <div class="form-group">
             {% csrf_token %}
